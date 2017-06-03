@@ -24,6 +24,7 @@
 
 Ball *balls;
 Player *players;
+int totalPlayers;
 
 /*/////////////////////////////////////////
  //	GAMEPLAY INITIALISATON FUNCTIONS	//
@@ -43,6 +44,7 @@ void initPlayer(Player *pl, int id, char *name, Point2D barCenter, Color3f barCo
 }
 
 void initGame(int nbPlayers) {
+	totalPlayers = nbPlayers;
 	players = malloc(nbPlayers * sizeof(Player));
 	if (players == NULL) {
 		exit(MALLOC_ERROR);
@@ -77,7 +79,7 @@ void initGame(int nbPlayers) {
 		default :
 			break;
 		}
-		initPlayer(&players[i-1], i, "TRAPATAPUSHPUTASSISTATUR", barCenter, barColor);
+		initPlayer(&players[i-1], i, playersNames[i - 1], barCenter, barColor);
 		initBall(&balls[i-1], i, BALL_RADIUS, ballSpeed, ballCenter, ballColor, i);
 	}
 }
@@ -162,7 +164,7 @@ void ballOutOfBounds(Ball *ball, enum direction dir) {
 		ball->lastPlayerId = 0;
 		ball->origin.y = HUD_HEIGHT + (3 * BAR_HEIGHT);
 	}
-	if (dir == BOTTOM) {
+	if (dir == BOTTOM && totalPlayers > 1) {
 		--(players[1].life);
 		ball->lastPlayerId = 1;
 		ball->origin.y = GAME_HEIGHT - HUD_HEIGHT - (3 * BAR_HEIGHT);

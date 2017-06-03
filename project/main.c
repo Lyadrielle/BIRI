@@ -27,6 +27,7 @@
 
 int screenWidth;
 int screenWidthCenter;
+char *playersNames[10];
 /*int theme;*/
 
 /*/////////////////////////////////////////
@@ -75,10 +76,20 @@ int main (int argc, char** argv) {
 	GLuint texturesBuffer[TEXTURE_NB];
 	glutInit(&argc, argv);
 
-	if(argc!=2) {
-		printf("Expected config file path as argument\n");
+	if(argc < 2) {
+		printf("ERREUR : Config file manquant\n");
 		return EXIT_FAILURE;
+	} else if (argc == 2) {
+		playersNames[0] = "Player 1";
+		playersNames[1] = "Player 2";
+	} else if (argc == 3) {
+		playersNames[0] = argv[2];
+		playersNames[1] = "Player 2";
+	} else if (argc == 4) {
+		playersNames[0] = argv[2];
+		playersNames[1] = argv[3];
 	}
+
 	brickTypes = readConfigFile(argv[1], &gridWidth, &gridHeight);
 	screenWidth = defineScreenWidth(gridWidth);
 	screenWidthCenter = screenWidth / 2;
@@ -141,7 +152,6 @@ int main (int argc, char** argv) {
 					nbBalls = nbPlayers;
 					break;
 				case PLAYTIME :
-					/*handleHUD();*/
 					break;
 				case SCOREBOARD :
 					break;
@@ -193,6 +203,10 @@ int main (int argc, char** argv) {
 					++gameStep;
 				}
 			}
+		}
+
+		if (gameStep == SCOREBOARD) {
+			printVictoryScreen(players);
 		}
 
 

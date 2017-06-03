@@ -58,7 +58,6 @@ void initMenu(Button *menu) {
 
 	buttonOrigin.y += BUTTON_HEIGHT + SPACE_BETWEEN_BUTTONS;
 	initColor3f(&buttonColor, 0, 255, 0);
-	printf("coucou");
 	/*initButton(&menu[2], buttonOrigin, buttonColor, selectTheme, SETTINGS);*/
 	buttonOrigin.y += BUTTON_HEIGHT + SPACE_BETWEEN_BUTTONS;
 	initColor3f(&buttonColor, 255, 0, 0);

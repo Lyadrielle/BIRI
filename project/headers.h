@@ -236,6 +236,8 @@ extern int screenWidth;
 extern int screenWidthCenter;
 extern Ball *balls;
 extern Player *players;
+extern char *playersNames[];
+extern int totalPlayers;
 /*extern int theme;*/
 
 /*/////////////////////////////////////////
@@ -296,6 +298,7 @@ void drawHUD(Player const *pl, Color3f color);
 void drawLife();
 void drawLifes(int nbHearts);
 void renderBitmapString(float x, float y, char const *string);
+void printVictoryScreen(Player const *players);
 
 /* TEXTURE */
 GLenum testFormat(SDL_Surface *img);

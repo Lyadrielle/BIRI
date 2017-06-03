@@ -22,6 +22,8 @@
 
 #include "headers.h"
 
+int totalPlayers;
+
 /*/////////////////////////////////////////
  //		BASIC DRAWING FUNCTIONS			//
 /////////////////////////////////////////*/
@@ -153,6 +155,8 @@ void drawGrid(GridBrick const grid,int gridWidth, int gridHeight, int brickWidth
 
 void drawHUD(Player const *pl, Color3f color) {
 	glColor3f(color.r, color.g, color.b);
+	char score[9] = "0";
+	sprintf(score, "%d", pl->score);
 
 	if (pl->id == 1) {
 		glBegin(GL_POLYGON);
@@ -170,6 +174,9 @@ void drawHUD(Player const *pl, Color3f color) {
 		glPushMatrix();
 			renderBitmapString((SCREEN_WIDTH / 2), (HUD_HEIGHT / 2), pl->name);
 		glPopMatrix();
+		glPushMatrix();
+			renderBitmapString((SCREEN_WIDTH - 30), (HUD_HEIGHT / 2), score);
+		glPopMatrix();
 
 	} else if (pl->id == 2) {
 		glBegin(GL_POLYGON);
@@ -184,8 +191,12 @@ void drawHUD(Player const *pl, Color3f color) {
 			drawLifes(pl->life);
 		glPopMatrix();
 
+		glColor3f(0, 0, 0);
 		glPushMatrix();
 			renderBitmapString((SCREEN_WIDTH / 2), (GAME_HEIGHT - (HUD_HEIGHT / 2)), pl->name);
+		glPopMatrix();
+		glPushMatrix();
+			renderBitmapString((SCREEN_WIDTH - 30), (GAME_HEIGHT - (HUD_HEIGHT / 2)), score);
 		glPopMatrix();
 	}
 }
@@ -218,6 +229,30 @@ void renderBitmapString(float x, float y, char const *string) {
 	for (c = string; *c != '\0'; c++) {
 		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *c);
 	}
+}
+
+void printVictoryScreen(Player const *players) {
+	glColor3f(255, 255, 255);
+	glPushMatrix();
+	switch (totalPlayers) {
+		case 1 :
+				if (players[0].life == 0) {
+					renderBitmapString((SCREEN_WIDTH / 2), (GAME_HEIGHT / 2), "Ordinateur");
+				} else {
+					renderBitmapString((SCREEN_WIDTH / 2), (GAME_HEIGHT / 2), players[0].name);
+				}
+			break;
+		case 2 :
+			if (players[1].life == 0) {
+				renderBitmapString((SCREEN_WIDTH / 2), (GAME_HEIGHT / 2), players[0].name);
+			} else {
+				renderBitmapString((SCREEN_WIDTH / 2), (GAME_HEIGHT / 2), players[1].name);
+			}
+			break;
+		default :
+			break;
+	}
+	glPopMatrix();
 }
 
 /*/////////////////////////////////////////

@@ -29,4 +29,4 @@ clean:
 	rm $(OBJ_FILES) $(BIN_PATH)/$(APP_BIN)
 
 test:
-	$(BIN_PATH)/$(APP_BIN) res/grid.txt
+	$(BIN_PATH)/$(APP_BIN) res/grid.txt cat teemo
