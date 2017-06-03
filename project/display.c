@@ -58,7 +58,7 @@ void drawBar(Bar bar, GLuint *textures) {
 			glVertex2f((bar.center.x - bar.width / 2), (bar.center.y + BAR_HEIGHT / 2));
 		glEnd();
 	}
-	
+
 }
 
 /**
@@ -87,7 +87,7 @@ void drawBall(Ball ball) {
  * @param	Brick	br			the current brick to draw
  * @param	int		brickWidth	the brick width based on the
  *             					config file gridWidth and screenWidth
- * @param	GLuint 		textures 	array containing textures places	
+ * @param	GLuint 		textures 	array containing textures places
  */
 void drawBrick(Brick br, int brickWidth, GLuint textures[]) {
 	if(br.type < TEXTURE_NB){
@@ -149,6 +149,23 @@ void drawGrid(GridBrick const grid,int gridWidth, int gridHeight, int brickWidth
 	}
 }
 
+void drawHUD(Player const *pl, Color3f color) {
+	if (pl->id == 1) {
+		glBegin(GL_POLYGON);
+			glVertex2f(0, 0);
+			glVertex2f((brickWidth - 1), 0);
+			glVertex2f((brickWidth - 1), (BRICK_HEIGHT - 1));
+			glVertex2f(0, (BRICK_HEIGHT - 1));
+		glEnd();
+	} else if (pl->id == 2) {
+		glBegin(GL_POLYGON);
+			glVertex2f(0, 0);
+			glVertex2f((brickWidth - 1), 0);
+			glVertex2f((brickWidth - 1), (BRICK_HEIGHT - 1));
+			glVertex2f(0, (BRICK_HEIGHT - 1));
+		glEnd();
+	}
+}
 
 
 /*/////////////////////////////////////////
@@ -193,12 +210,12 @@ void loadTextures(GLuint *textures, char *themeName) {
 
 	/* Selection of the good theme*/
 	if(strcmp(themeName, "")){ /* If theme name given */
-		strcpy(imgNameBase, "img/");		
+		strcpy(imgNameBase, "img/");
 		strcat(imgNameBase, themeName);
 		strcat(imgNameBase, "/brique_");
 	}
 	else {		/* else Default theme */
-		strcpy(imgNameBase, "img/Default/brique_");		
+		strcpy(imgNameBase, "img/Default/brique_");
 		strcpy(themeName, "Default");
 	}
 

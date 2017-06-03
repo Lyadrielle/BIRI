@@ -27,7 +27,7 @@
 
 /* ----------( SCREEN )---------- */
 #define SCREEN_WIDTH 960
-#define SCREEN_HEIGHT 543
+#define SCREEN_HEIGHT 600
 #define BIT_PER_PIXEL 32
 
 /* -----------( MENU )----------- */
@@ -66,8 +66,10 @@
 
 /* -----------( OTHER )---------- */
 #define MALLOC_ERROR -3
-#define TEXTURE_NB 50
+#define TEXTURE_NB 9
 #define TEXTURE_NAME_SIZE 51
+#define HUD_HEIGHT 100
+#define GAME_HEIGHT SCREEN_HEIGHT + (2 * HUD_HEIGHT)
 
 /*/////////////////////////////////////////
  //			ENUMERATIONS				//

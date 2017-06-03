@@ -26,10 +26,10 @@ void collisionBallScreen(Ball *ball) {
 	if ((ball->origin.x - ball->radius) <= 0 || (ball->origin.x + ball->radius) >= SCREEN_WIDTH) {
 		ball->speed.x *= -1;
 	}
-	if ((ball->origin.y - ball->radius) <= 0) {
+	if ((ball->origin.y - ball->radius) <= HUD_HEIGHT) {
 		ballOutOfBounds(ball, TOP);
 	}
-	if ((ball->origin.y + ball->radius) >= SCREEN_HEIGHT) {
+	if ((ball->origin.y + ball->radius) >= SCREEN_HEIGHT - HUD_HEIGHT) {
 		ballOutOfBounds(ball, BOTTOM);
 	}
 }

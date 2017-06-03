@@ -37,10 +37,10 @@ int screenWidthCenter;
  * @param	int	screenWidth	new screenWidth calculated with the config file gridWith
  */
 void reshape(int screenWidth) {
-	glViewport(0, 0, screenWidth, SCREEN_HEIGHT);
+	glViewport(0, 0, screenWidth, (SCREEN_HEIGHT + 2 * HUD_HEIGHT));
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluOrtho2D(0, screenWidth, SCREEN_HEIGHT, 0);
+	gluOrtho2D(0, screenWidth, (SCREEN_HEIGHT + 2 * HUD_HEIGHT), 0);
 }
 
 /**
@@ -48,7 +48,7 @@ void reshape(int screenWidth) {
  * @param int screenWidth new screenWidth calculated with the config file gridWith
  */
 void setVideoMode(int screenWidth) {
-	if(NULL == SDL_SetVideoMode(screenWidth, SCREEN_HEIGHT, BIT_PER_PIXEL, SDL_OPENGL)) {
+	if(NULL == SDL_SetVideoMode(screenWidth, (SCREEN_HEIGHT + 2 * HUD_HEIGHT), BIT_PER_PIXEL, SDL_OPENGL)) {
 		fprintf(stderr, "Impossible d'ouvrir la fenetre. Fin du programme.\n");
 		exit(EXIT_FAILURE);
 	}
@@ -71,7 +71,7 @@ int main (int argc, char** argv) {
 	Uint8 * keyState = SDL_GetKeyState(NULL);
 	int gridWidth = 0, gridHeight = 0, brickWidth = 0;
 	int *brickTypes;
-	GLuint textures_buffer[TEXTURE_NB];
+	GLuint texturesBuffer[TEXTURE_NB];
 
 	if(argc!=2) {
 		printf("Expected config file path as argument\n");
@@ -100,14 +100,14 @@ int main (int argc, char** argv) {
 	GridBrick grid = initGrid(gridWidth, gridHeight, brickTypes);
 	initBrickCoordinates(grid, gridWidth, gridHeight, brickWidth);
 
-	
+
 	/* THEME NAME init */
 	char *themeName = malloc(TEXTURE_NAME_SIZE * sizeof(char));
 	strcpy(themeName, "");
 
 	/* TEXTURES */
-	glGenTextures(TEXTURE_NB, textures);
-	loadTextures(textures_buffer, themeName);
+	glGenTextures(TEXTURE_NB, texturesBuffer);
+	loadTextures(texturesBuffer, themeName);
 
 	free(themeName);
 
@@ -138,6 +138,7 @@ int main (int argc, char** argv) {
 					nbBalls = nbPlayers;
 					break;
 				case PLAYTIME :
+					handleHUD();
 					break;
 				case SCOREBOARD :
 					break;
@@ -160,6 +161,7 @@ int main (int argc, char** argv) {
 		}
 		/* -------------( PLAYTIME FASE )------------ */
 		if (gameStep == PLAYTIME) {
+			drawHUD();
 			for (i = 0; i < nbBalls; ++i) {
 				collisionBallScreen(&balls[i]);
 				for (j = 0; j < nbPlayers; ++j) {
@@ -179,9 +181,9 @@ int main (int argc, char** argv) {
 			}
 
 			for (j = 0; j < nbPlayers; ++j) {
-				drawBar(players[j].bar, textures_buffer);
+				drawBar(players[j].bar, texturesBuffer);
 			}
-			drawGrid(grid, gridWidth, gridHeight, brickWidth, textures_buffer);
+			drawGrid(grid, gridWidth, gridHeight, brickWidth, texturesBuffer);
 
 			for (i = 0; i < nbPlayers; ++i) {
 				if (players[i].life <= 0) {
@@ -233,7 +235,7 @@ int main (int argc, char** argv) {
 	if (balls != NULL) {
 		free(balls);
 	}
-	glDeleteTextures(TEXTURE_NB, textures_buffer);
+	glDeleteTextures(TEXTURE_NB, texturesBuffer);
 	SDL_Quit();
 	return EXIT_SUCCESS;
 }
