@@ -232,6 +232,9 @@ void renderBitmapString(float x, float y, char const *string) {
 }
 
 void printVictoryScreen(Player const *players) {
+	char scorePl[100];
+	int i;
+
 	glColor3f(255, 255, 255);
 	glPushMatrix();
 	switch (totalPlayers) {
@@ -251,6 +254,10 @@ void printVictoryScreen(Player const *players) {
 			break;
 		default :
 			break;
+	}
+	for (i = 0; i < totalPlayers; ++i) {
+		sprintf(scorePl, "%s : %d", players[i].name, players[i].score);
+		renderBitmapString((SCREEN_WIDTH / 2), ((GAME_HEIGHT / 2) +( 30 * (i + 1))), scorePl);
 	}
 	glPopMatrix();
 }

@@ -60,7 +60,8 @@ void initGame(int nbPlayers) {
 	Vector2D ballSpeed;
 	Color3f barColor, ballColor;
 
-	for (i = 1; i <= nbPlayers; ++i) {
+	for (i =
+		1; i <= nbPlayers; ++i) {
 		switch (i) {
 		case 1 :
 			initPoint2D(&barCenter, (screenWidthCenter - (BASIC / 2)), (HUD_HEIGHT + BAR_HEIGHT));
@@ -136,14 +137,14 @@ void hitBrick (Brick *brick, Ball *ball) {
 	}
 
 	if (brick->type == SLOWER_BALL) {
-		ball->speed.x = ball->speed.x == NORMAL ? SLOW : NORMAL;
-		ball->speed.y = ball->speed.y == NORMAL ? SLOW : NORMAL;
+		balls[ball->lastPlayerId - 1].speed.x = balls[ball->lastPlayerId - 1].speed.x < 0 ? - SLOW : SLOW;
+		balls[ball->lastPlayerId - 1].speed.y = balls[ball->lastPlayerId - 1].speed.y < 0 ? - SLOW : SLOW;
 	}
 	if (brick->type == FASTER_BALL) {
-		ball->speed.x = ball->speed.x == NORMAL ? FAST : NORMAL;
-		ball->speed.y = ball->speed.y == NORMAL ? FAST : NORMAL;
+		balls[ball->lastPlayerId - 1].speed.x = balls[ball->lastPlayerId - 1].speed.x < 0 ? - FAST : FAST;
+		balls[ball->lastPlayerId - 1].speed.y = balls[ball->lastPlayerId - 1].speed.y < 0 ? - FAST : FAST;
 	}
-	if (brick->type != ORDINARY) {
+	if (brick->type == SLOWER_BALL || brick->type == FASTER_BALL) {
 		ball->bonusTimer = BALL_BONUS_TIME;
 	}
 }
@@ -161,12 +162,12 @@ void ballOutOfBounds(Ball *ball, enum direction dir) {
 	ball->speed.y *= -1;
 	if (dir == TOP) {
 		--(players[0].life);
-		ball->lastPlayerId = 0;
+		ball->lastPlayerId = 1;
 		ball->origin.y = HUD_HEIGHT + (3 * BAR_HEIGHT);
 	}
 	if (dir == BOTTOM && totalPlayers > 1) {
 		--(players[1].life);
-		ball->lastPlayerId = 1;
+		ball->lastPlayerId = 2;
 		ball->origin.y = GAME_HEIGHT - HUD_HEIGHT - (3 * BAR_HEIGHT);
 	}
 }

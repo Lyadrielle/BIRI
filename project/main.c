@@ -188,6 +188,11 @@ int main (int argc, char** argv) {
 					drawBall(balls[i]);
 				} else {
 					--(balls[i].respawnTimer);
+				}
+				if (!balls[i].bonusTimer) {
+					balls[i].speed.x = balls[i].speed.x < 0 ? - NORMAL : NORMAL;
+					balls[i].speed.y = balls[i].speed.y < 0 ? - NORMAL : NORMAL;
+				} else {
 					--(balls[i].bonusTimer);
 				}
 			}
