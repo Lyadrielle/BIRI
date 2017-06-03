@@ -63,14 +63,14 @@ void initGame(int nbPlayers) {
 		case 1 :
 			initPoint2D(&barCenter, (screenWidthCenter - (BASIC / 2)), (HUD_HEIGHT + BAR_HEIGHT));
 			initColor3f(&barColor, 255, 0, 0);
-			initPoint2D(&ballCenter, (screenWidthCenter - (BASIC / 2)), (HUD_HEIGHT + 3 * BAR_HEIGHT));
+			initPoint2D(&ballCenter, (screenWidthCenter - (BASIC / 2)), (HUD_HEIGHT + (3 * BAR_HEIGHT)));
 			initVector2D(&ballSpeed, NORMAL, NORMAL);
 			initColor3f(&ballColor, 255, 0, 0);
 			break;
 		case 2 :
 			initPoint2D(&barCenter, (screenWidthCenter - (BASIC / 2)), (GAME_HEIGHT - HUD_HEIGHT - BAR_HEIGHT));
 			initColor3f(&barColor, 0, 0, 255);
-			initPoint2D(&ballCenter, (screenWidthCenter - (BASIC / 2)), (GAME_HEIGHT - HUD_HEIGHT - 3 * BAR_HEIGHT));
+			initPoint2D(&ballCenter, (screenWidthCenter - (BASIC / 2)), (GAME_HEIGHT - HUD_HEIGHT - (3 * BAR_HEIGHT)));
 			initVector2D(&ballSpeed, NORMAL, (NORMAL * -1));
 			initColor3f(&ballColor, 0, 0, 255);
 			break;
@@ -159,12 +159,12 @@ void ballOutOfBounds(Ball *ball, enum direction dir) {
 	if (dir == TOP) {
 		--(players[0].life);
 		ball->lastPlayerId = 0;
-		ball->origin.y = HUD_HEIGHT + 3 * BAR_HEIGHT;
+		ball->origin.y = HUD_HEIGHT + (3 * BAR_HEIGHT);
 	}
 	if (dir == BOTTOM) {
 		--(players[1].life);
 		ball->lastPlayerId = 1;
-		ball->origin.y = GAME_HEIGHT - HUD_HEIGHT - 3 * BAR_HEIGHT;
+		ball->origin.y = GAME_HEIGHT - HUD_HEIGHT - (3 * BAR_HEIGHT);
 	}
 }
 

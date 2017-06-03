@@ -68,8 +68,9 @@
 #define MALLOC_ERROR -3
 #define TEXTURE_NB 9
 #define TEXTURE_NAME_SIZE 51
-#define HUD_HEIGHT 100
+#define HUD_HEIGHT 50
 #define GAME_HEIGHT SCREEN_HEIGHT + (2 * HUD_HEIGHT)
+#define LIFE_SIZE 10
 
 /*/////////////////////////////////////////
  //			ENUMERATIONS				//
@@ -291,6 +292,9 @@ void drawBar(Bar bar, GLuint *textures);
 void drawBall(Ball ball);
 void drawBrick(Brick br, int brickWidth,  GLuint textures[]);
 void drawGrid(GridBrick const grid,int gridWidth, int gridHeight, int brickWidth, GLuint textures[]);
+void drawHUD(Player const *pl, Color3f color);
+void drawLife();
+void drawLifes();
 
 /* TEXTURE */
 GLenum testFormat(SDL_Surface *img);

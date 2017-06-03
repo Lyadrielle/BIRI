@@ -150,23 +150,40 @@ void drawGrid(GridBrick const grid,int gridWidth, int gridHeight, int brickWidth
 }
 
 void drawHUD(Player const *pl, Color3f color) {
+	glColor3f(color.r, color.g, color.b);
+
 	if (pl->id == 1) {
 		glBegin(GL_POLYGON);
 			glVertex2f(0, 0);
-			glVertex2f((brickWidth - 1), 0);
-			glVertex2f((brickWidth - 1), (BRICK_HEIGHT - 1));
-			glVertex2f(0, (BRICK_HEIGHT - 1));
+			glVertex2f(SCREEN_WIDTH, 0);
+			glVertex2f(SCREEN_WIDTH, HUD_HEIGHT);
+			glVertex2f(0, HUD_HEIGHT);
 		glEnd();
+
+		glPushMatrix();
+			glTranslatef((SCREEN_WIDTH / 2), ((HUD_HEIGHT / 2) - (LIFE_SIZE / 2)), 0);
+			drawLifes();
+		glPopMatrix();
+
 	} else if (pl->id == 2) {
 		glBegin(GL_POLYGON);
-			glVertex2f(0, 0);
-			glVertex2f((brickWidth - 1), 0);
-			glVertex2f((brickWidth - 1), (BRICK_HEIGHT - 1));
-			glVertex2f(0, (BRICK_HEIGHT - 1));
+			glVertex2f(0, GAME_HEIGHT - HUD_HEIGHT);
+			glVertex2f(SCREEN_WIDTH, GAME_HEIGHT - HUD_HEIGHT);
+			glVertex2f(SCREEN_WIDTH, GAME_HEIGHT);
+			glVertex2f(0, GAME_HEIGHT);
 		glEnd();
 	}
 }
 
+void drawLife() {
+	glColor3f(255, 0, 0);
+	glBegin(GL_POLYGON);
+		glVertex2f(0, 0);
+		glVertex2f(LIFE_SIZE, 0);
+		glVertex2f(LIFE_SIZE, LIFE_SIZE);
+		glVertex2f(0, LIFE_SIZE);
+	glEnd();
+}
 
 /*/////////////////////////////////////////
  //			TEXTURES FUNCTIONS			//

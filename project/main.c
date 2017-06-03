@@ -37,10 +37,10 @@ int screenWidthCenter;
  * @param	int	screenWidth	new screenWidth calculated with the config file gridWith
  */
 void reshape(int screenWidth) {
-	glViewport(0, 0, screenWidth, (SCREEN_HEIGHT + 2 * HUD_HEIGHT));
+	glViewport(0, 0, screenWidth, GAME_HEIGHT);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluOrtho2D(0, screenWidth, (SCREEN_HEIGHT + 2 * HUD_HEIGHT), 0);
+	gluOrtho2D(0, screenWidth, GAME_HEIGHT, 0);
 }
 
 /**
@@ -48,7 +48,7 @@ void reshape(int screenWidth) {
  * @param int screenWidth new screenWidth calculated with the config file gridWith
  */
 void setVideoMode(int screenWidth) {
-	if(NULL == SDL_SetVideoMode(screenWidth, (SCREEN_HEIGHT + 2 * HUD_HEIGHT), BIT_PER_PIXEL, SDL_OPENGL)) {
+	if(NULL == SDL_SetVideoMode(screenWidth, GAME_HEIGHT, BIT_PER_PIXEL, SDL_OPENGL)) {
 		fprintf(stderr, "Impossible d'ouvrir la fenetre. Fin du programme.\n");
 		exit(EXIT_FAILURE);
 	}
@@ -99,7 +99,8 @@ int main (int argc, char** argv) {
 	initMenu(menu);
 	GridBrick grid = initGrid(gridWidth, gridHeight, brickTypes);
 	initBrickCoordinates(grid, gridWidth, gridHeight, brickWidth);
-
+	Color3f hudColor;
+	initColor3f(&hudColor, 200, 200, 200);
 
 	/* THEME NAME init */
 	char *themeName = malloc(TEXTURE_NAME_SIZE * sizeof(char));
@@ -138,7 +139,7 @@ int main (int argc, char** argv) {
 					nbBalls = nbPlayers;
 					break;
 				case PLAYTIME :
-					handleHUD();
+					/*handleHUD();*/
 					break;
 				case SCOREBOARD :
 					break;
@@ -161,7 +162,6 @@ int main (int argc, char** argv) {
 		}
 		/* -------------( PLAYTIME FASE )------------ */
 		if (gameStep == PLAYTIME) {
-			drawHUD();
 			for (i = 0; i < nbBalls; ++i) {
 				collisionBallScreen(&balls[i]);
 				for (j = 0; j < nbPlayers; ++j) {
@@ -181,6 +181,7 @@ int main (int argc, char** argv) {
 			}
 
 			for (j = 0; j < nbPlayers; ++j) {
+				drawHUD(&players[j], hudColor);
 				drawBar(players[j].bar, texturesBuffer);
 			}
 			drawGrid(grid, gridWidth, gridHeight, brickWidth, texturesBuffer);
