@@ -103,8 +103,7 @@ int handleButton(Button *bt, SDL_Event event, int *currentStep) {
 				*currentStep = PLAYTIME;
 			}/*
 			if (bt->param == SETTINGS) {
-				float currentColor = ((++theme) * 128) / 255;
-				initColor3f(bt->color, );
+				initColor3f(&bt->color, 255, 0, 0);
 			}*/
 			if (bt->param == QUIT) {
 				*currentStep = QUIT_PROGRAM;
@@ -123,11 +122,11 @@ int handleButton(Button *bt, SDL_Event event, int *currentStep) {
  * @return	bool			return true if the clic is inside the action area
  */
 bool isInsideButton(Point2D clic, Button bt) {
-  return ((clic.x > bt.origin.x)
-    && (clic.y > bt.origin.y)
-    && (clic.x < (bt.origin.x + BUTTON_WIDTH))
-    && (clic.y < (bt.origin.y + BUTTON_HEIGHT))
-  );
+	return ((clic.x > bt.origin.x)
+		&& (clic.y > bt.origin.y)
+		&& (clic.x < (bt.origin.x + BUTTON_WIDTH))
+		&& (clic.y < (bt.origin.y + BUTTON_HEIGHT))
+	);
 }
 
 char* handleTextField(TextField *tf, SDL_Event event) {
@@ -146,14 +145,10 @@ char* handleTextField(TextField *tf, SDL_Event event) {
 
 bool isInsideTextField(Point2D clic, TextField tf) {
 	return ((clic.x > tf.origin.x)
-    && (clic.y > tf.origin.y)
-    && (clic.x < (tf.origin.x + TEXT_FIELD_WIDTH))
-    && (clic.y < (tf.origin.y + TEXT_FIELD_HEIGHT))
-  );
-}
-
-void drawText() {
-
+		&& (clic.y > tf.origin.y)
+		&& (clic.x < (tf.origin.x + TEXT_FIELD_WIDTH))
+		&& (clic.y < (tf.origin.y + TEXT_FIELD_HEIGHT))
+	);
 }
 
 void selectTheme(int theme) {

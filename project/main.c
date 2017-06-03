@@ -17,6 +17,7 @@
 #include <SDL/SDL_image.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <GL/glut.h>
 
 #include "headers.h"
 
@@ -72,6 +73,7 @@ int main (int argc, char** argv) {
 	int gridWidth = 0, gridHeight = 0, brickWidth = 0;
 	int *brickTypes;
 	GLuint texturesBuffer[TEXTURE_NB];
+	glutInit(&argc, argv);
 
 	if(argc!=2) {
 		printf("Expected config file path as argument\n");

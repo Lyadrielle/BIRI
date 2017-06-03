@@ -70,7 +70,7 @@
 #define TEXTURE_NAME_SIZE 51
 #define HUD_HEIGHT 50
 #define GAME_HEIGHT SCREEN_HEIGHT + (2 * HUD_HEIGHT)
-#define LIFE_SIZE 10
+#define LIFE_SIZE 20
 
 /*/////////////////////////////////////////
  //			ENUMERATIONS				//
@@ -294,7 +294,8 @@ void drawBrick(Brick br, int brickWidth,  GLuint textures[]);
 void drawGrid(GridBrick const grid,int gridWidth, int gridHeight, int brickWidth, GLuint textures[]);
 void drawHUD(Player const *pl, Color3f color);
 void drawLife();
-void drawLifes();
+void drawLifes(int nbHearts);
+void renderBitmapString(float x, float y, char const *string);
 
 /* TEXTURE */
 GLenum testFormat(SDL_Surface *img);
@@ -322,6 +323,5 @@ void drawMenu(Button const *menu);
 int handleButton(Button *bt, SDL_Event event, int *currentStep);
 bool isInsideButton(Point2D clic, Button bt);
 bool isInsideTextField(Point2D clic, TextField tf);
-void drawText();
 void selectTheme(int theme);
 void quit(int quit);

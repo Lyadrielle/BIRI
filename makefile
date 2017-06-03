@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -ansi
-LDFLAGS = -lSDL -lGL -lGLU -lm -lSDL_image
+LDFLAGS = -lSDL -lGL -lGLU -lm -lSDL_image -lglut
 
 APP_BIN = KassPong
 

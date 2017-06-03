@@ -16,6 +16,8 @@
 #include <SDL/SDL.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <GL/glut.h>
+#include <GL/glx.h>
 #include <SDL/SDL_image.h>
 
 #include "headers.h"
@@ -161,8 +163,12 @@ void drawHUD(Player const *pl, Color3f color) {
 		glEnd();
 
 		glPushMatrix();
-			glTranslatef((SCREEN_WIDTH / 2), ((HUD_HEIGHT / 2) - (LIFE_SIZE / 2)), 0);
-			drawLifes();
+			glTranslatef((LIFE_SIZE * 2), ((HUD_HEIGHT / 2) - (LIFE_SIZE / 2)), 0);
+			drawLifes(pl->life);
+		glPopMatrix();
+
+		glPushMatrix();
+			renderBitmapString((SCREEN_WIDTH / 2), (HUD_HEIGHT / 2), pl->name);
 		glPopMatrix();
 
 	} else if (pl->id == 2) {
@@ -172,6 +178,15 @@ void drawHUD(Player const *pl, Color3f color) {
 			glVertex2f(SCREEN_WIDTH, GAME_HEIGHT);
 			glVertex2f(0, GAME_HEIGHT);
 		glEnd();
+
+		glPushMatrix();
+			glTranslatef((LIFE_SIZE * 2), (GAME_HEIGHT - (HUD_HEIGHT / 2) - (LIFE_SIZE / 2)), 0);
+			drawLifes(pl->life);
+		glPopMatrix();
+
+		glPushMatrix();
+			renderBitmapString((SCREEN_WIDTH / 2), (GAME_HEIGHT - (HUD_HEIGHT / 2)), pl->name);
+		glPopMatrix();
 	}
 }
 
@@ -183,6 +198,26 @@ void drawLife() {
 		glVertex2f(LIFE_SIZE, LIFE_SIZE);
 		glVertex2f(0, LIFE_SIZE);
 	glEnd();
+}
+
+void drawLifes(int nbHearts) {
+	int i;
+	for (i = nbHearts; i > 0; --i) {
+		glPushMatrix();
+		glTranslatef((i * (LIFE_SIZE + (LIFE_SIZE / 2))), 0, 0);
+			drawLife();
+		glPopMatrix();
+	}
+}
+
+void renderBitmapString(float x, float y, char const *string) {
+	char const *c;
+	for (c = string; *c != '\0'; c++) {}
+	int strLenght = c - string;
+	glRasterPos2f(x - ((9 * strLenght) / 2), y);
+	for (c = string; *c != '\0'; c++) {
+		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *c);
+	}
 }
 
 /*/////////////////////////////////////////

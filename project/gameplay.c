@@ -77,7 +77,7 @@ void initGame(int nbPlayers) {
 		default :
 			break;
 		}
-		initPlayer(&players[i-1], i, "Teemo", barCenter, barColor);
+		initPlayer(&players[i-1], i, "TRAPATAPUSHPUTASSISTATUR", barCenter, barColor);
 		initBall(&balls[i-1], i, BALL_RADIUS, ballSpeed, ballCenter, ballColor, i);
 	}
 }
@@ -113,6 +113,7 @@ void hitBrick (Brick *brick, Ball *ball) {
 	int barWidth = players[ball->lastPlayerId - 1].bar.width;
 	if (brick->type != INDESTRUCTIBLE) {
 		brick->status = DESTROYED;
+		players[ball->lastPlayerId - 1].score += 10;
 	}
 	if (brick->type == WIDER_BAR) {
 		if (barWidth == SMALL) {
