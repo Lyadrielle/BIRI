@@ -47,8 +47,7 @@
 
 /* -----------( BRICK )---------- */
 #define BRICK_WIDTH 70
-#define BRICK_HEIGHT 20
-
+#define BRICK_HEIGHT 24
 /* -----------( BAR )------------ */
 #define BAR_HEIGHT 12
 #define BAR_SPEED 4
@@ -69,7 +68,7 @@
 #define TEXTURE_NB 9
 #define TEXTURE_NAME_SIZE 51
 #define HUD_HEIGHT 50
-#define GAME_HEIGHT SCREEN_HEIGHT + (2 * HUD_HEIGHT)
+#define GAME_HEIGHT (SCREEN_HEIGHT + (2 * HUD_HEIGHT))
 #define LIFE_SIZE 20
 
 /*/////////////////////////////////////////
