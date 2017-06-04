@@ -113,8 +113,8 @@ enum brickType {
 };
 
 enum brickTexture {
-	BONUS = 3,
-	MALUS = 4
+	BONUS = 2,
+	MALUS = 3
 };
 
 enum direction {

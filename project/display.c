@@ -263,7 +263,6 @@ GLenum testFormat(SDL_Surface *img){
  * @param	char 		themePath	the name of the theme directory
  */
 void loadTextures(char *themePath) {
-	int nbBrickType = 5;
 	SDL_Surface *surface;
 	int i;
 	char *tmp = themePath;
@@ -300,7 +299,7 @@ void loadTextures(char *themePath) {
 		}
 
 		/* Génération des identifiants des textures */
-		glBindTexture(GL_TEXTURE_2D, texturesBuffer[i]);
+		glBindTexture(GL_TEXTURE_2D, texturesBuffer[i - 1]);
 
 		/* Association des textures avec les identifiants*/
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
