@@ -116,7 +116,7 @@ void drawGrid(GridBrick const grid,int gridWidth, int gridHeight) {
 
 /**
  * Draw the background texture. (x = 0, y = 0) (top left corner)
- * 
+ *
  */
 void drawBackground() {
 		glEnable(GL_TEXTURE_2D);
@@ -138,8 +138,7 @@ void drawBackground() {
 		glDisable(GL_TEXTURE_2D);
 }
 
-void drawHUD(Player const *pl, Color3f color) {
-	glColor3f(color.r, color.g, color.b);
+void drawHUD(Player const *pl) {
 	char score[9] = "0";
 	sprintf(score, "%d", pl->score);
 
@@ -166,6 +165,7 @@ void drawHUD(Player const *pl, Color3f color) {
 			drawLifes(pl->life);
 		glPopMatrix();
 
+		glColor3f(5, 11, 11);
 		glPushMatrix();
 			renderBitmapString((SCREEN_WIDTH / 2), (HUD_HEIGHT / 2)+5, pl->name);
 		glPopMatrix();
@@ -195,7 +195,7 @@ void drawHUD(Player const *pl, Color3f color) {
 			drawLifes(pl->life);
 		glPopMatrix();
 
-		glColor3f(0, 0, 0);
+		glColor3f(5, 11, 11);
 		glPushMatrix();
 			renderBitmapString((SCREEN_WIDTH / 2), (SCREEN_HEIGHT - (HUD_HEIGHT / 2))+5, pl->name);
 		glPopMatrix();
