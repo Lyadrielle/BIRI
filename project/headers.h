@@ -304,7 +304,7 @@ void drawBall(Ball ball);
 void drawBrick(Brick br);
 void drawGrid(GridBrick const grid,int gridWidth, int gridHeight);
 void drawBackground();
-void drawHUD(Player const *pl, Color3f color);
+void drawHUD(Player const *pl);
 void drawLife();
 void drawLifes(int nbHearts);
 void renderBitmapString(float x, float y, char const *string);

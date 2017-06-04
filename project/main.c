@@ -106,8 +106,6 @@ int main (int argc, char** argv) {
 	initMenu(menu);
 	GridBrick grid = initGrid(gridWidth, gridHeight, brickTypes);
 	initBrickCoordinates(grid, gridWidth, gridHeight);
-	Color3f hudColor;
-	initColor3f(&hudColor, 200, 200, 200);
 	glGenTextures(TEXTURE_NB, texturesBuffer);
 	loadTextures("img/THEME1/");
 
@@ -185,7 +183,7 @@ int main (int argc, char** argv) {
 			}
 
 			for (j = 0; j < nbPlayers; ++j) {
-				drawHUD(&players[j], hudColor);
+				drawHUD(&players[j]);
 				drawBar(players[j].bar);
 			}
 			drawGrid(grid, gridWidth, gridHeight);
