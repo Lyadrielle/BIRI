@@ -69,7 +69,17 @@ void initGame(int nbPlayers) {
 		case 2 :
 			initPoint2D(&barCenter, (SCREEN_WIDTH_CENTER - (BASIC / 2)), (SCREEN_HEIGHT - HUD_HEIGHT - BAR_HEIGHT));
 			initPoint2D(&ballCenter, (SCREEN_WIDTH_CENTER - (BASIC / 2)), (SCREEN_HEIGHT - HUD_HEIGHT - (3 * BAR_HEIGHT)));
+			initVector2D(&ballSpeed, -NORMAL, -NORMAL);
+			break;
+		case 3 :
+			initPoint2D(&barCenter, (HUD_HEIGHT + BAR_HEIGHT), (SCREEN_HEIGHT_CENTER - (BASIC / 2)));
+			initPoint2D(&ballCenter, (HUD_HEIGHT + (3 * BAR_HEIGHT)), (SCREEN_HEIGHT_CENTER - (BASIC / 2)));
 			initVector2D(&ballSpeed, NORMAL, -NORMAL);
+			break;
+		case 4 :
+			initPoint2D(&barCenter, (SCREEN_WIDTH - HUD_HEIGHT - BAR_HEIGHT), (SCREEN_HEIGHT_CENTER - (BASIC / 2)));
+			initPoint2D(&ballCenter, (SCREEN_WIDTH - HUD_HEIGHT - (3 * BAR_HEIGHT)), (SCREEN_HEIGHT_CENTER - (BASIC / 2)));
+			initVector2D(&ballSpeed, -NORMAL, NORMAL);
 			break;
 		default :
 			break;
@@ -89,16 +99,26 @@ void initGame(int nbPlayers) {
  * @param	enum	dir	the screen border
  */
 void moveBar (Bar *bar, enum direction dir) {
-  if (dir == LEFT) {
-    if ((bar->center.x - (bar->width / 2)) >= (HUD_HEIGHT)) {
-      bar->center.x -= BAR_SPEED;
-    }
-  }
-  if (dir == RIGHT) {
-    if ((bar->center.x + (bar->width / 2)) <= (SCREEN_WIDTH - HUD_HEIGHT)) {
-      bar->center.x += BAR_SPEED;
-    }
-  }
+	if (dir == LEFT) {
+		if ((bar->center.x - (bar->width / 2)) >= (HUD_HEIGHT)) {
+			bar->center.x -= BAR_SPEED;
+		}
+	}
+	if (dir == RIGHT) {
+		if ((bar->center.x + (bar->width / 2)) <= (SCREEN_WIDTH - HUD_HEIGHT)) {
+			bar->center.x += BAR_SPEED;
+		}
+	}
+	if (dir == TOP) {
+		if ((bar->center.y - (bar->width / 2)) >= (HUD_HEIGHT)) {
+			bar->center.y -= BAR_SPEED;
+		}
+	}
+	if (dir == BOTTOM) {
+		if ((bar->center.y + (bar->width / 2)) <= (SCREEN_HEIGHT - HUD_HEIGHT)) {
+			bar->center.y += BAR_SPEED;
+		}
+	}
 }
 
 void handleGladOS(Bar *bar, Ball const *balls, int nbBalls) {
@@ -194,6 +214,7 @@ void ballOutOfBounds(Ball *ball, enum direction dir) {
 	ball->origin.x = SCREEN_WIDTH_CENTER;
 	ball->respawnTimer = BALL_RESPAWN_TIME;
 	ball->speed.y *= -1;
+	ball->speed.x *= -1;
 	if (dir == TOP) {
 		--(players[0].life);
 		ball->lastPlayerId = 1;
@@ -203,6 +224,16 @@ void ballOutOfBounds(Ball *ball, enum direction dir) {
 		--(players[1].life);
 		ball->lastPlayerId = 2;
 		ball->origin.y = SCREEN_HEIGHT - HUD_HEIGHT - (3 * BAR_HEIGHT);
+	}
+	if (dir == LEFT) {
+		--(players[2].life);
+		ball->lastPlayerId = 3;
+		ball->origin.x = HUD_HEIGHT + (3 * BAR_HEIGHT);
+	}
+	if (dir == RIGHT) {
+		--(players[3].life);
+		ball->lastPlayerId = 4;
+		ball->origin.x = SCREEN_WIDTH - HUD_HEIGHT - (3 * BAR_HEIGHT);
 	}
 }
 

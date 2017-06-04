@@ -188,6 +188,7 @@ typedef struct Bar {
 	int width;
 	Point2D center;
 	Color3f color;
+	bool orientationHorizontal;
 } Bar;
 
 typedef struct Brick {
@@ -244,7 +245,6 @@ extern int screenWidthCenter;
 extern Ball *balls;
 extern Player *players;
 extern char *playersNames[];
-extern int totalPlayers;
 extern GLuint texturesBuffer[];
 extern Color3f themeColor;
 
@@ -286,7 +286,7 @@ float distance(Point2D a, Point2D b);
 
 /* ------------( collision.c )----------- */
 
-void collisionBallScreen(Ball *ball);
+void collisionBallScreen(Ball *ball, int nbPlayers);
 bool collisionBallLine(Ball const *ball, Point2D A, Point2D B);
 enum collisionType collisionBallSegment(Ball const *ball, Point2D A, Point2D B);
 enum direction collisionBallBrick(Ball const *ball, Brick const *brick);

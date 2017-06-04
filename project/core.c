@@ -68,6 +68,9 @@ int *readConfigFile(char *filePath, int *gridWidth, int *gridHeight) {
  */
 void initBar(Bar *bar, Point2D center, Color3f color, int playerId) {
 	bar->playerId = playerId;
+
+	bar->orientationHorizontal = (playerId == 1 || playerId == 2);
+
 	bar->width = BASIC;
 
 	bar->center.x = center.x;

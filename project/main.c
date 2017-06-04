@@ -25,7 +25,7 @@
  //			GLOBAL VARIABLES DEF		//
 /////////////////////////////////////////*/
 
-char *playersNames[10];
+char *playersNames[4];
 GLuint texturesBuffer[TEXTURE_NB];
 Color3f themeColor;
 
@@ -58,6 +58,38 @@ void setVideoMode() {
 	SDL_GL_SwapBuffers();
 }
 
+void instanciatePlayerNames(int argc, char** argv) {
+	if(argc < 2) {
+		printf("ERREUR : Config file manquant\n");
+		return EXIT_FAILURE;
+	} else if (argc == 2) {
+		playersNames[0] = "Player 1";
+		playersNames[1] = "Player 2";
+		playersNames[2] = "Player 3";
+		playersNames[3] = "Player 4";
+	} else if (argc == 3) {
+		playersNames[0] = argv[2];
+		playersNames[1] = "Player 2";
+		playersNames[2] = "Player 3";
+		playersNames[3] = "Player 4";
+	} else if (argc == 4) {
+		playersNames[0] = argv[2];
+		playersNames[1] = argv[3];
+		playersNames[2] = "Player 3";
+		playersNames[3] = "Player 4";
+	} else if (argc == 5) {
+		playersNames[0] = argv[2];
+		playersNames[1] = argv[3];
+		playersNames[2] = argv[4];
+		playersNames[3] = "Player 4";
+	} else if (argc == 6){
+		playersNames[0] = argv[2];
+		playersNames[1] = argv[3];
+		playersNames[2] = argv[4];
+		playersNames[3] = argv[5];
+	}
+}
+
 /*/////////////////////////////////////////
  //			MAIN FUNCTION START			//
 /////////////////////////////////////////*/
@@ -75,20 +107,7 @@ int main (int argc, char** argv) {
 	bool gladOS = false;
 	glutInit(&argc, argv);
 	initColor3f(&themeColor, 255, 139, 0);
-
-	if(argc < 2) {
-		printf("ERREUR : Config file manquant\n");
-		return EXIT_FAILURE;
-	} else if (argc == 2) {
-		playersNames[0] = "Player 1";
-		playersNames[1] = "Player 2";
-	} else if (argc == 3) {
-		playersNames[0] = argv[2];
-		playersNames[1] = "Player 2";
-	} else if (argc == 4) {
-		playersNames[0] = argv[2];
-		playersNames[1] = argv[3];
-	}
+	instanciatePlayerNames(argc, argv);
 
 	brickTypes = readConfigFile(argv[1], &gridWidth, &gridHeight);
 
@@ -132,11 +151,11 @@ int main (int argc, char** argv) {
 				case INITIALISATON :
 					tmp = handleButton(&menu[0], trigger, &gameStep);
 					if (tmp == 1) gladOS = true;
-					if (tmp && tmp < 4)	nbPlayers = tmp + 1;
+					if (tmp && tmp <= 4)	nbPlayers = tmp + 1;
 					tmp = handleButton(&menu[1], trigger, &gameStep);
-					if (tmp && tmp < 4)	nbPlayers = tmp;
+					if (tmp && tmp <= 4)	nbPlayers = tmp;
 					tmp = handleButton(&menu[2], trigger, &gameStep);
-					if (tmp && tmp < 4)	nbPlayers = tmp;
+					if (tmp && tmp <= 4)	nbPlayers = tmp;
 					handleButton(&menu[3], trigger, &gameStep);
 					handleButton(&menu[4], trigger, &gameStep);
 					nbBalls = nbPlayers;
@@ -167,7 +186,7 @@ int main (int argc, char** argv) {
 		if (gameStep == PLAYTIME) {
 			drawBackgroundGame();
 			for (i = 0; i < nbBalls; ++i) {
-				collisionBallScreen(&balls[i]);
+				collisionBallScreen(&balls[i], nbPlayers);
 				for (j = 0; j < nbPlayers; ++j) {
 					collisionBarBall(&(players[j].bar), &balls[i]);
 				}
@@ -215,21 +234,24 @@ int main (int argc, char** argv) {
 		/////////////////////////////////////////*/
 		if (gameStep == PLAYTIME) {
 			keyState = SDL_GetKeyState(NULL);
-			if (keyState[SDLK_LEFT]) {
-				moveBar(&(players[0].bar), LEFT);
-			}
-			if (keyState[SDLK_RIGHT]) {
-				moveBar(&(players[0].bar), RIGHT);
-			}
+			if (keyState[SDLK_LEFT]) moveBar(&(players[0].bar), LEFT);
+			if (keyState[SDLK_RIGHT]) moveBar(&(players[0].bar), RIGHT);
+
+			/* IA */
 			if (!gladOS) {
-				if (keyState[SDLK_q]) {
-					moveBar(&(players[1].bar), LEFT);
-				}
-				if (keyState[SDLK_d]) {
-					moveBar(&(players[1].bar), RIGHT);
-				}
+				if (keyState[SDLK_q]) moveBar(&(players[1].bar), LEFT);
+				if (keyState[SDLK_d]) moveBar(&(players[1].bar), RIGHT);
 			} else {
 				handleGladOS(&(players[1].bar), balls, nbPlayers);
+			}
+
+			/* 4 PLAYERS */
+			if (nbPlayers > 2) {
+				if (keyState[SDLK_u]) moveBar(&(players[2].bar), TOP);
+				if (keyState[SDLK_n]) moveBar(&(players[2].bar), BOTTOM);
+
+				if (keyState[SDLK_KP9]) moveBar(&(players[3].bar), TOP);
+				if (keyState[SDLK_KP3]) moveBar(&(players[3].bar), BOTTOM);
 			}
 
 			SDL_Delay(5);

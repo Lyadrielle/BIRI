@@ -22,10 +22,20 @@
  * determines if there is a collision between a ball and the screen borders.
  * @param	Ball*	ball	the current ball pointer
  */
-void collisionBallScreen(Ball *ball) {
-	if ((ball->origin.x - ball->radius) <= HUD_HEIGHT || (ball->origin.x + ball->radius) >= (SCREEN_WIDTH - HUD_HEIGHT)) {
-		ball->speed.x *= -1;
+void collisionBallScreen(Ball *ball, int nbPlayers) {
+	if (nbPlayers < 3) {
+		if ((ball->origin.x - ball->radius) <= HUD_HEIGHT || (ball->origin.x + ball->radius) >= (SCREEN_WIDTH - HUD_HEIGHT)) {
+			ball->speed.x *= -1;
+		}
+	} else {
+		if ((ball->origin.x - ball->radius) <= HUD_HEIGHT) {
+			ballOutOfBounds(ball, LEFT);
+		}
+		if ((ball->origin.x + ball->radius) >= (SCREEN_WIDTH - HUD_HEIGHT)) {
+			ballOutOfBounds(ball, RIGHT);
+		}
 	}
+
 	if ((ball->origin.y - ball->radius) <= HUD_HEIGHT) {
 		ballOutOfBounds(ball, TOP);
 	}

@@ -22,8 +22,6 @@
 
 #include "headers.h"
 
-int totalPlayers;
-
 /*/////////////////////////////////////////
  //		BASIC DRAWING FUNCTIONS			//
 /////////////////////////////////////////*/
@@ -34,12 +32,21 @@ int totalPlayers;
  */
 void drawBar(Bar bar) {
 	glColor3f(bar.color.r, bar.color.g, bar.color.b);
-	glBegin(GL_POLYGON);
-		glVertex2f((bar.center.x - bar.width / 2), (bar.center.y - BAR_HEIGHT / 2));
-		glVertex2f((bar.center.x + bar.width / 2), (bar.center.y - BAR_HEIGHT / 2));
-		glVertex2f((bar.center.x + bar.width / 2), (bar.center.y + BAR_HEIGHT / 2));
-		glVertex2f((bar.center.x - bar.width / 2), (bar.center.y + BAR_HEIGHT / 2));
-	glEnd();
+	if (bar.orientationHorizontal) {
+		glBegin(GL_POLYGON);
+			glVertex2f((bar.center.x - bar.width / 2), (bar.center.y - BAR_HEIGHT / 2));
+			glVertex2f((bar.center.x + bar.width / 2), (bar.center.y - BAR_HEIGHT / 2));
+			glVertex2f((bar.center.x + bar.width / 2), (bar.center.y + BAR_HEIGHT / 2));
+			glVertex2f((bar.center.x - bar.width / 2), (bar.center.y + BAR_HEIGHT / 2));
+		glEnd();
+	} else {
+		glBegin(GL_POLYGON);
+			glVertex2f((bar.center.x - BAR_HEIGHT / 2), (bar.center.y - bar.width / 2));
+			glVertex2f((bar.center.x + BAR_HEIGHT / 2), (bar.center.y - bar.width / 2));
+			glVertex2f((bar.center.x + BAR_HEIGHT / 2), (bar.center.y + bar.width / 2));
+			glVertex2f((bar.center.x - BAR_HEIGHT / 2), (bar.center.y + bar.width / 2));
+		glEnd();
+	}
 }
 
 /**
@@ -276,7 +283,7 @@ void printVictoryScreen(Player const *players) {
 
 	glColor3f(255, 255, 255);
 	glPushMatrix();
-	switch (totalPlayers) {
+	switch (2) {
 		case 1 :
 				if (players[0].life == 0) {
 					renderBitmapString((SCREEN_WIDTH / 2), (GAME_HEIGHT / 2), "Ordinateur");
@@ -294,7 +301,7 @@ void printVictoryScreen(Player const *players) {
 		default :
 			break;
 	}
-	for (i = 0; i < totalPlayers; ++i) {
+	for (i = 0; i < 2; ++i) {
 		sprintf(scorePl, "%s : %d", players[i].name, players[i].score);
 		renderBitmapString((SCREEN_WIDTH / 2), ((GAME_HEIGHT / 2) +( 30 * (i + 1))), scorePl);
 	}
