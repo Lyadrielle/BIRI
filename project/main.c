@@ -156,11 +156,12 @@ int main (int argc, char** argv) {
 		glClear(GL_COLOR_BUFFER_BIT);
 		/* ----------( INITIALISATION FASE )---------- */
 		if (gameStep == INITIALISATON) {
+			drawBackgroundMenu();
 			drawMenu(menu);
 		}
 		/* -------------( PLAYTIME FASE )------------ */
 		if (gameStep == PLAYTIME) {
-			drawBackground();
+			drawBackgroundGame();
 			for (i = 0; i < nbBalls; ++i) {
 				collisionBallScreen(&balls[i]);
 				for (j = 0; j < nbPlayers; ++j) {
