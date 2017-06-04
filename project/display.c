@@ -32,37 +32,14 @@ int totalPlayers;
  * Draw a centerd bar based on the player's id.
  * @param	Bar	bar	the current bar to draw
  */
-void drawBar(Bar bar, GLuint *textures) {
-	if(bar.playerId < TEXTURE_NB){
-		glEnable(GL_TEXTURE_2D);
-		glColor3f(255,255,255);
-		glBindTexture(GL_TEXTURE_2D, textures[bar.playerId]);
-
-		glBegin(GL_POLYGON);
-		glTexCoord2f(0.0f,0.0f);
+void drawBar(Bar bar) {
+	glColor3f(bar.color.r, bar.color.g, bar.color.b);
+	glBegin(GL_POLYGON);
 		glVertex2f((bar.center.x - bar.width / 2), (bar.center.y - BAR_HEIGHT / 2));
-		glTexCoord2f(1.0f, 0.0f);
 		glVertex2f((bar.center.x + bar.width / 2), (bar.center.y - BAR_HEIGHT / 2));
-		glTexCoord2f(1.0f, 1.0f);
 		glVertex2f((bar.center.x + bar.width / 2), (bar.center.y + BAR_HEIGHT / 2));
-		glTexCoord2f(0.0f, 1.0f);
 		glVertex2f((bar.center.x - bar.width / 2), (bar.center.y + BAR_HEIGHT / 2));
-		glEnd();
-
-		glBindTexture(GL_TEXTURE_2D, textures[bar.playerId]);
-		glDisable(GL_TEXTURE_2D);
-
-	}
-	else {
-		glColor3f(bar.color.r, bar.color.g, bar.color.b);
-		glBegin(GL_POLYGON);
-			glVertex2f((bar.center.x - bar.width / 2), (bar.center.y - BAR_HEIGHT / 2));
-			glVertex2f((bar.center.x + bar.width / 2), (bar.center.y - BAR_HEIGHT / 2));
-			glVertex2f((bar.center.x + bar.width / 2), (bar.center.y + BAR_HEIGHT / 2));
-			glVertex2f((bar.center.x - bar.width / 2), (bar.center.y + BAR_HEIGHT / 2));
-		glEnd();
-	}
-
+	glEnd();
 }
 
 /**
@@ -75,7 +52,6 @@ void drawBall(Ball ball) {
 
 	glColor3f(ball.color.r, ball.color.g, ball.color.b);
 	glBegin(GL_POLYGON);
-
 	for(i = 0; i < sides; ++i){
 		angle =  i * 2*PI / sides;
 		glVertex2f(
@@ -91,13 +67,21 @@ void drawBall(Ball ball) {
  * @param	Brick	br			the current brick to draw
  * @param	int		brickWidth	the brick width based on the
  *             					config file gridWidth and screenWidth
- * @param	GLuint 		textures 	array containing textures places
  */
-void drawBrick(Brick br, int brickWidth, GLuint textures[]) {
-	if(br.type < TEXTURE_NB){
+void drawBrick(Brick br, int brickWidth) {
+	int index = defineBrickColor(br);
+	printf("INDEX : %d\n", index);
+	if(index < 1 || index > 4){
+		glColor3f(255, 255, 255);
+		glBegin(GL_POLYGON);
+		glVertex2f(0, 0);
+		glVertex2f((brickWidth - 1), 0);
+		glVertex2f((brickWidth - 1), (BRICK_HEIGHT - 1));
+		glVertex2f(0, (BRICK_HEIGHT - 1));
+		glEnd();
+	}	else {
 		glEnable(GL_TEXTURE_2D);
-		glColor3f(255,255,255);
-		glBindTexture(GL_TEXTURE_2D, textures[br.type]);
+		glBindTexture(GL_TEXTURE_2D, texturesBuffer[index]);
 
 		glBegin(GL_POLYGON);
 		glTexCoord2f(0.0f,0.0f);
@@ -110,18 +94,8 @@ void drawBrick(Brick br, int brickWidth, GLuint textures[]) {
 		glVertex2f(0, (BRICK_HEIGHT - 1));
 		glEnd();
 
-		glBindTexture(GL_TEXTURE_2D, textures[br.type]);
+		glBindTexture(GL_TEXTURE_2D, texturesBuffer[index]);
 		glDisable(GL_TEXTURE_2D);
-
-	}
-	else {
-		defineBrickColor(br);
-		glBegin(GL_POLYGON);
-		glVertex2f(0, 0);
-		glVertex2f((brickWidth - 1), 0);
-		glVertex2f((brickWidth - 1), (BRICK_HEIGHT - 1));
-		glVertex2f(0, (BRICK_HEIGHT - 1));
-		glEnd();
 	}
 }
 
@@ -133,7 +107,7 @@ void drawBrick(Brick br, int brickWidth, GLuint textures[]) {
  * @param	int			brickWidth	the brickWidth based on the
  *              					gridWidth and screenWidth
  */
-void drawGrid(GridBrick const grid,int gridWidth, int gridHeight, int brickWidth, GLuint textures[]) {
+void drawGrid(GridBrick const grid,int gridWidth, int gridHeight, int brickWidth) {
 	int i, j;
 	int origin = (SCREEN_HEIGHT / 2) - ((gridHeight * BRICK_HEIGHT) / 2);
 	Point2D topLeft;
@@ -143,7 +117,7 @@ void drawGrid(GridBrick const grid,int gridWidth, int gridHeight, int brickWidth
 			if (grid[i][j].status != DESTROYED) {
 				glPushMatrix();
 					glTranslatef(((brickWidth * j)), (origin + (i * BRICK_HEIGHT)), 0);
-					drawBrick(grid[i][j], brickWidth, textures);
+					drawBrick(grid[i][j], brickWidth);
 				glPopMatrix();
 			}
 			topLeft.x = brickWidth * j;
@@ -288,59 +262,60 @@ GLenum testFormat(SDL_Surface *img){
 	return format;
 }
 
-
 /**
  * Load and give pictures of the theme to the GPU
- * @param	GLuint 		textures 	array containing textures places
- * @param	char 		themeName	the name of the theme directory
+ * @param	char 		themePath	the name of the theme directory
  */
-void loadTextures(GLuint *textures, char *themeName) {
+void loadTextures(char *themePath) {
 	int nbBrickType = 5;
 	SDL_Surface *surface;
-	char *imgName = malloc(TEXTURE_NAME_SIZE * sizeof(char));
-	char *imgNameBase = malloc(TEXTURE_NAME_SIZE * sizeof(char));
-	char tempName[3];
 	int i;
+	char *tmp = themePath;
+	char imgPath[100];
 
-	/* Selection of the good theme*/
-	if(strcmp(themeName, "")){ /* If theme name given */
-		strcpy(imgNameBase, "img/");
-		strcat(imgNameBase, themeName);
-		strcat(imgNameBase, "/brique_");
-	}
-	else {		/* else Default theme */
-		strcpy(imgNameBase, "img/Default/brique_");
-		strcpy(themeName, "Default");
-	}
+	for(i = 1; i <= TEXTURE_NB; ++i){
+		switch (i) {
+			case 1 :
+			case 2 :
+			case 3 :
+			case 4 :
+				sprintf(imgPath, "%sbrick0%d.png",tmp, i);
+				break;
+			case 5 :
+				sprintf(imgPath, "%sbackground.png", tmp);
+				break;
+			case 6 :
+				sprintf(imgPath, "%sHUD.png", tmp);
+				break;
+			case 7 :
+				sprintf(imgPath, "%slife.png", tmp);
+				break;
+			default :
+				sprintf(imgPath, "%serror.png", tmp);
+				break;
+		}
+		printf("PATH : %s\n", imgPath);
 
-	for(i = 0; i < TEXTURE_NB; ++i){
-		strcpy(imgName, imgNameBase);
-		sprintf(tempName, "%d", i);
-		strcat(imgName, tempName);
-		strcat(imgName, ".jpg");
+		/* If "imgPath" link is wrong (picture doesn't exist or themePath is wrong), segmentation error */
+		surface = IMG_Load(imgPath);
 
-		/* If "imgName" link is wrong (picture doesn't exist or themeName is wrong), segmentation error */
-		surface = IMG_Load(imgName);
-
-		if(surface == NULL) printf("Error : can't load the picture '%s' from the '%s' theme : memory issue.", imgName, themeName);
+		if(surface == NULL) {
+			printf("Error : can't load the picture '%s' from the '%s' theme : memory issue.", imgPath, themePath);
+		}
 
 		/* Génération des identifiants des textures */
-		glBindTexture(GL_TEXTURE_2D, textures[i]);
+		glBindTexture(GL_TEXTURE_2D, texturesBuffer[i]);
 
 		/* Association des textures avec les identifiants*/
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glBindTexture(GL_TEXTURE_2D, textures[i]);
+		glBindTexture(GL_TEXTURE_2D, texturesBuffer[i]);
 		GLenum format = testFormat(surface);
 		glTexImage2D(GL_TEXTURE_2D, 0, format, surface->w, surface->h, 0, format, GL_UNSIGNED_BYTE, surface->pixels);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	SDL_FreeSurface(surface);
-
-	if (imgName != NULL) {
-		free(imgName);
-	}
 }

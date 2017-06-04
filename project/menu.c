@@ -58,7 +58,7 @@ void initMenu(Button *menu) {
 
 	buttonOrigin.y += BUTTON_HEIGHT + SPACE_BETWEEN_BUTTONS;
 	initColor3f(&buttonColor, 0, 255, 0);
-	/*initButton(&menu[2], buttonOrigin, buttonColor, selectTheme, SETTINGS);*/
+	initButton(&menu[2], buttonOrigin, buttonColor, selectTheme, THEME1);
 	buttonOrigin.y += BUTTON_HEIGHT + SPACE_BETWEEN_BUTTONS;
 	initColor3f(&buttonColor, 255, 0, 0);
 	initButton(&menu[3], buttonOrigin, buttonColor, quit, QUIT);
@@ -94,23 +94,24 @@ void drawMenu(Button const *menu) {
 int handleButton(Button *bt, SDL_Event event, int *currentStep) {
   /* ---( MOUSE OFFSET )---*/
   Point2D clic;
-  if ((event.type = SDL_MOUSEBUTTONUP) && (event.button.button == SDL_BUTTON_LEFT)) {
-    clic.x = event.button.x;
-    clic.y = event.button.y;
-    if (isInsideButton(clic, *bt)) {
-			if (bt->param != SETTINGS /*|| bt->param != QUIT*/) {
+	if ((event.type == SDL_MOUSEBUTTONUP) && (event.button.button == SDL_BUTTON_LEFT)) {
+		clic.x = event.button.x;
+		clic.y = event.button.y;
+		if (isInsideButton(clic, *bt)) {
+			if (bt->param < THEME1) {
 				*currentStep = PLAYTIME;
-			}/*
-			if (bt->param == SETTINGS) {
-				initColor3f(&bt->color, 255, 0, 0);
-			}*/
+			}
+			if (bt->param > 9) {
+				bt->param = bt->param == THEME1 ? THEME2 : THEME1;
+			}
 			if (bt->param == QUIT) {
 				*currentStep = QUIT_PROGRAM;
 			}
-      (*(bt->action))(bt->param);
+
+			(*(bt->action))(bt->param);
 			return bt->param;
-    }
-  }
+		}
+	}
 	return 0;
 }
 
@@ -128,32 +129,10 @@ bool isInsideButton(Point2D clic, Button bt) {
 	);
 }
 
-char* handleTextField(TextField *tf, SDL_Event event) {
-	Point2D clic;
-	int i;
-	char *name = malloc(MAX_NAME_SIZE * sizeof(char));
-	if ((event.type = SDL_MOUSEBUTTONUP) && (event.button.button == SDL_BUTTON_LEFT)) {
-		clic.x = event.button.x;
-		clic.y = event.button.y;
-		if (isInsideTextField(clic, *tf)) {
-			printf("coucou textfield");
-		}
-	}
-	return name;
-}
-
-bool isInsideTextField(Point2D clic, TextField tf) {
-	return ((clic.x > tf.origin.x)
-		&& (clic.y > tf.origin.y)
-		&& (clic.x < (tf.origin.x + TEXT_FIELD_WIDTH))
-		&& (clic.y < (tf.origin.y + TEXT_FIELD_HEIGHT))
-	);
-}
-
-void selectTheme(int theme) {
-	printf("Coucou theme\n");
-	/*isInsideTextField();*/
-	/*return theme;*/
+void selectTheme(int themeId) {
+	char path[100];
+	sprintf(path, "img/THEME%d/", (themeId / 10));
+	loadTextures(path);
 }
 
 void quit(int quit) {

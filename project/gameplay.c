@@ -180,25 +180,16 @@ void ballOutOfBounds(Ball *ball, enum direction dir) {
  * Define a brick color (TO DO TEXTURES) based on it's type.
  * @param	Brick	br	the current brick to look at
  */
-void defineBrickColor(Brick br) {
-	switch (br.type) {
-		case 0 :
-			glColor3f(255, 255, 255);
-			break;
-		case 1 :
-			glColor3f(0, 0, 255);
-			break;
-		case 2 :
-		case 4 :
-		case 6 :
-			glColor3f(0, 255, 0);
-			break;
-		case 3 :
-		case 5 :
-			glColor3f(255, 0, 0);
-			break;
-		default :
-			glColor3f(255, 255, 255);
-			break;
+int defineBrickColor(Brick br) {
+	int indexTexture;
+	if (br.type == 0) {
+		indexTexture = ORDINARY;
+	} else if (br.type == 1) {
+		indexTexture = INDESTRUCTIBLE;
+	} else if (br.type > 1 && (br.type % 2) == 0) {
+		indexTexture = BONUS;
+	} else {
+		indexTexture = MALUS;
 	}
+	return indexTexture;
 }

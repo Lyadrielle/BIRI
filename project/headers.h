@@ -65,7 +65,7 @@
 
 /* -----------( OTHER )---------- */
 #define MALLOC_ERROR -3
-#define TEXTURE_NB 9
+#define TEXTURE_NB 7
 #define TEXTURE_NAME_SIZE 51
 #define HUD_HEIGHT 50
 #define GAME_HEIGHT (SCREEN_HEIGHT + (2 * HUD_HEIGHT))
@@ -109,6 +109,11 @@ enum brickType {
 	SLOWER_BALL = 6
 };
 
+enum brickTexture {
+	BONUS = 3,
+	MALUS = 4
+};
+
 enum direction {
 	NONE,
 	TOP,
@@ -133,8 +138,9 @@ enum gameMode {
 	TWO_PL = 2,
 	TRHEE_PL = 3,
 	FOUR_PL = 4,
-	SETTINGS = 5,
-	QUIT = 6
+	QUIT = 5,
+	THEME1 = 10,
+	THEME2 = 20
 };
 
 enum gameStep {
@@ -237,7 +243,7 @@ extern Ball *balls;
 extern Player *players;
 extern char *playersNames[];
 extern int totalPlayers;
-/*extern int theme;*/
+extern GLuint texturesBuffer[];
 
 /*/////////////////////////////////////////
  //			FUNCTIONS PROTOTYPE			//
@@ -289,10 +295,10 @@ void moveBall(Ball *ball);
 
 /* ------------( display.c )----------- */
 
-void drawBar(Bar bar, GLuint *textures);
+void drawBar(Bar bar);
 void drawBall(Ball ball);
-void drawBrick(Brick br, int brickWidth,  GLuint textures[]);
-void drawGrid(GridBrick const grid,int gridWidth, int gridHeight, int brickWidth, GLuint textures[]);
+void drawBrick(Brick br, int brickWidth);
+void drawGrid(GridBrick const grid,int gridWidth, int gridHeight, int brickWidth);
 void drawHUD(Player const *pl, Color3f color);
 void drawLife();
 void drawLifes(int nbHearts);
@@ -301,8 +307,8 @@ void printVictoryScreen(Player const *players);
 
 /* TEXTURE */
 GLenum testFormat(SDL_Surface *img);
-void loadTextures(GLuint *textures, char *themeName);
-void chargeTexture(GLuint textures, char *imgaddress);
+void loadTextures(char *themePath);
+void chargeTexture(char *imgaddress);
 
 
 /* ----------( gameplay.c )---------- */
@@ -314,7 +320,7 @@ void moveBar (Bar *bar, enum direction dir);
 void hitBrick (Brick *brick, Ball *ball);
 void ballOutOfBounds(Ball *ball, enum direction dir);
 
-void defineBrickColor(Brick br);
+int defineBrickColor(Brick br);
 
 /* ----------( menu.c )---------- */
 
@@ -324,6 +330,5 @@ void drawMenu(Button const *menu);
 
 int handleButton(Button *bt, SDL_Event event, int *currentStep);
 bool isInsideButton(Point2D clic, Button bt);
-bool isInsideTextField(Point2D clic, TextField tf);
-void selectTheme(int theme);
+void selectTheme(int themeId);
 void quit(int quit);

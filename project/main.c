@@ -28,7 +28,7 @@
 int screenWidth;
 int screenWidthCenter;
 char *playersNames[10];
-/*int theme;*/
+GLuint texturesBuffer[TEXTURE_NB];
 
 /*/////////////////////////////////////////
  //			MAIN SDL FUNCTIONS			//
@@ -73,7 +73,6 @@ int main (int argc, char** argv) {
 	Uint8 * keyState = SDL_GetKeyState(NULL);
 	int gridWidth = 0, gridHeight = 0, brickWidth = 0;
 	int *brickTypes;
-	GLuint texturesBuffer[TEXTURE_NB];
 	glutInit(&argc, argv);
 
 	if(argc < 2) {
@@ -114,16 +113,8 @@ int main (int argc, char** argv) {
 	initBrickCoordinates(grid, gridWidth, gridHeight, brickWidth);
 	Color3f hudColor;
 	initColor3f(&hudColor, 200, 200, 200);
-
-	/* THEME NAME init */
-	char *themeName = malloc(TEXTURE_NAME_SIZE * sizeof(char));
-	strcpy(themeName, "");
-
-	/* TEXTURES */
 	glGenTextures(TEXTURE_NB, texturesBuffer);
-	loadTextures(texturesBuffer, themeName);
-
-	free(themeName);
+	loadTextures("img/THEME1/");
 
 	/*/////////////////////////////////////////
 	 //				INFINITE LOOP			//
@@ -144,9 +135,9 @@ int main (int argc, char** argv) {
 			switch (gameStep) {
 				case INITIALISATON :
 					tmp = handleButton(&menu[0], trigger, &gameStep);
-					if (tmp)	nbPlayers = tmp;
+					if (tmp && tmp < 4)	nbPlayers = tmp;
 					tmp = handleButton(&menu[1], trigger, &gameStep);
-					if (tmp)	nbPlayers = tmp;
+					if (tmp && tmp < 4)	nbPlayers = tmp;
 					handleButton(&menu[2], trigger, &gameStep);
 					handleButton(&menu[3], trigger, &gameStep);
 					nbBalls = nbPlayers;
@@ -199,9 +190,9 @@ int main (int argc, char** argv) {
 
 			for (j = 0; j < nbPlayers; ++j) {
 				drawHUD(&players[j], hudColor);
-				drawBar(players[j].bar, texturesBuffer);
+				drawBar(players[j].bar);
 			}
-			drawGrid(grid, gridWidth, gridHeight, brickWidth, texturesBuffer);
+			drawGrid(grid, gridWidth, gridHeight, brickWidth);
 
 			for (i = 0; i < nbPlayers; ++i) {
 				if (players[i].life <= 0) {
