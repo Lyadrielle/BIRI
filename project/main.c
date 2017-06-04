@@ -156,6 +156,10 @@ int main (int argc, char** argv) {
 					if (tmp && tmp <= 4)	nbPlayers = tmp;
 					tmp = handleButton(&menu[2], trigger, &gameStep);
 					if (tmp && tmp <= 4)	nbPlayers = tmp;
+					if (tmp == 4 && gridWidth > 7)  {
+						gridWidth = 7;
+						initBrickCoordinates(grid, gridWidth, gridHeight);
+					}
 					handleButton(&menu[3], trigger, &gameStep);
 					handleButton(&menu[4], trigger, &gameStep);
 					nbBalls = nbPlayers;
