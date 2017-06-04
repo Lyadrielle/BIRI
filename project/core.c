@@ -33,6 +33,12 @@ int *readConfigFile(char *filePath, int *gridWidth, int *gridHeight) {
 	}
 
 	fscanf(file, " %d %d\n", gridWidth, gridHeight);
+	*gridWidth = *gridWidth > 15 ? 15 : *gridWidth;
+	*gridHeight = *gridHeight > 9 ? 9 : *gridHeight;
+	*gridWidth = *gridWidth < 0 ? 0 : *gridWidth;
+	*gridHeight = *gridHeight < 0 ? 0 : *gridHeight;
+
+
 	fgets(tmp, sizeof(tmp), file);
 
 	brickTypes = malloc(*gridWidth * *gridHeight * sizeof(int));
@@ -53,25 +59,6 @@ int *readConfigFile(char *filePath, int *gridWidth, int *gridHeight) {
 /*/////////////////////////////////////////
  //		INITIALISATION FUNCTIONS		//
 /////////////////////////////////////////*/
-
-/**
- * Define the screenWidth depending on the config file gridWidth.
- * @param	int	gridWidth	the config file gridWidth
- * @return					return the new screenWidth
- */
-int defineScreenWidth(int gridWidth) {
-	return SCREEN_WIDTH - (SCREEN_WIDTH % gridWidth);
-}
-
-/**
- * Define the brickWidth depending on the config file gridWidth.
- * @param	int	gridWidth	the config file gridWidth
- * @return					return the new brickWidth
- */
-int defineBrickWidth(int gridWidth) {
-	return screenWidth / gridWidth;
-}
-
 
 /**
  * Initialise a bar for a player structure.
@@ -140,30 +127,31 @@ void initBrick(Brick *b, int type, enum brickStatus status, int indexX, int inde
  * @param	int		width	the width of the brick
  * @param	Point2D	topLeft	the top left corner of the brick
  */
-void updateBrickCoordinates(Brick *br, int width, Point2D topLeft) {
+void updateBrickCoordinates(Brick *br, Point2D topLeft) {
 	br->topLeft.x = topLeft.x;
 	br->topLeft.y = topLeft.y;
 
-	br->topRight.x = topLeft.x + width;
+	br->topRight.x = topLeft.x + BRICK_WIDTH;
 	br->topRight.y = topLeft.y;
 
 	br->bottomLeft.x = topLeft.x;
 	br->bottomLeft.y = topLeft.y + BRICK_HEIGHT;
 
-	br->bottomRight.x = topLeft.x + width;
+	br->bottomRight.x = topLeft.x + BRICK_WIDTH;
 	br->bottomRight.y = topLeft.y + BRICK_HEIGHT;
 }
 
-void initBrickCoordinates(GridBrick grid, int gridWidth, int gridHeight, int brickWidth) {
+void initBrickCoordinates(GridBrick grid, int gridWidth, int gridHeight) {
 	Point2D topLeft;
-	int origin = (SCREEN_HEIGHT / 2) - ((gridHeight * BRICK_HEIGHT) / 2);
+	int originX = (SCREEN_WIDTH / 2) - ((gridWidth / 2) * BRICK_WIDTH);
+	int originY = ((SCREEN_HEIGHT / 2) - ((gridHeight) / 2) * BRICK_HEIGHT);
 
 	int i, j;
 	for (i = 0; i < gridHeight; ++i) {
 		for (j = 0; j < gridWidth; ++j) {
-			topLeft.x = brickWidth * j;
-			topLeft.y = origin + (i * BRICK_HEIGHT);
-			updateBrickCoordinates(&grid[i][j], brickWidth, topLeft);
+			topLeft.x = originX + (j * BRICK_WIDTH);
+			topLeft.y = originY + (i * BRICK_HEIGHT);
+			updateBrickCoordinates(&grid[i][j], topLeft);
 		}
 	}
 }

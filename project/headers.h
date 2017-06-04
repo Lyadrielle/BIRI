@@ -26,8 +26,13 @@
 /////////////////////////////////////////*/
 
 /* ----------( SCREEN )---------- */
-#define SCREEN_WIDTH 960
-#define SCREEN_HEIGHT 600
+#define SCREEN_WIDTH 1080
+#define SCREEN_WIDTH_CENTER (SCREEN_WIDTH / 2)
+#define SCREEN_HEIGHT 700
+#define SCREEN_HEIGHT_CENTER (SCREEN_HEIGHT / 2)
+#define HUD_HEIGHT 70
+#define GAME_HEIGHT (SCREEN_HEIGHT - (2 * HUD_HEIGHT))
+#define GAME_WIDTH (SCREEN_WIDTH - (2 * HUD_HEIGHT))
 #define BIT_PER_PIXEL 32
 
 /* -----------( MENU )----------- */
@@ -46,8 +51,8 @@
 #define MIN_NAME_SIZE 3
 
 /* -----------( BRICK )---------- */
-#define BRICK_WIDTH 70
-#define BRICK_HEIGHT 24
+#define BRICK_WIDTH 62
+#define BRICK_HEIGHT 32
 /* -----------( BAR )------------ */
 #define BAR_HEIGHT 12
 #define BAR_SPEED 4
@@ -67,8 +72,6 @@
 #define MALLOC_ERROR -3
 #define TEXTURE_NB 7
 #define TEXTURE_NAME_SIZE 51
-#define HUD_HEIGHT 50
-#define GAME_HEIGHT (SCREEN_HEIGHT + (2 * HUD_HEIGHT))
 #define LIFE_SIZE 20
 
 /*/////////////////////////////////////////
@@ -259,8 +262,8 @@ int defineBrickWidth(int gridWidth);
 void initBar(Bar *bar, Point2D center, Color3f color, int playerId);
 void initBall(Ball *bl, int id, int radius, Vector2D speed, Point2D origin, Color3f color, int lastPlayerId);
 void initBrick(Brick *b, int type, enum brickStatus status, int indexX, int indexY);
-void updateBrickCoordinates(Brick *br, int width, Point2D topLeft);
-void initBrickCoordinates(GridBrick grid, int gridWidth, int gridHeight, int brickWidth);
+void updateBrickCoordinates(Brick *br, Point2D topLeft);
+void initBrickCoordinates(GridBrick grid, int gridWidth, int gridHeight);
 GridBrick initGrid(int gridWidth, int gridHeight, int *blockType);
 
 /* ----------( geometry.c )---------- */
@@ -297,8 +300,8 @@ void moveBall(Ball *ball);
 
 void drawBar(Bar bar);
 void drawBall(Ball ball);
-void drawBrick(Brick br, int brickWidth);
-void drawGrid(GridBrick const grid,int gridWidth, int gridHeight, int brickWidth);
+void drawBrick(Brick br);
+void drawGrid(GridBrick const grid,int gridWidth, int gridHeight);
 void drawHUD(Player const *pl, Color3f color);
 void drawLife();
 void drawLifes(int nbHearts);

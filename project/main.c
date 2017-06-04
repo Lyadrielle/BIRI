@@ -25,8 +25,6 @@
  //			GLOBAL VARIABLES DEF		//
 /////////////////////////////////////////*/
 
-int screenWidth;
-int screenWidthCenter;
 char *playersNames[10];
 GLuint texturesBuffer[TEXTURE_NB];
 
@@ -38,23 +36,23 @@ GLuint texturesBuffer[TEXTURE_NB];
  * Reajust the axis of the window, x and y start at 0 at the top left corner
  * @param	int	screenWidth	new screenWidth calculated with the config file gridWith
  */
-void reshape(int screenWidth) {
-	glViewport(0, 0, screenWidth, GAME_HEIGHT);
+void reshape() {
+	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluOrtho2D(0, screenWidth, GAME_HEIGHT, 0);
+	gluOrtho2D(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
 }
 
 /**
  * Set the video mode for an SDL_OPENGL window.
  * @param int screenWidth new screenWidth calculated with the config file gridWith
  */
-void setVideoMode(int screenWidth) {
-	if(NULL == SDL_SetVideoMode(screenWidth, GAME_HEIGHT, BIT_PER_PIXEL, SDL_OPENGL)) {
+void setVideoMode() {
+	if(NULL == SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, BIT_PER_PIXEL, SDL_OPENGL)) {
 		fprintf(stderr, "Impossible d'ouvrir la fenetre. Fin du programme.\n");
 		exit(EXIT_FAILURE);
 	}
-	reshape(screenWidth);
+	reshape();
 	glClear(GL_COLOR_BUFFER_BIT);
 	SDL_GL_SwapBuffers();
 }
@@ -71,7 +69,7 @@ void setVideoMode(int screenWidth) {
  */
 int main (int argc, char** argv) {
 	Uint8 * keyState = SDL_GetKeyState(NULL);
-	int gridWidth = 0, gridHeight = 0, brickWidth = 0;
+	int gridWidth = 0, gridHeight = 0;
 	int *brickTypes;
 	glutInit(&argc, argv);
 
@@ -90,9 +88,6 @@ int main (int argc, char** argv) {
 	}
 
 	brickTypes = readConfigFile(argv[1], &gridWidth, &gridHeight);
-	screenWidth = defineScreenWidth(gridWidth);
-	screenWidthCenter = screenWidth / 2;
-	brickWidth = defineBrickWidth(gridWidth);
 
 	if (-1 == SDL_Init(SDL_INIT_VIDEO)) {
 		fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
@@ -100,7 +95,7 @@ int main (int argc, char** argv) {
 	}
 
 	/* set the openGL SDL context */
-	setVideoMode(screenWidth);
+	setVideoMode(SCREEN_WIDTH);
 	/* Set a title to the window */
 	SDL_WM_SetCaption("KassPong", NULL);
 
@@ -110,7 +105,7 @@ int main (int argc, char** argv) {
 	Button *menu = malloc(NB_BUTTON_MAIN_MENU * sizeof(Button));
 	initMenu(menu);
 	GridBrick grid = initGrid(gridWidth, gridHeight, brickTypes);
-	initBrickCoordinates(grid, gridWidth, gridHeight, brickWidth);
+	initBrickCoordinates(grid, gridWidth, gridHeight);
 	Color3f hudColor;
 	initColor3f(&hudColor, 200, 200, 200);
 	glGenTextures(TEXTURE_NB, texturesBuffer);
@@ -192,7 +187,7 @@ int main (int argc, char** argv) {
 				drawHUD(&players[j], hudColor);
 				drawBar(players[j].bar);
 			}
-			drawGrid(grid, gridWidth, gridHeight, brickWidth);
+			drawGrid(grid, gridWidth, gridHeight);
 
 			for (i = 0; i < nbPlayers; ++i) {
 				if (players[i].life <= 0) {

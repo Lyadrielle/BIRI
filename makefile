@@ -1,11 +1,11 @@
 CC = gcc
-CFLAGS = -Wall -ansi
+CFLAGS = -Wall -ansi -g
 LDFLAGS = -lSDL -lGL -lGLU -lm -lSDL_image -lglut
 
 APP_BIN = KassPong
 
 SRC_PATH = project
-INC_PATH = -I project
+INC_PATH = -iquote project
 
 OBJ_PATH = obj
 IMG_PATH = img
@@ -26,7 +26,15 @@ $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
 	$(CC) -c $< -o $@ $(CFLAGS) $(INC_PATH)
 
 clean:
-	rm $(OBJ_FILES) $(BIN_PATH)/$(APP_BIN)
+	rm -f $(OBJ_FILES)
+
+fclean: clean
+	rm -f $(BIN_PATH)/$(APP_BIN)
+
+re: fclean all
 
 test:
 	$(BIN_PATH)/$(APP_BIN) res/grid.txt cat teemo
+
+.PHONY: all clean fclean re test
+.SUFFIXES:

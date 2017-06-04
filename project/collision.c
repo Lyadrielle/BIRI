@@ -23,13 +23,13 @@
  * @param	Ball*	ball	the current ball pointer
  */
 void collisionBallScreen(Ball *ball) {
-	if ((ball->origin.x - ball->radius) <= 0 || (ball->origin.x + ball->radius) >= SCREEN_WIDTH) {
+	if ((ball->origin.x - ball->radius) <= HUD_HEIGHT || (ball->origin.x + ball->radius) >= (SCREEN_WIDTH - HUD_HEIGHT)) {
 		ball->speed.x *= -1;
 	}
 	if ((ball->origin.y - ball->radius) <= HUD_HEIGHT) {
 		ballOutOfBounds(ball, TOP);
 	}
-	if ((ball->origin.y + ball->radius) >= (GAME_HEIGHT - HUD_HEIGHT)) {
+	if ((ball->origin.y + ball->radius) >= (SCREEN_HEIGHT - HUD_HEIGHT)) {
 		ballOutOfBounds(ball, BOTTOM);
 	}
 }

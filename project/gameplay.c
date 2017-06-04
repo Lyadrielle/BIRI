@@ -64,16 +64,16 @@ void initGame(int nbPlayers) {
 		1; i <= nbPlayers; ++i) {
 		switch (i) {
 		case 1 :
-			initPoint2D(&barCenter, (screenWidthCenter - (BASIC / 2)), (HUD_HEIGHT + BAR_HEIGHT));
+			initPoint2D(&barCenter, (SCREEN_WIDTH_CENTER - (BASIC / 2)), (HUD_HEIGHT + BAR_HEIGHT));
 			initColor3f(&barColor, 255, 0, 0);
-			initPoint2D(&ballCenter, (screenWidthCenter - (BASIC / 2)), (HUD_HEIGHT + (3 * BAR_HEIGHT)));
+			initPoint2D(&ballCenter, (SCREEN_WIDTH_CENTER - (BASIC / 2)), (HUD_HEIGHT + (3 * BAR_HEIGHT)));
 			initVector2D(&ballSpeed, NORMAL, NORMAL);
 			initColor3f(&ballColor, 255, 0, 0);
 			break;
 		case 2 :
-			initPoint2D(&barCenter, (screenWidthCenter - (BASIC / 2)), (GAME_HEIGHT - HUD_HEIGHT - BAR_HEIGHT));
+			initPoint2D(&barCenter, (SCREEN_WIDTH_CENTER - (BASIC / 2)), (SCREEN_HEIGHT - HUD_HEIGHT - BAR_HEIGHT));
 			initColor3f(&barColor, 0, 0, 255);
-			initPoint2D(&ballCenter, (screenWidthCenter - (BASIC / 2)), (GAME_HEIGHT - HUD_HEIGHT - (3 * BAR_HEIGHT)));
+			initPoint2D(&ballCenter, (SCREEN_WIDTH_CENTER - (BASIC / 2)), (SCREEN_HEIGHT - HUD_HEIGHT - (3 * BAR_HEIGHT)));
 			initVector2D(&ballSpeed, NORMAL, (NORMAL * -1));
 			initColor3f(&ballColor, 0, 0, 255);
 			break;
@@ -96,12 +96,12 @@ void initGame(int nbPlayers) {
  */
 void moveBar (Bar *bar, enum direction dir) {
   if (dir == LEFT) {
-    if ((bar->center.x - (bar->width / 2)) >= 0) {
+    if ((bar->center.x - (bar->width / 2)) >= (HUD_HEIGHT)) {
       bar->center.x -= BAR_SPEED;
     }
   }
   if (dir == RIGHT) {
-    if ((bar->center.x + (bar->width / 2)) <= screenWidth) {
+    if ((bar->center.x + (bar->width / 2)) <= (SCREEN_WIDTH - HUD_HEIGHT)) {
       bar->center.x += BAR_SPEED;
     }
   }
@@ -157,7 +157,7 @@ void hitBrick (Brick *brick, Ball *ball) {
  * @param	enum	dir		the side the ball fell
  */
 void ballOutOfBounds(Ball *ball, enum direction dir) {
-	ball->origin.x = screenWidthCenter;
+	ball->origin.x = SCREEN_WIDTH_CENTER;
 	ball->respawnTimer = BALL_RESPAWN_TIME;
 	ball->speed.y *= -1;
 	if (dir == TOP) {
@@ -168,7 +168,7 @@ void ballOutOfBounds(Ball *ball, enum direction dir) {
 	if (dir == BOTTOM && totalPlayers > 1) {
 		--(players[1].life);
 		ball->lastPlayerId = 2;
-		ball->origin.y = GAME_HEIGHT - HUD_HEIGHT - (3 * BAR_HEIGHT);
+		ball->origin.y = SCREEN_HEIGHT - HUD_HEIGHT - (3 * BAR_HEIGHT);
 	}
 }
 

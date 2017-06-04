@@ -48,7 +48,7 @@ void initButton(Button *bt, Point2D origin, Color3f color, void (*action)(int), 
  */
 void initMenu(Button *menu) {
 	Point2D buttonOrigin;
-	initPoint2D(&buttonOrigin, screenWidthCenter - (BUTTON_WIDTH / 2), 50);
+	initPoint2D(&buttonOrigin, SCREEN_WIDTH_CENTER - (BUTTON_WIDTH / 2), 50);
 	Color3f buttonColor;
 	initColor3f(&buttonColor, 255, 255, 255);
 

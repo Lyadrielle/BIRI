@@ -68,15 +68,14 @@ void drawBall(Ball ball) {
  * @param	int		brickWidth	the brick width based on the
  *             					config file gridWidth and screenWidth
  */
-void drawBrick(Brick br, int brickWidth) {
+void drawBrick(Brick br) {
 	int index = defineBrickColor(br);
-	printf("INDEX : %d\n", index);
 	if(index < 1 || index > 4){
 		glColor3f(255, 255, 255);
 		glBegin(GL_POLYGON);
 		glVertex2f(0, 0);
-		glVertex2f((brickWidth - 1), 0);
-		glVertex2f((brickWidth - 1), (BRICK_HEIGHT - 1));
+		glVertex2f((BRICK_WIDTH - 1), 0);
+		glVertex2f((BRICK_WIDTH - 1), (BRICK_HEIGHT - 1));
 		glVertex2f(0, (BRICK_HEIGHT - 1));
 		glEnd();
 	}	else {
@@ -87,9 +86,9 @@ void drawBrick(Brick br, int brickWidth) {
 		glTexCoord2f(0.0f,0.0f);
 		glVertex2f(0, 0);
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex2f((brickWidth - 1), 0);
+		glVertex2f((BRICK_WIDTH - 1), 0);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex2f((brickWidth - 1), (BRICK_HEIGHT - 1));
+		glVertex2f((BRICK_WIDTH - 1), (BRICK_HEIGHT - 1));
 		glTexCoord2f(1.0f, 0.0f);
 		glVertex2f(0, (BRICK_HEIGHT - 1));
 		glEnd();
@@ -107,22 +106,19 @@ void drawBrick(Brick br, int brickWidth) {
  * @param	int			brickWidth	the brickWidth based on the
  *              					gridWidth and screenWidth
  */
-void drawGrid(GridBrick const grid,int gridWidth, int gridHeight, int brickWidth) {
+void drawGrid(GridBrick const grid,int gridWidth, int gridHeight) {
 	int i, j;
-	int origin = (SCREEN_HEIGHT / 2) - ((gridHeight * BRICK_HEIGHT) / 2);
-	Point2D topLeft;
+	int originX = (SCREEN_WIDTH / 2) - ((gridWidth / 2) * BRICK_WIDTH);
+	int originY = ((SCREEN_HEIGHT / 2) - ((gridHeight) / 2) * BRICK_HEIGHT);
 
 	for (i = 0; i < gridHeight; ++i) {
 		for (j = 0; j < gridWidth; ++j) {
 			if (grid[i][j].status != DESTROYED) {
 				glPushMatrix();
-					glTranslatef(((brickWidth * j)), (origin + (i * BRICK_HEIGHT)), 0);
-					drawBrick(grid[i][j], brickWidth);
+					glTranslatef((originX + (j * BRICK_WIDTH)), (originY + (i * BRICK_HEIGHT)), 0);
+					drawBrick(grid[i][j]);
 				glPopMatrix();
 			}
-			topLeft.x = brickWidth * j;
-			topLeft.y = origin + (i * BRICK_HEIGHT);
-			updateBrickCoordinates(&grid[i][j], brickWidth, topLeft);
 		}
 	}
 }
@@ -154,23 +150,23 @@ void drawHUD(Player const *pl, Color3f color) {
 
 	} else if (pl->id == 2) {
 		glBegin(GL_POLYGON);
-			glVertex2f(0, GAME_HEIGHT - HUD_HEIGHT);
-			glVertex2f(SCREEN_WIDTH, GAME_HEIGHT - HUD_HEIGHT);
-			glVertex2f(SCREEN_WIDTH, GAME_HEIGHT);
-			glVertex2f(0, GAME_HEIGHT);
+			glVertex2f(0, SCREEN_HEIGHT - HUD_HEIGHT);
+			glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT - HUD_HEIGHT);
+			glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT);
+			glVertex2f(0, SCREEN_HEIGHT);
 		glEnd();
 
 		glPushMatrix();
-			glTranslatef((LIFE_SIZE * 2), (GAME_HEIGHT - (HUD_HEIGHT / 2) - (LIFE_SIZE / 2)), 0);
+			glTranslatef((LIFE_SIZE * 2), (SCREEN_HEIGHT - (HUD_HEIGHT / 2) - (LIFE_SIZE / 2)), 0);
 			drawLifes(pl->life);
 		glPopMatrix();
 
 		glColor3f(0, 0, 0);
 		glPushMatrix();
-			renderBitmapString((SCREEN_WIDTH / 2), (GAME_HEIGHT - (HUD_HEIGHT / 2)), pl->name);
+			renderBitmapString((SCREEN_WIDTH / 2), (SCREEN_HEIGHT - (HUD_HEIGHT / 2)), pl->name);
 		glPopMatrix();
 		glPushMatrix();
-			renderBitmapString((SCREEN_WIDTH - 30), (GAME_HEIGHT - (HUD_HEIGHT / 2)), score);
+			renderBitmapString((SCREEN_WIDTH - 30), (SCREEN_HEIGHT - (HUD_HEIGHT / 2)), score);
 		glPopMatrix();
 	}
 }
