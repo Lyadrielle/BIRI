@@ -61,7 +61,7 @@ void setVideoMode() {
 void instanciatePlayerNames(int argc, char** argv) {
 	if(argc < 2) {
 		printf("ERREUR : Config file manquant\n");
-		return EXIT_FAILURE;
+		return;
 	} else if (argc == 2) {
 		playersNames[0] = "Player 1";
 		playersNames[1] = "Player 2";
@@ -179,12 +179,12 @@ int main (int argc, char** argv) {
 		glClear(GL_COLOR_BUFFER_BIT);
 		/* ----------( INITIALISATION FASE )---------- */
 		if (gameStep == INITIALISATON) {
-			drawBackgroundMenu();
+			drawBackground(13);
 			drawMenu(menu);
 		}
 		/* -------------( PLAYTIME FASE )------------ */
 		if (gameStep == PLAYTIME) {
-			drawBackgroundGame();
+			drawBackground(4);
 			for (i = 0; i < nbBalls; ++i) {
 				collisionBallScreen(&balls[i], nbPlayers);
 				for (j = 0; j < nbPlayers; ++j) {
@@ -209,7 +209,7 @@ int main (int argc, char** argv) {
 			}
 
 			for (j = 0; j < nbPlayers; ++j) {
-				drawHUD(&players[j]);
+				drawHUD(&players[j], nbPlayers);
 				drawBar(players[j].bar);
 			}
 			drawGrid(grid, gridWidth, gridHeight);
@@ -222,7 +222,8 @@ int main (int argc, char** argv) {
 		}
 
 		if (gameStep == SCOREBOARD) {
-			printVictoryScreen(players);
+			drawBackground(14);
+			printVictoryScreen(players, nbPlayers, gladOS);
 		}
 
 

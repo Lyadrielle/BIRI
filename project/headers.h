@@ -34,19 +34,13 @@
 #define GAME_HEIGHT (SCREEN_HEIGHT - (2 * HUD_HEIGHT))
 #define GAME_WIDTH (SCREEN_WIDTH - (2 * HUD_HEIGHT))
 #define BIT_PER_PIXEL 32
+#define TEXTURE_NB 16
 
 /* -----------( MENU )----------- */
 #define NB_BUTTON_MAIN_MENU 5
-
-/* ----------( BUTTONS )---------- */
 #define BUTTON_WIDTH 360
 #define BUTTON_HEIGHT 60
 #define SPACE_BETWEEN_BUTTONS 20
-
-#define TEXT_FIELD_WIDTH 200
-#define TEXT_FIELD_HEIGHT 60
-#define MAX_NAME_SIZE 15
-#define MIN_NAME_SIZE 3
 
 /* -----------( BRICK )---------- */
 #define BRICK_WIDTH 62
@@ -68,8 +62,6 @@
 
 /* -----------( OTHER )---------- */
 #define MALLOC_ERROR -3
-#define TEXTURE_NB 15
-#define TEXTURE_NAME_SIZE 51
 #define LIFE_SIZE_WIDTH 20
 #define LIFE_SIZE_HEIGHT 26
 
@@ -302,13 +294,13 @@ void drawBar(Bar bar);
 void drawBall(Ball ball);
 void drawBrick(Brick br);
 void drawGrid(GridBrick const grid,int gridWidth, int gridHeight);
-void drawBackgroundGame();
-void drawBackgroundMenu();
-void drawHUD(Player const *pl);
+void drawBackground(int index);
+void drawHUD(Player const *pl, int nbPlayers);
 void drawLife();
 void drawLifes(int nbHearts);
 void renderBitmapString(float x, float y, char const *string);
-void printVictoryScreen(Player const *players);
+void printVictoryScreen(Player const *players, int nbPlayers, bool gladOS);
+int NameLenght(char const *name);
 
 /* TEXTURE */
 GLenum testFormat(SDL_Surface *img);

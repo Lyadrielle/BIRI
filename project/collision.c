@@ -198,17 +198,31 @@ void collisionBarBall(Bar const *bar, Ball *ball) {
 	Point2D topLeft, topRight, bottomLeft, bottomRight;
 	enum collisionType collision;
 
-	topLeft.x = bar->center.x - bar->width / 2;
-	topLeft.y = bar->center.y - BAR_HEIGHT / 2;
+	if (bar->orientationHorizontal) {
+		topLeft.x = bar->center.x - bar->width / 2;
+		topLeft.y = bar->center.y - BAR_HEIGHT / 2;
 
-	topRight.x = bar->center.x + bar->width / 2;
-	topRight.y = bar->center.y - BAR_HEIGHT / 2;
+		topRight.x = bar->center.x + bar->width / 2;
+		topRight.y = bar->center.y - BAR_HEIGHT / 2;
 
-	bottomLeft.x = bar->center.x - bar->width / 2;
-	bottomLeft.y = bar->center.y + BAR_HEIGHT / 2;
+		bottomLeft.x = bar->center.x - bar->width / 2;
+		bottomLeft.y = bar->center.y + BAR_HEIGHT / 2;
 
-	bottomRight.x = bar->center.x + bar->width / 2;
-	bottomRight.y = bar->center.y + BAR_HEIGHT / 2;
+		bottomRight.x = bar->center.x + bar->width / 2;
+		bottomRight.y = bar->center.y + BAR_HEIGHT / 2;
+	} else {
+		topLeft.x = bar->center.x - BAR_HEIGHT / 2;
+		topLeft.y = bar->center.y - bar->width / 2;
+
+		topRight.x = bar->center.x + BAR_HEIGHT / 2;
+		topRight.y = bar->center.y - bar->width / 2;
+
+		bottomLeft.x = bar->center.x - BAR_HEIGHT / 2;
+		bottomLeft.y = bar->center.y + bar->width / 2;
+
+		bottomRight.x = bar->center.x + BAR_HEIGHT / 2;
+		bottomRight.y = bar->center.y + bar->width / 2;
+	}
 
 	if (ball->speed.y < 0) {
 		if ((collision = collisionBallSegment(ball, bottomRight, bottomLeft))) {

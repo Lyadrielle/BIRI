@@ -106,8 +106,8 @@ void drawBrick(Brick br) {
  */
 void drawGrid(GridBrick const grid,int gridWidth, int gridHeight) {
 	int i, j;
-	int originX = (SCREEN_WIDTH / 2) - ((gridWidth / 2) * BRICK_WIDTH);
-	int originY = ((SCREEN_HEIGHT / 2) - ((gridHeight) / 2) * BRICK_HEIGHT);
+	int originX = SCREEN_WIDTH_CENTER - ((gridWidth / 2) * BRICK_WIDTH);
+	int originY = (SCREEN_HEIGHT_CENTER - ((gridHeight) / 2) * BRICK_HEIGHT);
 
 	for (i = 0; i < gridHeight; ++i) {
 		for (j = 0; j < gridWidth; ++j) {
@@ -125,10 +125,10 @@ void drawGrid(GridBrick const grid,int gridWidth, int gridHeight) {
  * Draw the background texture. (x = 0, y = 0) (top left corner)
  *
  */
-void drawBackgroundGame() {
+void drawBackground(int index) {
 		glEnable(GL_TEXTURE_2D);
 		glColor3f(255, 255, 255);
-		glBindTexture(GL_TEXTURE_2D, texturesBuffer[4]);
+		glBindTexture(GL_TEXTURE_2D, texturesBuffer[index]);
 
 		glBegin(GL_POLYGON);
 		glTexCoord2f(0.0f, 0.0f);
@@ -141,35 +141,11 @@ void drawBackgroundGame() {
 		glVertex2f(0, SCREEN_HEIGHT);
 		glEnd();
 
-		glBindTexture(GL_TEXTURE_2D, texturesBuffer[4]);
+		glBindTexture(GL_TEXTURE_2D, texturesBuffer[index]);
 		glDisable(GL_TEXTURE_2D);
 }
 
-/**
- * Draw the background texture. (x = 0, y = 0) (top left corner)
- *
- */
-void drawBackgroundMenu() {
-		glEnable(GL_TEXTURE_2D);
-		glColor3f(255, 255, 255);
-		glBindTexture(GL_TEXTURE_2D, texturesBuffer[13]);
-
-		glBegin(GL_POLYGON);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex2f(0, 0);
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex2f(SCREEN_WIDTH , 0);
-		glTexCoord2f(1.0f, 1.0f);
-		glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT);
-		glTexCoord2f(0.0f, 1.0f);
-		glVertex2f(0, SCREEN_HEIGHT);
-		glEnd();
-
-		glBindTexture(GL_TEXTURE_2D, texturesBuffer[13]);
-		glDisable(GL_TEXTURE_2D);
-}
-
-void drawHUD(Player const *pl) {
+void drawHUD(Player const *pl, int nbPlayers) {
 	char score[9] = "0";
 	sprintf(score, "%d", pl->score);
 
@@ -198,9 +174,7 @@ void drawHUD(Player const *pl) {
 
 		glColor3f(5, 11, 11);
 		glPushMatrix();
-			renderBitmapString((SCREEN_WIDTH / 2), (HUD_HEIGHT / 2)+5, pl->name);
-		glPopMatrix();
-		glPushMatrix();
+			renderBitmapString(SCREEN_WIDTH_CENTER, (HUD_HEIGHT / 2)+5, pl->name);
 			renderBitmapString((SCREEN_WIDTH - 120), (HUD_HEIGHT / 2)+7, score);
 		glPopMatrix();
 
@@ -228,11 +202,72 @@ void drawHUD(Player const *pl) {
 
 		glColor3f(5, 11, 11);
 		glPushMatrix();
-			renderBitmapString((SCREEN_WIDTH / 2), (SCREEN_HEIGHT - (HUD_HEIGHT / 2))+5, pl->name);
-		glPopMatrix();
-		glPushMatrix();
+			renderBitmapString(SCREEN_WIDTH_CENTER, (SCREEN_HEIGHT - (HUD_HEIGHT / 2))+5, pl->name);
 			renderBitmapString((SCREEN_WIDTH - 120), (SCREEN_HEIGHT - (HUD_HEIGHT / 2))+7, score);
 		glPopMatrix();
+	}
+	if (nbPlayers > 2) {
+		if (pl->id == 3) {
+			glEnable(GL_TEXTURE_2D);
+			glColor3f(255, 255, 255);
+			glBindTexture(GL_TEXTURE_2D, texturesBuffer[15]);
+			glBegin(GL_POLYGON);
+				glTexCoord2f(0.0f, 0.0f);
+				glVertex2f(0, 0);
+				glTexCoord2f(1.0f, 0.0f);
+				glVertex2f(HUD_HEIGHT, 0);
+				glTexCoord2f(1.0f, 1.0f);
+				glVertex2f(HUD_HEIGHT, SCREEN_HEIGHT);
+				glTexCoord2f(0.0f, 1.0f);
+				glVertex2f(0, SCREEN_HEIGHT);
+			glEnd();
+			glBindTexture(GL_TEXTURE_2D, texturesBuffer[15]);
+			glDisable(GL_TEXTURE_2D);
+
+
+			glPushMatrix();
+				glTranslatef(((HUD_HEIGHT / 2) + (LIFE_SIZE_HEIGHT / 2)), -20, 0);
+				glRotatef(90, 0, 0, 1);
+				drawLifes(pl->life);
+			glPopMatrix();
+
+			glColor3f(5, 11, 11);
+			glPushMatrix();
+				renderBitmapString(((HUD_HEIGHT / 2)+5), SCREEN_HEIGHT_CENTER, pl->name);
+				renderBitmapString(((HUD_HEIGHT / 2)+7), (SCREEN_HEIGHT - 70), score);
+				glRotatef(90, 0, 0, 1);
+			glPopMatrix();
+
+		} else if (pl->id == 4) {
+			glEnable(GL_TEXTURE_2D);
+			glColor3f(255, 255, 255);
+			glBindTexture(GL_TEXTURE_2D, texturesBuffer[15]);
+			glBegin(GL_POLYGON);
+				glTexCoord2f(0.0f, 0.0f);
+				glVertex2f((SCREEN_WIDTH - HUD_HEIGHT), 0);
+				glTexCoord2f(1.0f, 0.0f);
+				glVertex2f(SCREEN_WIDTH, 0);
+				glTexCoord2f(1.0f, 1.0f);
+				glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT);
+				glTexCoord2f(0.0f, 1.0f);
+				glVertex2f((SCREEN_WIDTH - HUD_HEIGHT), SCREEN_HEIGHT);
+			glEnd();
+			glBindTexture(GL_TEXTURE_2D, texturesBuffer[15]);
+			glDisable(GL_TEXTURE_2D);
+
+			glPushMatrix();
+				glTranslatef((SCREEN_WIDTH - (HUD_HEIGHT / 2 ) + (LIFE_SIZE_HEIGHT / 2)), -20, 0);
+				glRotatef(90, 0, 0, 1);
+				drawLifes(pl->life);
+			glPopMatrix();
+
+			glColor3f(5, 11, 11);
+			glPushMatrix();
+				renderBitmapString((SCREEN_WIDTH - (HUD_HEIGHT / 2)+5), SCREEN_HEIGHT_CENTER, pl->name);
+				renderBitmapString((SCREEN_WIDTH - (HUD_HEIGHT / 2)+7), (SCREEN_HEIGHT - 70), score);
+				glRotatef(90, 0, 0, 1);
+			glPopMatrix();
+		}
 	}
 }
 
@@ -277,35 +312,53 @@ void renderBitmapString(float x, float y, char const *string) {
 	}
 }
 
-void printVictoryScreen(Player const *players) {
+void printVictoryScreen(Player const *players, int nbPlayers, bool gladOS) {
 	char scorePl[100];
+	int score = players[0].score + (players[0].life * 10), tmpScore = 0;
+	int index = 0;
 	int i;
 
 	glColor3f(255, 255, 255);
 	glPushMatrix();
-	switch (2) {
-		case 1 :
-				if (players[0].life == 0) {
-					renderBitmapString((SCREEN_WIDTH / 2), (GAME_HEIGHT / 2), "Ordinateur");
-				} else {
-					renderBitmapString((SCREEN_WIDTH / 2), (GAME_HEIGHT / 2), players[0].name);
-				}
-			break;
-		case 2 :
-			if (players[1].life == 0) {
-				renderBitmapString((SCREEN_WIDTH / 2), (GAME_HEIGHT / 2), players[0].name);
+	if (nbPlayers < 3) {
+		if (players[0].life == 0) {
+			if (gladOS) {
+				renderBitmapString((SCREEN_WIDTH_CENTER - 27), 200, "gladOS");
 			} else {
-				renderBitmapString((SCREEN_WIDTH / 2), (GAME_HEIGHT / 2), players[1].name);
+				renderBitmapString((SCREEN_WIDTH_CENTER - (((NameLenght(players[1].name)/2) * 9))), 230, players[1].name);
 			}
-			break;
-		default :
-			break;
+		} else {
+			renderBitmapString((SCREEN_WIDTH_CENTER - (((NameLenght(players[0].name)/2) * 9))), 230, players[0].name);
+		}
+		for (i = 0; i < 2; ++i) {
+			sprintf(scorePl, "%s\t\t%d", players[i].name, players[i].score);
+			renderBitmapString((SCREEN_WIDTH_CENTER - (((NameLenght(players[i].name)/2) * 9))), (400 + ( 30 * (i + 1))), scorePl);
+		}
 	}
-	for (i = 0; i < 2; ++i) {
-		sprintf(scorePl, "%s : %d", players[i].name, players[i].score);
-		renderBitmapString((SCREEN_WIDTH / 2), ((GAME_HEIGHT / 2) +( 30 * (i + 1))), scorePl);
+
+	if (nbPlayers > 2 ) {
+		for (i = 1; i < nbPlayers; ++i) {
+			tmpScore = players[i].score + (players[i].life * 10);
+			if (tmpScore > score && players[i].life > 0) {
+				score = tmpScore;
+				index = i;
+			}
+		}
+		renderBitmapString((SCREEN_WIDTH_CENTER - (((NameLenght(players[index].name)/2) * 9))), 230, players[index].name);
+		for (i = 0; i < 4; ++i) {
+			sprintf(scorePl, "%s.........................%d", players[i].name, players[i].score);
+			renderBitmapString((SCREEN_WIDTH_CENTER - (((NameLenght(players[i].name)/2) * 9))), (400 + ( 30 * (i + 1))), scorePl);
+		}
 	}
 	glPopMatrix();
+}
+
+int NameLenght(char const *name) {
+	int lenght = 0;
+	while (name[lenght] != '\0') {
+		lenght++;
+	}
+	return lenght;
 }
 
 /*/////////////////////////////////////////
@@ -356,7 +409,7 @@ void loadTextures(char *themePath) {
 				sprintf(imgPath, "%sbackground.jpg", tmp);
 				break;
 			case 6 :
-				sprintf(imgPath, "%sHUD.jpg", tmp);
+				sprintf(imgPath, "%sHUDh.jpg", tmp);
 				break;
 			case 7 :
 				sprintf(imgPath, "%slife.jpg", tmp);
@@ -374,6 +427,9 @@ void loadTextures(char *themePath) {
 				break;
 			case 15 :
 				sprintf(imgPath, "img/victory.jpg");
+				break;
+			case 16 :
+				sprintf(imgPath, "%sHUDv.jpg", tmp);
 				break;
 			default :
 				sprintf(imgPath, "%serror.jpg", tmp);
