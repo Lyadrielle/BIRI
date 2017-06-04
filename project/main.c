@@ -133,8 +133,10 @@ int main (int argc, char** argv) {
 					if (tmp && tmp < 4)	nbPlayers = tmp;
 					tmp = handleButton(&menu[1], trigger, &gameStep);
 					if (tmp && tmp < 4)	nbPlayers = tmp;
-					handleButton(&menu[2], trigger, &gameStep);
+					tmp = handleButton(&menu[2], trigger, &gameStep);
+					if (tmp && tmp < 4)	nbPlayers = tmp;
 					handleButton(&menu[3], trigger, &gameStep);
+					handleButton(&menu[4], trigger, &gameStep);
 					nbBalls = nbPlayers;
 					break;
 				case PLAYTIME :

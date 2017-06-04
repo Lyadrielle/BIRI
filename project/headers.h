@@ -36,9 +36,7 @@
 #define BIT_PER_PIXEL 32
 
 /* -----------( MENU )----------- */
-#define NB_BUTTON_MAIN_MENU 4
-#define NB_BUTTON_TEXTURE_MENU 2
-#define NB_BUTTON_GMODE_MENU 2
+#define NB_BUTTON_MAIN_MENU 5
 
 /* ----------( BUTTONS )---------- */
 #define BUTTON_WIDTH 360
@@ -55,7 +53,7 @@
 #define BRICK_HEIGHT 32
 /* -----------( BAR )------------ */
 #define BAR_HEIGHT 12
-#define BAR_SPEED 4
+#define BAR_SPEED 6
 
 /* -----------( BALL )------------ */
 #define BALL_RADIUS 7
@@ -86,9 +84,9 @@ enum difficulty {
 };
 
 enum speed {
-	SLOW = 1,
-	NORMAL = 2,
-	FAST = 3
+	SLOW = 2,
+	NORMAL = 3,
+	FAST = 4
 };
 
 enum barSize {
@@ -331,7 +329,7 @@ int defineBrickColor(Brick br);
 
 /* ----------( menu.c )---------- */
 
-void initButton(Button *bt, Point2D origin, Color3f color, void (*action)(int), int param);
+void initButton(Button *bt, Point2D origin, void (*action)(int), int param);
 void initMenu(Button *menu);
 void drawMenu(Button const *menu);
 

@@ -354,28 +354,18 @@ void loadTextures(char *themePath) {
 			case 7 :
 				sprintf(imgPath, "%slife.jpg", tmp);
 				break;
-			case 8 : 
-				sprintf(imgPath, "img/button01.jpg");
+			case 8 :
+			case 9 :
+			case 10 :
+			case 11 :
+			case 12 :
+			case 13 :
+				sprintf(imgPath, "img/button0%d.jpg", (i - 7));
 				break;
-			case 9 : 
-				sprintf(imgPath, "img/button02.jpg");
-				break;
-			case 10 : 
-				sprintf(imgPath, "img/button03.jpg");
-				break;
-			case 11 : 
-				sprintf(imgPath, "img/button04.jpg");
-				break;
-			case 12 : 
-				sprintf(imgPath, "img/button05.jpg");
-				break;
-			case 13 : 
-				sprintf(imgPath, "img/bb.jpg");
-				break;
-			case 14 : 
+			case 14 :
 				sprintf(imgPath, "img/menu.jpg");
 				break;
-			case 15 : 
+			case 15 :
 				sprintf(imgPath, "img/victory.jpg");
 				break;
 			default :

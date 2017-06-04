@@ -30,13 +30,13 @@
  * @param	void	action	pointer on the action functions
  * @param	int		param	int parameter of the action function
  */
-void initButton(Button *bt, Point2D origin, Color3f color, void (*action)(int), int param) {
+void initButton(Button *bt, Point2D origin, void (*action)(int), int param) {
 	bt->origin.x = origin.x;
 	bt->origin.y = origin.y;
 
-	bt->color.r = color.r;
-	bt->color.g = color.g;
-	bt->color.b = color.b;
+	bt->color.r = 255;
+	bt->color.g = 255;
+	bt->color.b = 255;
 
 	bt->action = action;
 	bt->param = param;
@@ -49,19 +49,20 @@ void initButton(Button *bt, Point2D origin, Color3f color, void (*action)(int), 
 void initMenu(Button *menu) {
 	Point2D buttonOrigin;
 	initPoint2D(&buttonOrigin, SCREEN_WIDTH_CENTER - (BUTTON_WIDTH / 2), 210);
-	Color3f buttonColor;
-	initColor3f(&buttonColor, 255, 255, 255);
 
-	initButton(&menu[0], buttonOrigin, buttonColor, initGame, ONE_PL);
-	buttonOrigin.y += BUTTON_HEIGHT + SPACE_BETWEEN_BUTTONS;
-	initButton(&menu[1], buttonOrigin, buttonColor, initGame, TWO_PL);
+	initButton(&menu[0], buttonOrigin, initGame, ONE_PL);
 
 	buttonOrigin.y += BUTTON_HEIGHT + SPACE_BETWEEN_BUTTONS;
-	initColor3f(&buttonColor, 0, 255, 0);
-	initButton(&menu[2], buttonOrigin, buttonColor, selectTheme, THEME1);
+	initButton(&menu[1], buttonOrigin, initGame, TWO_PL);
+
 	buttonOrigin.y += BUTTON_HEIGHT + SPACE_BETWEEN_BUTTONS;
-	initColor3f(&buttonColor, 255, 0, 0);
-	initButton(&menu[3], buttonOrigin, buttonColor, quit, QUIT);
+	initButton(&menu[2], buttonOrigin, initGame, FOUR_PL);
+
+	buttonOrigin.y += BUTTON_HEIGHT + SPACE_BETWEEN_BUTTONS;
+	initButton(&menu[3], buttonOrigin, selectTheme, THEME1);
+
+	buttonOrigin.y += BUTTON_HEIGHT + SPACE_BETWEEN_BUTTONS;
+	initButton(&menu[4], buttonOrigin, quit, QUIT);
 }
 
 /**
@@ -73,7 +74,11 @@ void drawMenu(Button const *menu) {
   for (i = 0; i < NB_BUTTON_MAIN_MENU; ++i) {
   	glEnable(GL_TEXTURE_2D);
 	glColor3f(255, 255, 255);
-	glBindTexture(GL_TEXTURE_2D, texturesBuffer[7 + i]);
+	if (i == 3 && menu[i].param == THEME2) {
+		glBindTexture(GL_TEXTURE_2D, texturesBuffer[12]);
+	} else {
+		glBindTexture(GL_TEXTURE_2D, texturesBuffer[7 + i]);
+	}
     /*glColor3f(menu[i].color.r, menu[i].color.g, menu[i].color.b);*/
     glBegin(GL_POLYGON);
     	glTexCoord2f(0.0f, 0.0f);
@@ -86,7 +91,11 @@ void drawMenu(Button const *menu) {
   		glVertex2f(menu[i].origin.x, (menu[i].origin.y + BUTTON_HEIGHT));
   	glEnd();
 
-  	glBindTexture(GL_TEXTURE_2D, texturesBuffer[4]);
+		if (i == 3 && menu[i].param == THEME2) {
+			glBindTexture(GL_TEXTURE_2D, texturesBuffer[12]);
+		} else {
+			glBindTexture(GL_TEXTURE_2D, texturesBuffer[7 + i]);
+		}
 	glDisable(GL_TEXTURE_2D);
   }
 }
@@ -113,6 +122,7 @@ int handleButton(Button *bt, SDL_Event event, int *currentStep) {
 			}
 			if (bt->param > 9) {
 				bt->param = bt->param == THEME1 ? THEME2 : THEME1;
+
 				if (bt->param == THEME1) {
 					initColor3f(&themeColor, 255, 139, 0);
 				} else {
