@@ -322,6 +322,8 @@ void initPlayer(Player *pl, int id, char *name, Point2D barCenter, Color3f barCo
 void initGame(int nbPlayers);
 
 void moveBar (Bar *bar, enum direction dir);
+void handleGladOS(Bar *bar, Ball const *balls, int nbBalls);
+int indesirableNumberOne(Ball const *ball);
 void hitBrick (Brick *brick, Ball *ball);
 void ballOutOfBounds(Ball *ball, enum direction dir);
 

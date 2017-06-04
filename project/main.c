@@ -72,6 +72,7 @@ int main (int argc, char** argv) {
 	Uint8 * keyState = SDL_GetKeyState(NULL);
 	int gridWidth = 0, gridHeight = 0;
 	int *brickTypes;
+	bool gladOS = false;
 	glutInit(&argc, argv);
 	initColor3f(&themeColor, 255, 139, 0);
 
@@ -130,7 +131,8 @@ int main (int argc, char** argv) {
 			switch (gameStep) {
 				case INITIALISATON :
 					tmp = handleButton(&menu[0], trigger, &gameStep);
-					if (tmp && tmp < 4)	nbPlayers = tmp;
+					if (tmp == 1) gladOS = true;
+					if (tmp && tmp < 4)	nbPlayers = tmp + 1;
 					tmp = handleButton(&menu[1], trigger, &gameStep);
 					if (tmp && tmp < 4)	nbPlayers = tmp;
 					tmp = handleButton(&menu[2], trigger, &gameStep);
@@ -211,20 +213,29 @@ int main (int argc, char** argv) {
 		/*/////////////////////////////////////////
 		 //			KEYBOARD MANAGER			//
 		/////////////////////////////////////////*/
-		keyState = SDL_GetKeyState(NULL);
-		if (keyState[SDLK_LEFT]) {
-			moveBar(&(players[0].bar), LEFT);
+		if (gameStep == PLAYTIME) {
+			keyState = SDL_GetKeyState(NULL);
+			if (keyState[SDLK_LEFT]) {
+				moveBar(&(players[0].bar), LEFT);
+			}
+			if (keyState[SDLK_RIGHT]) {
+				moveBar(&(players[0].bar), RIGHT);
+			}
+			if (!gladOS) {
+				if (keyState[SDLK_q]) {
+					moveBar(&(players[1].bar), LEFT);
+				}
+				if (keyState[SDLK_d]) {
+					moveBar(&(players[1].bar), RIGHT);
+				}
+			} else {
+				handleGladOS(&(players[1].bar), balls, nbPlayers);
+			}
+
+			SDL_Delay(5);
 		}
-		if (keyState[SDLK_RIGHT]) {
-			moveBar(&(players[0].bar), RIGHT);
-		}
-		if (keyState[SDLK_q]) {
-			moveBar(&(players[1].bar), LEFT);
-		}
-		if (keyState[SDLK_d]) {
-			moveBar(&(players[1].bar), RIGHT);
-		}
-		SDL_Delay(5);
+
+
 	}
 
 	if (menu != NULL) {

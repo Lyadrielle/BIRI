@@ -24,7 +24,6 @@
 
 Ball *balls;
 Player *players;
-int totalPlayers;
 
 /*/////////////////////////////////////////
  //	GAMEPLAY INITIALISATON FUNCTIONS	//
@@ -44,7 +43,8 @@ void initPlayer(Player *pl, int id, char *name, Point2D barCenter, Color3f barCo
 }
 
 void initGame(int nbPlayers) {
-	totalPlayers = nbPlayers;
+	if (nbPlayers == 1)	nbPlayers = 2;
+
 	players = malloc(nbPlayers * sizeof(Player));
 	if (players == NULL) {
 		exit(MALLOC_ERROR);
@@ -74,7 +74,7 @@ void initGame(int nbPlayers) {
 		default :
 			break;
 		}
-		initPlayer(&players[i-1], i, playersNames[i - 1], barCenter, themeColor);
+		initPlayer(&players[i-1], i,  playersNames[i - 1], barCenter, themeColor);
 		initBall(&balls[i-1], i, BALL_RADIUS, ballSpeed, ballCenter, themeColor, i);
 	}
 }
@@ -99,6 +99,46 @@ void moveBar (Bar *bar, enum direction dir) {
       bar->center.x += BAR_SPEED;
     }
   }
+}
+
+void handleGladOS(Bar *bar, Ball const *balls, int nbBalls) {
+	float score = indesirableNumberOne(&balls[0]);
+	float tmpScore;
+	int indexBall = 0;
+	float offset = 0;
+	int i;
+
+	for (i = 1; i < nbBalls; ++i) {
+		tmpScore = indesirableNumberOne(&balls[i]);
+		if (tmpScore > score && balls[i].respawnTimer == 0) {
+			indexBall = i;
+		}
+	}
+	offset = balls[indexBall].origin.x - bar->center.x;
+	if (offset < -BAR_SPEED) {
+		offset = -BAR_SPEED;
+	}
+	if (offset > BAR_SPEED) {
+		offset = BAR_SPEED;
+	}
+	if (offset < 0) {
+		if ((bar->center.x - (bar->width / 2)) >= (HUD_HEIGHT)) {
+			bar->center.x += offset;
+		}
+	}
+	if (offset > 0) {
+		if ((bar->center.x + (bar->width / 2)) <= (SCREEN_WIDTH - HUD_HEIGHT)) {
+			bar->center.x += offset;
+		}
+	}
+}
+
+int indesirableNumberOne(Ball const *ball) {
+	if (ball->speed.y < 0) {
+		return - ball->origin.y;
+	} else {
+		return ball->origin.y;
+	}
 }
 
 /**
@@ -159,7 +199,7 @@ void ballOutOfBounds(Ball *ball, enum direction dir) {
 		ball->lastPlayerId = 1;
 		ball->origin.y = HUD_HEIGHT + (3 * BAR_HEIGHT);
 	}
-	if (dir == BOTTOM && totalPlayers > 1) {
+	if (dir == BOTTOM) {
 		--(players[1].life);
 		ball->lastPlayerId = 2;
 		ball->origin.y = SCREEN_HEIGHT - HUD_HEIGHT - (3 * BAR_HEIGHT);

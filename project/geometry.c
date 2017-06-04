@@ -166,5 +166,4 @@ float distance(Point2D a, Point2D b) {
 	v.x = b.x - a.x;
 	v.y = b.y - a.y;
 	return norm(v);
-
 }
