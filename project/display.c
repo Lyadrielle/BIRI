@@ -126,11 +126,11 @@ void drawBackground() {
 		glBegin(GL_POLYGON);
 		glTexCoord2f(0.0f, 0.0f);
 		glVertex2f(0, 0);
-		glTexCoord2f(0.0f, 1.0f);
+		glTexCoord2f(1.0f, 0.0f);
 		glVertex2f(SCREEN_WIDTH , 0);
 		glTexCoord2f(1.0f, 1.0f);
 		glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT);
-		glTexCoord2f(1.0f, 0.0f);
+		glTexCoord2f(0.0f, 1.0f);
 		glVertex2f(0, SCREEN_HEIGHT);
 		glEnd();
 
@@ -170,7 +170,7 @@ void drawHUD(Player const *pl, Color3f color) {
 			renderBitmapString((SCREEN_WIDTH / 2), (HUD_HEIGHT / 2)+5, pl->name);
 		glPopMatrix();
 		glPushMatrix();
-			renderBitmapString((SCREEN_WIDTH - 120), (HUD_HEIGHT / 2)+10, score);
+			renderBitmapString((SCREEN_WIDTH - 120), (HUD_HEIGHT / 2)+7, score);
 		glPopMatrix();
 
 	} else if (pl->id == 2) {
@@ -200,7 +200,7 @@ void drawHUD(Player const *pl, Color3f color) {
 			renderBitmapString((SCREEN_WIDTH / 2), (SCREEN_HEIGHT - (HUD_HEIGHT / 2))+5, pl->name);
 		glPopMatrix();
 		glPushMatrix();
-			renderBitmapString((SCREEN_WIDTH - 120), (SCREEN_HEIGHT - (HUD_HEIGHT / 2))+10, score);
+			renderBitmapString((SCREEN_WIDTH - 120), (SCREEN_HEIGHT - (HUD_HEIGHT / 2))+7, score);
 		glPopMatrix();
 	}
 }
