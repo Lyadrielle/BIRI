@@ -72,7 +72,8 @@
 #define MALLOC_ERROR -3
 #define TEXTURE_NB 7
 #define TEXTURE_NAME_SIZE 51
-#define LIFE_SIZE 20
+#define LIFE_SIZE_WIDTH 20
+#define LIFE_SIZE_HEIGHT 26
 
 /*/////////////////////////////////////////
  //			ENUMERATIONS				//
@@ -302,6 +303,7 @@ void drawBar(Bar bar);
 void drawBall(Ball ball);
 void drawBrick(Brick br);
 void drawGrid(GridBrick const grid,int gridWidth, int gridHeight);
+void drawBackground();
 void drawHUD(Player const *pl, Color3f color);
 void drawLife();
 void drawLifes(int nbHearts);

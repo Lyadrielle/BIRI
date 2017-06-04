@@ -114,69 +114,123 @@ void drawGrid(GridBrick const grid,int gridWidth, int gridHeight) {
 	}
 }
 
+/**
+ * Draw the background texture. (x = 0, y = 0) (top left corner)
+ * 
+ */
+void drawBackground() {
+		glEnable(GL_TEXTURE_2D);
+		glColor3f(255, 255, 255);
+		glBindTexture(GL_TEXTURE_2D, texturesBuffer[4]);
+
+		glBegin(GL_POLYGON);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex2f(0, 0);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex2f(SCREEN_WIDTH , 0);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex2f(0, SCREEN_HEIGHT);
+		glEnd();
+
+		glBindTexture(GL_TEXTURE_2D, texturesBuffer[4]);
+		glDisable(GL_TEXTURE_2D);
+}
+
 void drawHUD(Player const *pl, Color3f color) {
 	glColor3f(color.r, color.g, color.b);
 	char score[9] = "0";
 	sprintf(score, "%d", pl->score);
 
 	if (pl->id == 1) {
+		glEnable(GL_TEXTURE_2D);
+		glColor3f(255, 255, 255);
+		glBindTexture(GL_TEXTURE_2D, texturesBuffer[5]);
 		glBegin(GL_POLYGON);
+			glTexCoord2f(0.0f, 0.0f);
 			glVertex2f(0, 0);
+			glTexCoord2f(1.0f, 0.0f);
 			glVertex2f(SCREEN_WIDTH, 0);
+			glTexCoord2f(1.0f, 1.0f);
 			glVertex2f(SCREEN_WIDTH, HUD_HEIGHT);
+			glTexCoord2f(0.0f, 1.0f);
 			glVertex2f(0, HUD_HEIGHT);
 		glEnd();
+		glBindTexture(GL_TEXTURE_2D, texturesBuffer[5]);
+		glDisable(GL_TEXTURE_2D);
+
 
 		glPushMatrix();
-			glTranslatef((LIFE_SIZE * 2), ((HUD_HEIGHT / 2) - (LIFE_SIZE / 2)), 0);
+			glTranslatef((LIFE_SIZE_WIDTH * 2), ((HUD_HEIGHT / 2) - (LIFE_SIZE_HEIGHT / 2)), 0);
 			drawLifes(pl->life);
 		glPopMatrix();
 
 		glPushMatrix();
-			renderBitmapString((SCREEN_WIDTH / 2), (HUD_HEIGHT / 2), pl->name);
+			renderBitmapString((SCREEN_WIDTH / 2), (HUD_HEIGHT / 2)+5, pl->name);
 		glPopMatrix();
 		glPushMatrix();
-			renderBitmapString((SCREEN_WIDTH - 30), (HUD_HEIGHT / 2), score);
+			renderBitmapString((SCREEN_WIDTH - 120), (HUD_HEIGHT / 2)+10, score);
 		glPopMatrix();
 
 	} else if (pl->id == 2) {
+		glEnable(GL_TEXTURE_2D);
+		glColor3f(255, 255, 255);
+		glBindTexture(GL_TEXTURE_2D, texturesBuffer[5]);
 		glBegin(GL_POLYGON);
+			glTexCoord2f(0.0f, 0.0f);
 			glVertex2f(0, SCREEN_HEIGHT - HUD_HEIGHT);
+			glTexCoord2f(1.0f, 0.0f);
 			glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT - HUD_HEIGHT);
+			glTexCoord2f(1.0f, 1.0f);
 			glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT);
+			glTexCoord2f(0.0f, 1.0f);
 			glVertex2f(0, SCREEN_HEIGHT);
 		glEnd();
+		glBindTexture(GL_TEXTURE_2D, texturesBuffer[5]);
+		glDisable(GL_TEXTURE_2D);
 
 		glPushMatrix();
-			glTranslatef((LIFE_SIZE * 2), (SCREEN_HEIGHT - (HUD_HEIGHT / 2) - (LIFE_SIZE / 2)), 0);
+			glTranslatef((LIFE_SIZE_WIDTH * 2), (SCREEN_HEIGHT - (HUD_HEIGHT / 2) - (LIFE_SIZE_HEIGHT / 2)), 0);
 			drawLifes(pl->life);
 		glPopMatrix();
 
 		glColor3f(0, 0, 0);
 		glPushMatrix();
-			renderBitmapString((SCREEN_WIDTH / 2), (SCREEN_HEIGHT - (HUD_HEIGHT / 2)), pl->name);
+			renderBitmapString((SCREEN_WIDTH / 2), (SCREEN_HEIGHT - (HUD_HEIGHT / 2))+5, pl->name);
 		glPopMatrix();
 		glPushMatrix();
-			renderBitmapString((SCREEN_WIDTH - 30), (SCREEN_HEIGHT - (HUD_HEIGHT / 2)), score);
+			renderBitmapString((SCREEN_WIDTH - 120), (SCREEN_HEIGHT - (HUD_HEIGHT / 2))+10, score);
 		glPopMatrix();
 	}
 }
 
 void drawLife() {
-	glColor3f(255, 0, 0);
+	glEnable(GL_TEXTURE_2D);
+	glColor3f(255, 255, 255);
+	glBindTexture(GL_TEXTURE_2D, texturesBuffer[6]);
+
 	glBegin(GL_POLYGON);
+		glTexCoord2f(0.0f, 0.0f);
 		glVertex2f(0, 0);
-		glVertex2f(LIFE_SIZE, 0);
-		glVertex2f(LIFE_SIZE, LIFE_SIZE);
-		glVertex2f(0, LIFE_SIZE);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex2f(LIFE_SIZE_WIDTH, 0);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex2f(LIFE_SIZE_WIDTH, LIFE_SIZE_HEIGHT);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex2f(0, LIFE_SIZE_HEIGHT);
 	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, texturesBuffer[6]);
+	glDisable(GL_TEXTURE_2D);
 }
+
 
 void drawLifes(int nbHearts) {
 	int i;
 	for (i = nbHearts; i > 0; --i) {
 		glPushMatrix();
-		glTranslatef((i * (LIFE_SIZE + (LIFE_SIZE / 2))), 0, 0);
+		glTranslatef(47 +(i * (LIFE_SIZE_WIDTH +4)), 0, 0);
 			drawLife();
 		glPopMatrix();
 	}
@@ -280,7 +334,7 @@ void loadTextures(char *themePath) {
 				sprintf(imgPath, "%serror.jpg", tmp);
 				break;
 		}
-		printf("PATH : %s\n", imgPath);
+		printf("PATH : %s et %d\n", imgPath, i-1);
 
 		/* If "imgPath" link is wrong (picture doesn't exist or themePath is wrong), segmentation error */
 		surface = IMG_Load(imgPath);
@@ -292,8 +346,8 @@ void loadTextures(char *themePath) {
 		/* Génération des identifiants des textures */
 		glBindTexture(GL_TEXTURE_2D, texturesBuffer[i - 1]);
 		/* Association des textures avec les identifiants*/
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glBindTexture(GL_TEXTURE_2D, texturesBuffer[i - 1]);

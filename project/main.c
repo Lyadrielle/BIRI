@@ -160,6 +160,7 @@ int main (int argc, char** argv) {
 		}
 		/* -------------( PLAYTIME FASE )------------ */
 		if (gameStep == PLAYTIME) {
+			drawBackground();
 			for (i = 0; i < nbBalls; ++i) {
 				collisionBallScreen(&balls[i]);
 				for (j = 0; j < nbPlayers; ++j) {
