@@ -103,6 +103,11 @@ int handleButton(Button *bt, SDL_Event event, int *currentStep) {
 			}
 			if (bt->param > 9) {
 				bt->param = bt->param == THEME1 ? THEME2 : THEME1;
+				if (bt->param == THEME1) {
+					initColor3f(&themeColor, 255, 139, 0);
+				} else {
+					initColor3f(&themeColor, 42, 239, 219);
+				}
 			}
 			if (bt->param == QUIT) {
 				*currentStep = QUIT_PROGRAM;

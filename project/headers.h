@@ -248,6 +248,7 @@ extern Player *players;
 extern char *playersNames[];
 extern int totalPlayers;
 extern GLuint texturesBuffer[];
+extern Color3f themeColor;
 
 /*/////////////////////////////////////////
  //			FUNCTIONS PROTOTYPE			//

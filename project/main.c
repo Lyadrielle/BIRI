@@ -27,6 +27,7 @@
 
 char *playersNames[10];
 GLuint texturesBuffer[TEXTURE_NB];
+Color3f themeColor;
 
 /*/////////////////////////////////////////
  //			MAIN SDL FUNCTIONS			//
@@ -72,6 +73,7 @@ int main (int argc, char** argv) {
 	int gridWidth = 0, gridHeight = 0;
 	int *brickTypes;
 	glutInit(&argc, argv);
+	initColor3f(&themeColor, 255, 139, 0);
 
 	if(argc < 2) {
 		printf("ERREUR : Config file manquant\n");

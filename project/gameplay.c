@@ -58,30 +58,24 @@ void initGame(int nbPlayers) {
 	int i;
 	Point2D barCenter, ballCenter;
 	Vector2D ballSpeed;
-	Color3f barColor, ballColor;
 
-	for (i =
-		1; i <= nbPlayers; ++i) {
+	for (i = 1; i <= nbPlayers; ++i) {
 		switch (i) {
 		case 1 :
 			initPoint2D(&barCenter, (SCREEN_WIDTH_CENTER - (BASIC / 2)), (HUD_HEIGHT + BAR_HEIGHT));
-			initColor3f(&barColor, 255, 0, 0);
 			initPoint2D(&ballCenter, (SCREEN_WIDTH_CENTER - (BASIC / 2)), (HUD_HEIGHT + (3 * BAR_HEIGHT)));
 			initVector2D(&ballSpeed, NORMAL, NORMAL);
-			initColor3f(&ballColor, 255, 0, 0);
 			break;
 		case 2 :
 			initPoint2D(&barCenter, (SCREEN_WIDTH_CENTER - (BASIC / 2)), (SCREEN_HEIGHT - HUD_HEIGHT - BAR_HEIGHT));
-			initColor3f(&barColor, 0, 0, 255);
 			initPoint2D(&ballCenter, (SCREEN_WIDTH_CENTER - (BASIC / 2)), (SCREEN_HEIGHT - HUD_HEIGHT - (3 * BAR_HEIGHT)));
-			initVector2D(&ballSpeed, NORMAL, (NORMAL * -1));
-			initColor3f(&ballColor, 0, 0, 255);
+			initVector2D(&ballSpeed, NORMAL, -NORMAL);
 			break;
 		default :
 			break;
 		}
-		initPlayer(&players[i-1], i, playersNames[i - 1], barCenter, barColor);
-		initBall(&balls[i-1], i, BALL_RADIUS, ballSpeed, ballCenter, ballColor, i);
+		initPlayer(&players[i-1], i, playersNames[i - 1], barCenter, themeColor);
+		initBall(&balls[i-1], i, BALL_RADIUS, ballSpeed, ballCenter, themeColor, i);
 	}
 }
 
@@ -132,17 +126,17 @@ void hitBrick (Brick *brick, Ball *ball) {
 			players[ball->lastPlayerId - 1].bar.width = SMALL;
 		}
 	}
-	if (brick->type == ADD_LIFE) {
+	if (brick->type == ADD_LIFE && players[ball->lastPlayerId - 1].life < 9) {
 		++(players[ball->lastPlayerId - 1].life);
 	}
 
 	if (brick->type == SLOWER_BALL) {
-		balls[ball->lastPlayerId - 1].speed.x = balls[ball->lastPlayerId - 1].speed.x < 0 ? - SLOW : SLOW;
-		balls[ball->lastPlayerId - 1].speed.y = balls[ball->lastPlayerId - 1].speed.y < 0 ? - SLOW : SLOW;
+		ball->speed.x = ball->speed.x < 0 ? - SLOW : SLOW;
+		ball->speed.y = ball->speed.y < 0 ? - SLOW : SLOW;
 	}
 	if (brick->type == FASTER_BALL) {
-		balls[ball->lastPlayerId - 1].speed.x = balls[ball->lastPlayerId - 1].speed.x < 0 ? - FAST : FAST;
-		balls[ball->lastPlayerId - 1].speed.y = balls[ball->lastPlayerId - 1].speed.y < 0 ? - FAST : FAST;
+		ball->speed.x = ball->speed.x < 0 ? - FAST : FAST;
+		ball->speed.y = ball->speed.y < 0 ? - FAST : FAST;
 	}
 	if (brick->type == SLOWER_BALL || brick->type == FASTER_BALL) {
 		ball->bonusTimer = BALL_BONUS_TIME;
