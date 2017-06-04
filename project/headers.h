@@ -41,9 +41,9 @@
 #define NB_BUTTON_GMODE_MENU 2
 
 /* ----------( BUTTONS )---------- */
-#define BUTTON_WIDTH 140
+#define BUTTON_WIDTH 360
 #define BUTTON_HEIGHT 60
-#define SPACE_BETWEEN_BUTTONS 40
+#define SPACE_BETWEEN_BUTTONS 20
 
 #define TEXT_FIELD_WIDTH 200
 #define TEXT_FIELD_HEIGHT 60
@@ -70,7 +70,7 @@
 
 /* -----------( OTHER )---------- */
 #define MALLOC_ERROR -3
-#define TEXTURE_NB 7
+#define TEXTURE_NB 15
 #define TEXTURE_NAME_SIZE 51
 #define LIFE_SIZE_WIDTH 20
 #define LIFE_SIZE_HEIGHT 26
@@ -303,7 +303,8 @@ void drawBar(Bar bar);
 void drawBall(Ball ball);
 void drawBrick(Brick br);
 void drawGrid(GridBrick const grid,int gridWidth, int gridHeight);
-void drawBackground();
+void drawBackgroundGame();
+void drawBackgroundMenu();
 void drawHUD(Player const *pl);
 void drawLife();
 void drawLifes(int nbHearts);

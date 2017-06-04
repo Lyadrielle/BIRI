@@ -118,7 +118,7 @@ void drawGrid(GridBrick const grid,int gridWidth, int gridHeight) {
  * Draw the background texture. (x = 0, y = 0) (top left corner)
  *
  */
-void drawBackground() {
+void drawBackgroundGame() {
 		glEnable(GL_TEXTURE_2D);
 		glColor3f(255, 255, 255);
 		glBindTexture(GL_TEXTURE_2D, texturesBuffer[4]);
@@ -135,6 +135,30 @@ void drawBackground() {
 		glEnd();
 
 		glBindTexture(GL_TEXTURE_2D, texturesBuffer[4]);
+		glDisable(GL_TEXTURE_2D);
+}
+
+/**
+ * Draw the background texture. (x = 0, y = 0) (top left corner)
+ *
+ */
+void drawBackgroundMenu() {
+		glEnable(GL_TEXTURE_2D);
+		glColor3f(255, 255, 255);
+		glBindTexture(GL_TEXTURE_2D, texturesBuffer[13]);
+
+		glBegin(GL_POLYGON);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex2f(0, 0);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex2f(SCREEN_WIDTH , 0);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex2f(0, SCREEN_HEIGHT);
+		glEnd();
+
+		glBindTexture(GL_TEXTURE_2D, texturesBuffer[13]);
 		glDisable(GL_TEXTURE_2D);
 }
 
@@ -330,6 +354,30 @@ void loadTextures(char *themePath) {
 			case 7 :
 				sprintf(imgPath, "%slife.jpg", tmp);
 				break;
+			case 8 : 
+				sprintf(imgPath, "img/button01.jpg");
+				break;
+			case 9 : 
+				sprintf(imgPath, "img/button02.jpg");
+				break;
+			case 10 : 
+				sprintf(imgPath, "img/button03.jpg");
+				break;
+			case 11 : 
+				sprintf(imgPath, "img/button04.jpg");
+				break;
+			case 12 : 
+				sprintf(imgPath, "img/button05.jpg");
+				break;
+			case 13 : 
+				sprintf(imgPath, "img/bb.jpg");
+				break;
+			case 14 : 
+				sprintf(imgPath, "img/menu.jpg");
+				break;
+			case 15 : 
+				sprintf(imgPath, "img/victory.jpg");
+				break;
 			default :
 				sprintf(imgPath, "%serror.jpg", tmp);
 				break;
@@ -346,8 +394,8 @@ void loadTextures(char *themePath) {
 		/* Génération des identifiants des textures */
 		glBindTexture(GL_TEXTURE_2D, texturesBuffer[i - 1]);
 		/* Association des textures avec les identifiants*/
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glBindTexture(GL_TEXTURE_2D, texturesBuffer[i - 1]);

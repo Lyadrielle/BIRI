@@ -48,7 +48,7 @@ void initButton(Button *bt, Point2D origin, Color3f color, void (*action)(int), 
  */
 void initMenu(Button *menu) {
 	Point2D buttonOrigin;
-	initPoint2D(&buttonOrigin, SCREEN_WIDTH_CENTER - (BUTTON_WIDTH / 2), 50);
+	initPoint2D(&buttonOrigin, SCREEN_WIDTH_CENTER - (BUTTON_WIDTH / 2), 210);
 	Color3f buttonColor;
 	initColor3f(&buttonColor, 255, 255, 255);
 
@@ -71,13 +71,23 @@ void initMenu(Button *menu) {
 void drawMenu(Button const *menu) {
   int i;
   for (i = 0; i < NB_BUTTON_MAIN_MENU; ++i) {
-    glColor3f(menu[i].color.r, menu[i].color.g, menu[i].color.b);
+  	glEnable(GL_TEXTURE_2D);
+	glColor3f(255, 255, 255);
+	glBindTexture(GL_TEXTURE_2D, texturesBuffer[7 + i]);
+    /*glColor3f(menu[i].color.r, menu[i].color.g, menu[i].color.b);*/
     glBegin(GL_POLYGON);
+    	glTexCoord2f(0.0f, 0.0f);
   		glVertex2f(menu[i].origin.x, menu[i].origin.y);
+  		glTexCoord2f(1.0f, 0.0f);
   		glVertex2f((menu[i].origin.x + BUTTON_WIDTH), menu[i].origin.y);
+  		glTexCoord2f(1.0f, 1.0f);
   		glVertex2f((menu[i].origin.x + BUTTON_WIDTH), (menu[i].origin.y + BUTTON_HEIGHT));
+  		glTexCoord2f(0.0f, 1.0f);
   		glVertex2f(menu[i].origin.x, (menu[i].origin.y + BUTTON_HEIGHT));
   	glEnd();
+
+  	glBindTexture(GL_TEXTURE_2D, texturesBuffer[4]);
+	glDisable(GL_TEXTURE_2D);
   }
 }
 
