@@ -141,7 +141,8 @@ enum gameStep {
 	INITIALISATON,
 	PLAYTIME,
 	SCOREBOARD,
-	QUIT_PROGRAM
+	QUIT_PROGRAM,
+	PAUSE
 };
 
 /*/////////////////////////////////////////
@@ -299,6 +300,7 @@ void drawHUD(Player const *pl, int nbPlayers);
 void drawLife();
 void drawLifes(int nbHearts);
 void renderBitmapString(float x, float y, char const *string);
+void renderBitmapVerticalString(float x, float y, char const *string);
 void printVictoryScreen(Player const *players, int nbPlayers, bool gladOS);
 int NameLenght(char const *name);
 

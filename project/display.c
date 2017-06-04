@@ -233,9 +233,8 @@ void drawHUD(Player const *pl, int nbPlayers) {
 
 			glColor3f(5, 11, 11);
 			glPushMatrix();
-				renderBitmapString(((HUD_HEIGHT / 2)+5), SCREEN_HEIGHT_CENTER, pl->name);
-				renderBitmapString(((HUD_HEIGHT / 2)+7), (SCREEN_HEIGHT - 70), score);
-				glRotatef(90, 0, 0, 1);
+				renderBitmapVerticalString(((HUD_HEIGHT / 2)-5), (SCREEN_HEIGHT_CENTER + 30), pl->name);
+				renderBitmapVerticalString(((HUD_HEIGHT / 2)-5), (SCREEN_HEIGHT - 90), score);
 			glPopMatrix();
 
 		} else if (pl->id == 4) {
@@ -263,9 +262,8 @@ void drawHUD(Player const *pl, int nbPlayers) {
 
 			glColor3f(5, 11, 11);
 			glPushMatrix();
-				renderBitmapString((SCREEN_WIDTH - (HUD_HEIGHT / 2)+5), SCREEN_HEIGHT_CENTER, pl->name);
-				renderBitmapString((SCREEN_WIDTH - (HUD_HEIGHT / 2)+7), (SCREEN_HEIGHT - 70), score);
-				glRotatef(90, 0, 0, 1);
+				renderBitmapVerticalString((SCREEN_WIDTH - (HUD_HEIGHT / 2)-5), (SCREEN_HEIGHT_CENTER + 30), pl->name);
+				renderBitmapVerticalString((SCREEN_WIDTH - (HUD_HEIGHT / 2)-5), (SCREEN_HEIGHT - 90), score);
 			glPopMatrix();
 		}
 	}
@@ -291,7 +289,6 @@ void drawLife() {
 	glDisable(GL_TEXTURE_2D);
 }
 
-
 void drawLifes(int nbHearts) {
 	int i;
 	for (i = nbHearts; i > 0; --i) {
@@ -309,6 +306,16 @@ void renderBitmapString(float x, float y, char const *string) {
 	glRasterPos2f(x - ((9 * strLenght) / 2), y);
 	for (c = string; *c != '\0'; c++) {
 		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *c);
+	}
+}
+
+void renderBitmapVerticalString(float x, float y, char const *string) {
+	char const *c;
+	for (c = string; *c != '\0'; c++) {}
+	for (c = string; *c != '\0'; c++) {
+		glRasterPos2f(x, y + ((15 *  (c - string) )));
+		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *c);
+
 	}
 }
 
@@ -331,7 +338,7 @@ void printVictoryScreen(Player const *players, int nbPlayers, bool gladOS) {
 			renderBitmapString((SCREEN_WIDTH_CENTER - (((NameLenght(players[0].name)/2) * 9))), 230, players[0].name);
 		}
 		for (i = 0; i < 2; ++i) {
-			sprintf(scorePl, "%s\t\t%d", players[i].name, players[i].score);
+			sprintf(scorePl, "%s.........................t%d", players[i].name, players[i].score);
 			renderBitmapString((SCREEN_WIDTH_CENTER - (((NameLenght(players[i].name)/2) * 9))), (400 + ( 30 * (i + 1))), scorePl);
 		}
 	}

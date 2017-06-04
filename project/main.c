@@ -167,6 +167,8 @@ int main (int argc, char** argv) {
 				case QUIT_PROGRAM :
 					loop = false;
 					break;
+				case PAUSE :
+					break;
 				default :
 					break;
 			}
@@ -226,6 +228,9 @@ int main (int argc, char** argv) {
 			printVictoryScreen(players, nbPlayers, gladOS);
 		}
 
+		if (gameStep == PAUSE) {
+			drawBackground(14);
+		}
 
 		/* -------------( SCOREBOARD FASE )------------ */
 		SDL_GL_SwapBuffers();
@@ -233,16 +238,23 @@ int main (int argc, char** argv) {
 		/*/////////////////////////////////////////
 		 //			KEYBOARD MANAGER			//
 		/////////////////////////////////////////*/
+		if (keyState[SDLK_p] && trigger.type == SDL_KEYDOWN && gameStep == PLAYTIME) {
+			gameStep = PAUSE;
+		} else if (keyState[SDLK_p] && trigger.type == SDL_KEYDOWN && gameStep == PAUSE) {
+			gameStep = PLAYTIME;
+		}
+
 		if (gameStep == PLAYTIME) {
 			keyState = SDL_GetKeyState(NULL);
-			if (keyState[SDLK_LEFT]) moveBar(&(players[0].bar), LEFT);
-			if (keyState[SDLK_RIGHT]) moveBar(&(players[0].bar), RIGHT);
+			if (keyState[SDLK_a]) moveBar(&(players[0].bar), LEFT);
+			if (keyState[SDLK_z]) moveBar(&(players[0].bar), RIGHT);
 
 			/* IA */
 			if (!gladOS) {
-				if (keyState[SDLK_q]) moveBar(&(players[1].bar), LEFT);
-				if (keyState[SDLK_d]) moveBar(&(players[1].bar), RIGHT);
+				if (keyState[SDLK_LEFT]) moveBar(&(players[1].bar), LEFT);
+				if (keyState[SDLK_RIGHT]) moveBar(&(players[1].bar), RIGHT);
 			} else {
+				players[1].name = "GladOS";
 				handleGladOS(&(players[1].bar), balls, nbPlayers);
 			}
 
@@ -257,8 +269,6 @@ int main (int argc, char** argv) {
 
 			SDL_Delay(5);
 		}
-
-
 	}
 
 	if (menu != NULL) {
