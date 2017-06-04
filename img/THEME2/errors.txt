@@ -1,2 +1,0 @@
-[2017-06-04 00:34:49] layer "background.png": Duplicate path: background.png
-[2017-06-04 00:34:49] layer "life.png": Duplicate path: life.png

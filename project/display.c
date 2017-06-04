@@ -265,19 +265,19 @@ void loadTextures(char *themePath) {
 			case 2 :
 			case 3 :
 			case 4 :
-				sprintf(imgPath, "%sbrick0%d.png",tmp, i);
+				sprintf(imgPath, "%sbrick0%d.jpg",tmp, i);
 				break;
 			case 5 :
-				sprintf(imgPath, "%sbackground.png", tmp);
+				sprintf(imgPath, "%sbackground.jpg", tmp);
 				break;
 			case 6 :
-				sprintf(imgPath, "%sHUD.png", tmp);
+				sprintf(imgPath, "%sHUD.jpg", tmp);
 				break;
 			case 7 :
-				sprintf(imgPath, "%slife.png", tmp);
+				sprintf(imgPath, "%slife.jpg", tmp);
 				break;
 			default :
-				sprintf(imgPath, "%serror.png", tmp);
+				sprintf(imgPath, "%serror.jpg", tmp);
 				break;
 		}
 		printf("PATH : %s\n", imgPath);
