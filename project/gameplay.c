@@ -62,23 +62,23 @@ void initGame(int nbPlayers) {
 	for (i = 1; i <= nbPlayers; ++i) {
 		switch (i) {
 		case 1 :
-			initPoint2D(&barCenter, (SCREEN_WIDTH_CENTER - (BASIC / 2)), (HUD_HEIGHT + BAR_HEIGHT));
-			initPoint2D(&ballCenter, (SCREEN_WIDTH_CENTER - (BASIC / 2)), (HUD_HEIGHT + (3 * BAR_HEIGHT)));
+			initPoint2D(&barCenter, SCREEN_WIDTH_CENTER, (HUD_HEIGHT + BAR_HEIGHT));
+			initPoint2D(&ballCenter, SCREEN_WIDTH_CENTER, (HUD_HEIGHT + (3 * BAR_HEIGHT)));
 			initVector2D(&ballSpeed, NORMAL, NORMAL);
 			break;
 		case 2 :
-			initPoint2D(&barCenter, (SCREEN_WIDTH_CENTER - (BASIC / 2)), (SCREEN_HEIGHT - HUD_HEIGHT - BAR_HEIGHT));
-			initPoint2D(&ballCenter, (SCREEN_WIDTH_CENTER - (BASIC / 2)), (SCREEN_HEIGHT - HUD_HEIGHT - (3 * BAR_HEIGHT)));
+			initPoint2D(&barCenter, SCREEN_WIDTH_CENTER, (SCREEN_HEIGHT - HUD_HEIGHT - BAR_HEIGHT));
+			initPoint2D(&ballCenter, SCREEN_WIDTH_CENTER, (SCREEN_HEIGHT - HUD_HEIGHT - (3 * BAR_HEIGHT)));
 			initVector2D(&ballSpeed, -NORMAL, -NORMAL);
 			break;
 		case 3 :
-			initPoint2D(&barCenter, (HUD_HEIGHT + BAR_HEIGHT), (SCREEN_HEIGHT_CENTER - (BASIC / 2)));
-			initPoint2D(&ballCenter, (HUD_HEIGHT + (3 * BAR_HEIGHT)), (SCREEN_HEIGHT_CENTER - (BASIC / 2)));
+			initPoint2D(&barCenter, (HUD_HEIGHT + BAR_HEIGHT), SCREEN_HEIGHT_CENTER);
+			initPoint2D(&ballCenter, (HUD_HEIGHT + (3 * BAR_HEIGHT)), SCREEN_HEIGHT_CENTER );
 			initVector2D(&ballSpeed, NORMAL, -NORMAL);
 			break;
 		case 4 :
-			initPoint2D(&barCenter, (SCREEN_WIDTH - HUD_HEIGHT - BAR_HEIGHT), (SCREEN_HEIGHT_CENTER - (BASIC / 2)));
-			initPoint2D(&ballCenter, (SCREEN_WIDTH - HUD_HEIGHT - (3 * BAR_HEIGHT)), (SCREEN_HEIGHT_CENTER - (BASIC / 2)));
+			initPoint2D(&barCenter, (SCREEN_WIDTH - HUD_HEIGHT - BAR_HEIGHT), SCREEN_HEIGHT_CENTER);
+			initPoint2D(&ballCenter, (SCREEN_WIDTH - HUD_HEIGHT - (3 * BAR_HEIGHT)), SCREEN_HEIGHT_CENTER);
 			initVector2D(&ballSpeed, -NORMAL, NORMAL);
 			break;
 		default :

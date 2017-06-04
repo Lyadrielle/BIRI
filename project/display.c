@@ -107,7 +107,13 @@ void drawBrick(Brick br) {
 void drawGrid(GridBrick const grid,int gridWidth, int gridHeight) {
 	int i, j;
 	int originX = SCREEN_WIDTH_CENTER - ((gridWidth / 2) * BRICK_WIDTH);
+	if (gridWidth % 2 == 1) {
+		originX -= (BRICK_WIDTH / 2);
+	}
 	int originY = (SCREEN_HEIGHT_CENTER - ((gridHeight) / 2) * BRICK_HEIGHT);
+	if (gridHeight % 2 == 1) {
+		originY -= (BRICK_HEIGHT / 2);
+	}
 
 	for (i = 0; i < gridHeight; ++i) {
 		for (j = 0; j < gridWidth; ++j) {
@@ -338,7 +344,7 @@ void printVictoryScreen(Player const *players, int nbPlayers, bool gladOS) {
 			renderBitmapString((SCREEN_WIDTH_CENTER - (((NameLenght(players[0].name)/2) * 9))), 230, players[0].name);
 		}
 		for (i = 0; i < 2; ++i) {
-			sprintf(scorePl, "%s.........................t%d", players[i].name, players[i].score);
+			sprintf(scorePl, "%s.........................%d", players[i].name, players[i].score);
 			renderBitmapString((SCREEN_WIDTH_CENTER - (((NameLenght(players[i].name)/2) * 9))), (400 + ( 30 * (i + 1))), scorePl);
 		}
 	}

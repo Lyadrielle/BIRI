@@ -146,8 +146,14 @@ void updateBrickCoordinates(Brick *br, Point2D topLeft) {
 
 void initBrickCoordinates(GridBrick grid, int gridWidth, int gridHeight) {
 	Point2D topLeft;
-	int originX = (SCREEN_WIDTH / 2) - ((gridWidth / 2) * BRICK_WIDTH);
-	int originY = ((SCREEN_HEIGHT / 2) - ((gridHeight) / 2) * BRICK_HEIGHT);
+	int originX = SCREEN_WIDTH_CENTER - ((gridWidth / 2) * BRICK_WIDTH);
+	if (gridWidth % 2 == 1) {
+		originX -= (BRICK_WIDTH / 2);
+	}
+	int originY = (SCREEN_HEIGHT_CENTER - ((gridHeight) / 2) * BRICK_HEIGHT);
+	if (gridHeight % 2 == 1) {
+		originY -= (BRICK_HEIGHT / 2);
+	}
 
 	int i, j;
 	for (i = 0; i < gridHeight; ++i) {
