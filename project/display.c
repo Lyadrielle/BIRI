@@ -70,20 +70,12 @@ void drawBall(Ball ball) {
  */
 void drawBrick(Brick br) {
 	int index = defineBrickColor(br);
-	if(index < 1 || index > 4){
-		glColor3f(255, 255, 255);
-		glBegin(GL_POLYGON);
-		glVertex2f(0, 0);
-		glVertex2f((BRICK_WIDTH - 1), 0);
-		glVertex2f((BRICK_WIDTH - 1), (BRICK_HEIGHT - 1));
-		glVertex2f(0, (BRICK_HEIGHT - 1));
-		glEnd();
-	}	else {
 		glEnable(GL_TEXTURE_2D);
+		glColor3f(255, 255, 255);
 		glBindTexture(GL_TEXTURE_2D, texturesBuffer[index]);
 
 		glBegin(GL_POLYGON);
-		glTexCoord2f(0.0f,0.0f);
+		glTexCoord2f(0.0f, 0.0f);
 		glVertex2f(0, 0);
 		glTexCoord2f(0.0f, 1.0f);
 		glVertex2f((BRICK_WIDTH - 1), 0);
@@ -95,7 +87,6 @@ void drawBrick(Brick br) {
 
 		glBindTexture(GL_TEXTURE_2D, texturesBuffer[index]);
 		glDisable(GL_TEXTURE_2D);
-	}
 }
 
 /**
@@ -115,7 +106,7 @@ void drawGrid(GridBrick const grid,int gridWidth, int gridHeight) {
 		for (j = 0; j < gridWidth; ++j) {
 			if (grid[i][j].status != DESTROYED) {
 				glPushMatrix();
-					glTranslatef((originX + (j * BRICK_WIDTH)), (originY + (i * BRICK_HEIGHT)), 0);
+					glTranslatef((originX + (j * (BRICK_WIDTH - 1))), (originY + (i * (BRICK_HEIGHT - 1))), 0);
 					drawBrick(grid[i][j]);
 				glPopMatrix();
 			}
@@ -302,15 +293,14 @@ void loadTextures(char *themePath) {
 		glBindTexture(GL_TEXTURE_2D, texturesBuffer[i - 1]);
 
 		/* Association des textures avec les identifiants*/
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glBindTexture(GL_TEXTURE_2D, texturesBuffer[i]);
+		glBindTexture(GL_TEXTURE_2D, texturesBuffer[i - 1]);
 		GLenum format = testFormat(surface);
 		glTexImage2D(GL_TEXTURE_2D, 0, format, surface->w, surface->h, 0, format, GL_UNSIGNED_BYTE, surface->pixels);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
-
 	SDL_FreeSurface(surface);
 }
