@@ -25,8 +25,9 @@
  */
 void collisionBallScreen(Ball *ball, int nbPlayers) {
 	if (nbPlayers < 3) {
-		if ((ball->origin.x - ball->radius) <= HUD_HEIGHT || (ball->origin.x + ball->radius) >= (SCREEN_WIDTH - HUD_HEIGHT)) {
-			ball->speed.x *= -1;
+		if ((ball->origin.x - ball->radius) <= HUD_HEIGHT
+			|| (ball->origin.x + ball->radius) >= (SCREEN_WIDTH - HUD_HEIGHT)) {
+				ball->speed.x *= -1;
 		}
 	} else {
 		if ((ball->origin.x - ball->radius) <= HUD_HEIGHT) {
@@ -47,10 +48,10 @@ void collisionBallScreen(Ball *ball, int nbPlayers) {
 
 /**
  * Determines if there is a collision between a ball and a line.
- * @param	Ball*		ball	the current ball pointer
- * @param	Point2D	A			point A of the line
- * @param	Point2D	B			point B of the line
- * @return							return true if there is a collision, false otherwise
+ * @param		Ball*		ball	the current ball pointer
+ * @param		Point2D	A			point A of the line
+ * @param		Point2D	B			point B of the line
+ * @return	bool					return true if there is a collision, false otherwise
  */
 bool collisionBallLine(Ball const *ball, Point2D A, Point2D B) {
 	Vector2D AB = defineVector(A, B);
@@ -198,32 +199,22 @@ bool collisionBallGrid(GridBrick grid, Ball *ball, int gridWidth, int gridHeight
 void collisionBarBall(Bar const *bar, Ball *ball) {
 	Point2D topLeft, topRight, bottomLeft, bottomRight;
 	enum collisionType collision;
+	int sizeX = bar->width / 2;
+	int sizeY = BAR_HEIGHT / 2;
 
-	if (bar->orientationHorizontal) {
-		topLeft.x = bar->center.x - bar->width / 2;
-		topLeft.y = bar->center.y - BAR_HEIGHT / 2;
-
-		topRight.x = bar->center.x + bar->width / 2;
-		topRight.y = bar->center.y - BAR_HEIGHT / 2;
-
-		bottomLeft.x = bar->center.x - bar->width / 2;
-		bottomLeft.y = bar->center.y + BAR_HEIGHT / 2;
-
-		bottomRight.x = bar->center.x + bar->width / 2;
-		bottomRight.y = bar->center.y + BAR_HEIGHT / 2;
-	} else {
-		topLeft.x = bar->center.x - BAR_HEIGHT / 2;
-		topLeft.y = bar->center.y - bar->width / 2;
-
-		topRight.x = bar->center.x + BAR_HEIGHT / 2;
-		topRight.y = bar->center.y - bar->width / 2;
-
-		bottomLeft.x = bar->center.x - BAR_HEIGHT / 2;
-		bottomLeft.y = bar->center.y + bar->width / 2;
-
-		bottomRight.x = bar->center.x + BAR_HEIGHT / 2;
-		bottomRight.y = bar->center.y + bar->width / 2;
+	if (!bar->orientationHorizontal) {
+		sizeX = BAR_HEIGHT / 2;
+		sizeY = bar->width / 2;
 	}
+
+	topLeft.x = bar->center.x - sizeX;
+	topLeft.y = bar->center.y - sizeY;
+	topRight.x = bar->center.x + sizeX;
+	topRight.y = bar->center.y - sizeY;
+	bottomLeft.x = bar->center.x - sizeX;
+	bottomLeft.y = bar->center.y + sizeY;
+	bottomRight.x = bar->center.x + sizeX;
+	bottomRight.y = bar->center.y + sizeY;
 
 	if (ball->speed.y < 0) {
 		if ((collision = collisionBallSegment(ball, bottomRight, bottomLeft))) {
@@ -272,7 +263,7 @@ void collisionBarBall(Bar const *bar, Ball *ball) {
 }
 
 /*/////////////////////////////////////////
- //		BASIC MOUVEMENTS FUNCTIONS 		//
+ //				BASIC MOUVEMENTS FUNCTIONS 		//
 /////////////////////////////////////////*/
 
 /**

@@ -99,7 +99,7 @@ void instanciatePlayerNames(int argc, char** argv) {
 
 /**
  * Main function
- * @param		argc	number of paramaters of main
+ * @param		argc	number of parameters of main
  * @param		argv	array containing each main params
  * @return	int		the error code value or the correct end value.
  */
@@ -159,7 +159,7 @@ int main (int argc, char** argv) {
 				loop = 0;
 				break;
 			}
-			/*----------( OTHER ACTINS )---------- */
+			/*----------( OTHER ACTIONS )---------- */
 			switch (gameStep) {
 				case INITIALISATON :
 					tmp = handleButton(&menu[0], trigger, &gameStep);
@@ -196,13 +196,13 @@ int main (int argc, char** argv) {
 		/////////////////////////////////////////*/
 
 		glClear(GL_COLOR_BUFFER_BIT);
-		/* ----------( INITIALISATION FASE )---------- */
+		/* ----------( INITIALISATION PHASE )---------- */
 		if (gameStep == INITIALISATON) {
 			drawBackground(13);
 			drawMenu(menu);
 		}
 
-		/* -------------( PLAYTIME FASE )------------ */
+		/* -------------( PLAYTIME PHASE )------------ */
 		if (gameStep == PLAYTIME) {
 			drawBackground(4);
 			for (i = 0; i < nbBalls; ++i) {
@@ -240,13 +240,13 @@ int main (int argc, char** argv) {
 				}
 			}
 		}
-		/* -------------( SCOREBOARD FASE )------------ */
+		/* -------------( SCOREBOARD PHASE )------------ */
 		if (gameStep == SCOREBOARD) {
 			drawBackground(14);
 			printVictoryScreen(players, nbPlayers, gladOS);
 		}
 
-		/* -------------( PAUSE FASE )------------ */
+		/* -------------( PAUSE PHASE )------------ */
 		if (gameStep == PAUSE) {
 			drawBackground(16);
 		}
@@ -281,7 +281,7 @@ int main (int argc, char** argv) {
 				handleGladOS(&(players[1].bar), balls, nbPlayers);
 			}
 
-			/* 4PLAYER MODE ACTIONS */
+			/* 4PLAYERS MODE ACTIONS */
 			if (nbPlayers > 2) {
 				if (keyState[SDLK_u]) moveBar(&(players[2].bar), TOP);
 				if (keyState[SDLK_n]) moveBar(&(players[2].bar), BOTTOM);
@@ -327,6 +327,6 @@ int main (int argc, char** argv) {
 	/////////////////////////////////////////*/
 	glDeleteTextures(TEXTURE_NB, texturesBuffer);
 	SDL_Quit();
-	
+
 	return EXIT_SUCCESS;
 }

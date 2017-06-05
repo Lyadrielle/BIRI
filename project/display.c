@@ -27,26 +27,26 @@
 /////////////////////////////////////////*/
 
 /**
- * Draw a centerd bar based on the player's id.
+ * Draw a centered bar based on the player's id.
  * @param	Bar	bar	the current bar to draw
  */
 void drawBar(Bar bar) {
+	int sizeX = bar.width / 2;
+	int sizeY = BAR_HEIGHT / 2;
+
 	glColor3f(bar.color.r, bar.color.g, bar.color.b);
-	if (bar.orientationHorizontal) {
-		glBegin(GL_POLYGON);
-			glVertex2f((bar.center.x - bar.width / 2), (bar.center.y - BAR_HEIGHT / 2));
-			glVertex2f((bar.center.x + bar.width / 2), (bar.center.y - BAR_HEIGHT / 2));
-			glVertex2f((bar.center.x + bar.width / 2), (bar.center.y + BAR_HEIGHT / 2));
-			glVertex2f((bar.center.x - bar.width / 2), (bar.center.y + BAR_HEIGHT / 2));
-		glEnd();
-	} else {
-		glBegin(GL_POLYGON);
-			glVertex2f((bar.center.x - BAR_HEIGHT / 2), (bar.center.y - bar.width / 2));
-			glVertex2f((bar.center.x + BAR_HEIGHT / 2), (bar.center.y - bar.width / 2));
-			glVertex2f((bar.center.x + BAR_HEIGHT / 2), (bar.center.y + bar.width / 2));
-			glVertex2f((bar.center.x - BAR_HEIGHT / 2), (bar.center.y + bar.width / 2));
-		glEnd();
+
+	if (!bar.orientationHorizontal) {
+		sizeX = BAR_HEIGHT / 2;
+		sizeY = bar.width / 2;
 	}
+
+	glBegin(GL_POLYGON);
+		glVertex2f((bar.center.x - sizeX), (bar.center.y - sizeY));
+		glVertex2f((bar.center.x + sizeX), (bar.center.y - sizeY));
+		glVertex2f((bar.center.x + sizeX), (bar.center.y + sizeY));
+		glVertex2f((bar.center.x - sizeX), (bar.center.y + sizeY));
+	glEnd();
 }
 
 /**
@@ -58,14 +58,15 @@ void drawBall(Ball ball) {
 		float angle;
 
 	glColor3f(ball.color.r, ball.color.g, ball.color.b);
+
 	glBegin(GL_POLYGON);
-	for(i = 0; i < sides; ++i){
-		angle =  i * 2*PI / sides;
-		glVertex2f(
-			(cos(angle) * ball.radius) + ball.origin.x,
-			(sin(angle) * ball.radius) + ball.origin.y
-		);
-	}
+		for(i = 0; i < sides; ++i){
+			angle =  i * 2*PI / sides;
+			glVertex2f(
+				(cos(angle) * ball.radius) + ball.origin.x,
+				(sin(angle) * ball.radius) + ball.origin.y
+			);
+		}
 	glEnd();
 }
 
@@ -80,14 +81,14 @@ void drawBrick(Brick br) {
 		glBindTexture(GL_TEXTURE_2D, texturesBuffer[index]);
 
 		glBegin(GL_POLYGON);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex2f(0, 0);
-		glTexCoord2f(0.0f, 1.0f);
-		glVertex2f((BRICK_WIDTH - 1), 0);
-		glTexCoord2f(1.0f, 1.0f);
-		glVertex2f((BRICK_WIDTH - 1), (BRICK_HEIGHT - 1));
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex2f(0, (BRICK_HEIGHT - 1));
+			glTexCoord2f(0.0f, 0.0f);
+			glVertex2f(0, 0);
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex2f((BRICK_WIDTH - 1), 0);
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex2f((BRICK_WIDTH - 1), (BRICK_HEIGHT - 1));
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex2f(0, (BRICK_HEIGHT - 1));
 		glEnd();
 
 		glBindTexture(GL_TEXTURE_2D, texturesBuffer[index]);
@@ -133,14 +134,14 @@ void drawBackground(int index) {
 		glBindTexture(GL_TEXTURE_2D, texturesBuffer[index]);
 
 		glBegin(GL_POLYGON);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex2f(0, 0);
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex2f(SCREEN_WIDTH , 0);
-		glTexCoord2f(1.0f, 1.0f);
-		glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT);
-		glTexCoord2f(0.0f, 1.0f);
-		glVertex2f(0, SCREEN_HEIGHT);
+			glTexCoord2f(0.0f, 0.0f);
+			glVertex2f(0, 0);
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex2f(SCREEN_WIDTH , 0);
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT);
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex2f(0, SCREEN_HEIGHT);
 		glEnd();
 
 		glBindTexture(GL_TEXTURE_2D, texturesBuffer[index]);
@@ -150,9 +151,37 @@ void drawBackground(int index) {
 /*/////////////////////////////////////////
  //					HUD DISPLAY FUNCTIONS				//
 /////////////////////////////////////////*/
+/**
+ * Draw a single HUD based on it's corners
+ * @param	int			index				index Texture
+ * @param	Point2D	topLeft			top left corner
+ * @param	Point2D	topRight		top right corner
+ * @param	Point2D	bottomRight	bottom right corner
+ * @param	Point2D	bottomLeft	bottom left corner
+ */
+void drawRectangle(int index, Point2D topLeft, Point2D topRight, Point2D bottomRight, Point2D bottomLeft) {
+	glEnable(GL_TEXTURE_2D);
+	glColor3f(255, 255, 255);
+	glBindTexture(GL_TEXTURE_2D, texturesBuffer[index]);
+
+	glBegin(GL_POLYGON);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex2f(topLeft.x, topLeft.y);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex2f(topRight.x, topRight.y);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex2f(bottomRight.x, bottomRight.y);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex2f(bottomLeft.x, bottomLeft.y);
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, texturesBuffer[index]);
+	glDisable(GL_TEXTURE_2D);
+}
+
 
 /**
- * Draw all HUD baed on the number of players. Automatically up to date
+ * Draw all HUD based on the number of players. Automatically up to date
  * because It's based on the Players structures
  * @param	Player const*	pl				The current player
  * @param	int						nbPlayers	total number of players in game
@@ -160,24 +189,15 @@ void drawBackground(int index) {
 void drawHUD(Player const *pl, int nbPlayers) {
 	char score[9] = "0";
 	sprintf(score, "%d", pl->score);
+	Point2D topLeft, topRight, bottomRight, bottomLeft;
 
 	if (pl->id == 1) {
-		glEnable(GL_TEXTURE_2D);
-		glColor3f(255, 255, 255);
-		glBindTexture(GL_TEXTURE_2D, texturesBuffer[5]);
-		glBegin(GL_POLYGON);
-			glTexCoord2f(0.0f, 0.0f);
-			glVertex2f(0, 0);
-			glTexCoord2f(1.0f, 0.0f);
-			glVertex2f(SCREEN_WIDTH, 0);
-			glTexCoord2f(1.0f, 1.0f);
-			glVertex2f(SCREEN_WIDTH, HUD_HEIGHT);
-			glTexCoord2f(0.0f, 1.0f);
-			glVertex2f(0, HUD_HEIGHT);
-		glEnd();
-		glBindTexture(GL_TEXTURE_2D, texturesBuffer[5]);
-		glDisable(GL_TEXTURE_2D);
+		initPoint2D(&topLeft, 0, 0);
+		initPoint2D(&topRight, SCREEN_WIDTH, 0);
+		initPoint2D(&bottomRight, SCREEN_WIDTH, HUD_HEIGHT);
+		initPoint2D(&bottomLeft, 0, HUD_HEIGHT);
 
+		drawRectangle(5, topLeft, topRight, bottomRight, bottomLeft);
 
 		glPushMatrix();
 			glTranslatef((LIFE_SIZE_WIDTH * 2), ((HUD_HEIGHT / 2) - (LIFE_SIZE_HEIGHT / 2)), 0);
@@ -191,19 +211,13 @@ void drawHUD(Player const *pl, int nbPlayers) {
 		glPopMatrix();
 
 	} else if (pl->id == 2) {
-		glEnable(GL_TEXTURE_2D);
-		glColor3f(255, 255, 255);
-		glBindTexture(GL_TEXTURE_2D, texturesBuffer[5]);
-		glBegin(GL_POLYGON);
-			glTexCoord2f(0.0f, 0.0f);
-			glVertex2f(0, SCREEN_HEIGHT - HUD_HEIGHT);
-			glTexCoord2f(1.0f, 0.0f);
-			glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT - HUD_HEIGHT);
-			glTexCoord2f(1.0f, 1.0f);
-			glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT);
-			glTexCoord2f(0.0f, 1.0f);
-			glVertex2f(0, SCREEN_HEIGHT);
-		glEnd();
+		initPoint2D(&topLeft, 0, SCREEN_HEIGHT - HUD_HEIGHT);
+		initPoint2D(&topRight, SCREEN_WIDTH, SCREEN_HEIGHT - HUD_HEIGHT);
+		initPoint2D(&bottomRight, SCREEN_WIDTH, SCREEN_HEIGHT);
+		initPoint2D(&bottomLeft, 0, SCREEN_HEIGHT);
+
+		drawRectangle(5, topLeft, topRight, bottomRight, bottomLeft);
+
 		glBindTexture(GL_TEXTURE_2D, texturesBuffer[5]);
 		glDisable(GL_TEXTURE_2D);
 
@@ -220,22 +234,12 @@ void drawHUD(Player const *pl, int nbPlayers) {
 	}
 	if (nbPlayers > 2) {
 		if (pl->id == 3) {
-			glEnable(GL_TEXTURE_2D);
-			glColor3f(255, 255, 255);
-			glBindTexture(GL_TEXTURE_2D, texturesBuffer[15]);
-			glBegin(GL_POLYGON);
-				glTexCoord2f(0.0f, 0.0f);
-				glVertex2f(0, 0);
-				glTexCoord2f(1.0f, 0.0f);
-				glVertex2f(HUD_HEIGHT, 0);
-				glTexCoord2f(1.0f, 1.0f);
-				glVertex2f(HUD_HEIGHT, SCREEN_HEIGHT);
-				glTexCoord2f(0.0f, 1.0f);
-				glVertex2f(0, SCREEN_HEIGHT);
-			glEnd();
-			glBindTexture(GL_TEXTURE_2D, texturesBuffer[15]);
-			glDisable(GL_TEXTURE_2D);
+			initPoint2D(&topLeft, 0, 0);
+			initPoint2D(&topRight, HUD_HEIGHT, 0);
+			initPoint2D(&bottomRight, HUD_HEIGHT, SCREEN_HEIGHT);
+			initPoint2D(&bottomLeft, 0, SCREEN_HEIGHT);
 
+			drawRectangle(15, topLeft, topRight, bottomRight, bottomLeft);
 
 			glPushMatrix();
 				glTranslatef(((HUD_HEIGHT / 2) + (LIFE_SIZE_HEIGHT / 2)), -20, 0);
@@ -250,21 +254,12 @@ void drawHUD(Player const *pl, int nbPlayers) {
 			glPopMatrix();
 
 		} else if (pl->id == 4) {
-			glEnable(GL_TEXTURE_2D);
-			glColor3f(255, 255, 255);
-			glBindTexture(GL_TEXTURE_2D, texturesBuffer[15]);
-			glBegin(GL_POLYGON);
-				glTexCoord2f(0.0f, 0.0f);
-				glVertex2f((SCREEN_WIDTH - HUD_HEIGHT), 0);
-				glTexCoord2f(1.0f, 0.0f);
-				glVertex2f(SCREEN_WIDTH, 0);
-				glTexCoord2f(1.0f, 1.0f);
-				glVertex2f(SCREEN_WIDTH, SCREEN_HEIGHT);
-				glTexCoord2f(0.0f, 1.0f);
-				glVertex2f((SCREEN_WIDTH - HUD_HEIGHT), SCREEN_HEIGHT);
-			glEnd();
-			glBindTexture(GL_TEXTURE_2D, texturesBuffer[15]);
-			glDisable(GL_TEXTURE_2D);
+			initPoint2D(&topLeft, SCREEN_WIDTH - HUD_HEIGHT, 0);
+			initPoint2D(&topRight, SCREEN_WIDTH, 0);
+			initPoint2D(&bottomRight, SCREEN_WIDTH, SCREEN_HEIGHT);
+			initPoint2D(&bottomLeft, SCREEN_WIDTH - HUD_HEIGHT, SCREEN_HEIGHT);
+
+			drawRectangle(15, topLeft, topRight, bottomRight, bottomLeft);
 
 			glPushMatrix();
 				glTranslatef((SCREEN_WIDTH - (HUD_HEIGHT / 2 ) + (LIFE_SIZE_HEIGHT / 2)), -20, 0);
@@ -285,23 +280,14 @@ void drawHUD(Player const *pl, int nbPlayers) {
  * Draw a single life
  */
 void drawLife() {
-	glEnable(GL_TEXTURE_2D);
-	glColor3f(255, 255, 255);
-	glBindTexture(GL_TEXTURE_2D, texturesBuffer[6]);
+	Point2D topLeft, topRight, bottomRight, bottomLeft;
 
-	glBegin(GL_POLYGON);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex2f(0, 0);
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex2f(LIFE_SIZE_WIDTH, 0);
-		glTexCoord2f(1.0f, 1.0f);
-		glVertex2f(LIFE_SIZE_WIDTH, LIFE_SIZE_HEIGHT);
-		glTexCoord2f(0.0f, 1.0f);
-		glVertex2f(0, LIFE_SIZE_HEIGHT);
-	glEnd();
+	initPoint2D(&topLeft, 0, 0);
+	initPoint2D(&topRight, LIFE_SIZE_WIDTH, 0);
+	initPoint2D(&bottomRight, LIFE_SIZE_WIDTH, LIFE_SIZE_HEIGHT);
+	initPoint2D(&bottomLeft, 0, LIFE_SIZE_HEIGHT);
 
-	glBindTexture(GL_TEXTURE_2D, texturesBuffer[6]);
-	glDisable(GL_TEXTURE_2D);
+	drawRectangle(6, topLeft, topRight, bottomRight, bottomLeft);
 }
 
 /**
@@ -484,7 +470,6 @@ void loadTextures(char *themePath) {
 			default :
 				break;
 		}
-		printf("PATH : %s et %d\n", imgPath, i-1);
 
 		/* If "imgPath" link is wrong (picture doesn't exist or themePath is wrong), segmentation error */
 		surface = IMG_Load(imgPath);
@@ -495,14 +480,14 @@ void loadTextures(char *themePath) {
 
 		/* Génération des identifiants des textures */
 		glBindTexture(GL_TEXTURE_2D, texturesBuffer[i - 1]);
-		/* Association des textures avec les identifiants*/
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glBindTexture(GL_TEXTURE_2D, texturesBuffer[i - 1]);
-		GLenum format = testFormat(surface);
-		glTexImage2D(GL_TEXTURE_2D, 0, format, surface->w, surface->h, 0, format, GL_UNSIGNED_BYTE, surface->pixels);
+			/* Association des textures avec les identifiants*/
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glBindTexture(GL_TEXTURE_2D, texturesBuffer[i - 1]);
+			GLenum format = testFormat(surface);
+			glTexImage2D(GL_TEXTURE_2D, 0, format, surface->w, surface->h, 0, format, GL_UNSIGNED_BYTE, surface->pixels);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 	SDL_FreeSurface(surface);

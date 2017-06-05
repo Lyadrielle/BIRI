@@ -247,7 +247,6 @@ extern Color3f themeColor;
 /* ------------( core.c )------------ */
 
 int *readConfigFile(char *filePath, int *gridWidth, int *gridHeight);
-
 void initBar(Bar *bar, Point2D center, Color3f color, int playerId);
 void initBall(Ball *bl, int id, int radius, Vector2D speed, Point2D origin, Color3f color, int lastPlayerId);
 void initBrick(Brick *b, int type, enum brickStatus status, int indexX, int indexY);
@@ -262,13 +261,11 @@ void initPoint2D(Point2D *p, float x, float y);
 void initColor3f(Color3f *c, float r, float g, float b);
 void initVector2D(Vector2D *v, float x, float y);
 Vector2D defineVector(Point2D a, Point2D b);
-
 Point2D pointPlusVector( Point2D p, Vector2D v);
 Vector2D addVectors(Vector2D vA, Vector2D vB);
 Vector2D subVectors(Vector2D vA, Vector2D vB);
 Vector2D multVector(Vector2D v, float a);
 Vector2D divVector(Vector2D v, float a);
-
 float dotPRoduct(Vector2D vA, Vector2D vB);
 float norm(Vector2D v);
 Vector2D normalize(Vector2D v);
@@ -282,7 +279,6 @@ enum collisionType collisionBallSegment(Ball const *ball, Point2D A, Point2D B);
 enum direction collisionBallBrick(Ball const *ball, Brick const *brick);
 bool collisionBallGrid(GridBrick grid, Ball *ball, int gridWidth, int gridHeight);
 void collisionBarBall(Bar const *bar, Ball *ball);
-
 void moveBall(Ball *ball);
 
 /* ------------( display.c )----------- */
@@ -294,6 +290,7 @@ void drawGrid(GridBrick const grid,int gridWidth, int gridHeight);
 void drawBackground(int index);
 
 /* HUD DISPLAY */
+void drawRectangle(int index, Point2D topLeft, Point2D topRight, Point2D bottomRight, Point2D bottomLeft);
 void drawHUD(Player const *pl, int nbPlayers);
 void drawLife();
 void drawLifes(int nbHearts);

@@ -135,7 +135,8 @@ void moveBar (Bar *bar, enum direction dir) {
 }
 
 /**
- * Handle the IA names GladOS (reference to Portal Video Game by Valve)
+ * Handle the IA named GladOS (reference to Portal Video Game by Valve)
+ * The cake is a lie.
  * @param	Bar *				bar			the IA bar to move
  * @param	Ball const*	balls		all balls in game to look at
  * @param	int					nbBalls	the number of balls in game
@@ -173,7 +174,7 @@ void handleGladOS(Bar *bar, Ball const *balls, int nbBalls) {
 }
 
 /**
- * calculate score for each balls help GladOs determine which one to follow restlesly.
+ * calculate score for each balls to help GladOs determine which one to follow restlessly.
  * @param		Ball const*	ball	the current ball to look at
  * @return	int								return the score
  */
@@ -186,8 +187,8 @@ int indesirableNumberOne(Ball const *ball) {
 }
 
 /**
- * Start all imediate actions related to a brick being hit by a ball.
- * Set the current statud from PRISTINE or DAMAGED to DAMAGED or DESTROYED.
+ * Start all immediate actions related to a brick being hit by a ball.
+ * Set the current status from PRISTINE or DAMAGED to DAMAGED or DESTROYED.
  * @param	Brick*	brick	the current brick pointer
  */
 void hitBrick (Brick *brick, Ball *ball) {
@@ -228,8 +229,7 @@ void hitBrick (Brick *brick, Ball *ball) {
 }
 
 /**
- * Start all imediate actions related to a ball falling out of the playground.
- * (TO DO) lower the targeted player's life by 1.
+ * Start all immediate actions related to a ball falling out of the playground.
  * Relaunch the ball at the center of the screen, on the side it fell.
  * @param	Ball*	ball	the current ball pointer
  * @param	enum	dir		the side the ball fell
@@ -262,11 +262,11 @@ void ballOutOfBounds(Ball *ball, enum direction dir) {
 }
 
 /*/////////////////////////////////////////
- //		GAMEPLAY BRICK FUNCTIONS		//
+ //				GAMEPLAY BRICK FUNCTIONS			//
 /////////////////////////////////////////*/
 
 /**
- * Define a brick color (TO DO TEXTURES) based on it's type.
+ * Define a brick color (TO DO TEXTURES) based on its type.
  * @param	Brick	br	the current brick to look at
  */
 int defineBrickColor(Brick br) {

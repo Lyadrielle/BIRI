@@ -57,7 +57,7 @@ int *readConfigFile(char *filePath, int *gridWidth, int *gridHeight) {
 }
 
 /*/////////////////////////////////////////
- //		INITIALISATION FUNCTIONS		//
+ //				INITIALISATION FUNCTIONS			//
 /////////////////////////////////////////*/
 
 /**
@@ -83,12 +83,13 @@ void initBar(Bar *bar, Point2D center, Color3f color, int playerId) {
 
 /**
  * Initialise a ball.
- * @param	Ball*			bl			the pointer of the ball to be initialised
- * @param	int				id			the ball id (multiple balls allowed in the game)
- * @param	int				radius	the ball radius
- * @param	Vector2D	speed		the ball speed depending on the player (start position)
- * @param	Point2D		origin	the origin of the ball depending on the player too
- * @param	Color3f		color		the ball color depending on the player (for now)
+ * @param	Ball*			bl						the pointer of the ball to be initialised
+ * @param	int				id						the ball id (multiple balls allowed in the game)
+ * @param	int				radius				the ball radius
+ * @param	Vector2D	speed					the ball speed depending on the player (start position)
+ * @param	Point2D		origin				the origin of the ball depending on the player too
+ * @param	Color3f		color					the ball color depending on the player (for now)
+ * @param	int				lastPlayerId	the current owner of the ball (the last one to hit it)
  */
 void initBall(Ball *bl, int id, int radius, Vector2D speed, Point2D origin, Color3f color, int lastPlayerId) {
 	bl->id = id;
@@ -127,7 +128,6 @@ void initBrick(Brick *b, int type, enum brickStatus status, int indexX, int inde
 /**
  * Update a brick structure to set the coordinates of each corners. (to avoid numerous operations)
  * @param	Brick*	br			the pointer of the brick to be updated
- * @param	int			width		the width of the brick
  * @param	Point2D	topLeft	the top left corner of the brick
  */
 void updateBrickCoordinates(Brick *br, Point2D topLeft) {
@@ -201,10 +201,10 @@ GridBrick initGrid(int gridWidth, int gridHeight, int *blockType) {
 
 /**
  * Read the config file containing the grid configuration.
- * @param	char*	filePath		the relative file path
- * @param	int*	gridWidth		the pointer of the gridWidth
- * @param	int*	gridHeight	the pointer of the gridHeight
- * @return									return the array containing all brick types in order
+ * @param		char*	filePath		the relative file path
+ * @param		int*	gridWidth		the pointer of the gridWidth
+ * @param		int*	gridHeight	the pointer of the gridHeight
+ * @return	int*							return the array containing all brick types in order
  */
 int *readThemeFile(char *filePath, int *gridWidth, int *gridHeight) {
 	FILE *file;

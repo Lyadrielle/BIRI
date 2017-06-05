@@ -108,7 +108,7 @@ void drawMenu(Button const *menu) {
  * Handle one button events. Call it's action function.
  * @param	Button*		bt					the current button pointer
  * @param	SDL_Event	event				the trigger event to listen
- * @param	int*			currentStep	the current fase of the game
+ * @param	int*			currentStep	the current phase of the game
  */
 int handleButton(Button *bt, SDL_Event event, int *currentStep) {
 	Point2D clic;

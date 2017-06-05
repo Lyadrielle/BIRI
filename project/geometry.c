@@ -109,7 +109,7 @@ Vector2D subVectors(Vector2D vA, Vector2D vB){
 Vector2D multVector(Vector2D v, float a){
 	Vector2D vector;
 	vector.x = v.x * a;
-	vector.y = v.y *a;
+	vector.y = v.y * a;
 	return vector;
 }
 
