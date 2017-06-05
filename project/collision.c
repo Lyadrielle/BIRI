@@ -1,9 +1,9 @@
 /**
- * @file	collision.c
- *       	Collision functions library.Find collisions, apply/change basic objects speed.
+ * @file		collision.c
+ *       		Collision functions library.Find collisions, apply/change basic objects speed.
  * @author	Calmels Gaëlle, Gallet Adrian
  * @version	1.0
- * @date	2017-04-27
+ * @date		2017-04-27
  */
 
 #include <stdio.h>
@@ -15,12 +15,13 @@
 #include "headers.h"
 
 /*/////////////////////////////////////////
- //		BASIC COLLISION FUNCTIONS 		//
+ //			BASIC COLLISION FUNCTIONS 			//
 /////////////////////////////////////////*/
 
 /**
  * determines if there is a collision between a ball and the screen borders.
- * @param	Ball*	ball	the current ball pointer
+ * @param	Ball*	ball			the current ball pointer
+ * @param in		nbPlayers	total of players in game
  */
 void collisionBallScreen(Ball *ball, int nbPlayers) {
 	if (nbPlayers < 3) {
@@ -46,10 +47,10 @@ void collisionBallScreen(Ball *ball, int nbPlayers) {
 
 /**
  * Determines if there is a collision between a ball and a line.
- * @param	Ball*	ball	the current ball pointer
- * @param	Point2D	A		point A of the line
- * @param	Point2D	B		point B of the line
- * @return					return true if there is a collision, false otherwise
+ * @param	Ball*		ball	the current ball pointer
+ * @param	Point2D	A			point A of the line
+ * @param	Point2D	B			point B of the line
+ * @return							return true if there is a collision, false otherwise
  */
 bool collisionBallLine(Ball const *ball, Point2D A, Point2D B) {
 	Vector2D AB = defineVector(A, B);
@@ -66,10 +67,10 @@ bool collisionBallLine(Ball const *ball, Point2D A, Point2D B) {
  * Determines if there is a collision between a ball and a segment (one brick segment for exemple).
  * It uses the dot product to calculate if there is a collision.
  * Otherwithe, it uses the ball radius to calculate the distance between the ball and either A or B points.
- * @param	Ball*	ball	the current ball pointer
- * @param	Point2D	A		point A of the segment (start)
- * @param	Point2D	B		point B of the segment (end)
- * @return					return true if there is a collision, false otherwise
+ * @param		Ball*		ball	the current ball pointer
+ * @param		Point2D	A			point A of the segment (start)
+ * @param		Point2D	B			point B of the segment (end)
+ * @return	enum					return true if there is a collision, false otherwise
  */
 enum collisionType collisionBallSegment(Ball const *ball, Point2D A, Point2D B) {
 	if (!collisionBallLine(ball, A, B)) {
@@ -97,9 +98,9 @@ enum collisionType collisionBallSegment(Ball const *ball, Point2D A, Point2D B) 
 
 /**
  * Determines if there is a collision between a ball and a brick.
- * @param	Ball*	ball	the current ball pointer
- * @param	Brick*	brick	the current brick pointer
- * @return	enum			return the collided side label
+ * @param		Ball*		ball	the current ball pointer
+ * @param		Brick*	brick	the current brick pointer
+ * @return	enum					return the collided side label
  */
 enum direction collisionBallBrick(Ball const *ball, Brick const *brick) {
 	enum collisionType collision = NO_COLLISION;
@@ -153,11 +154,11 @@ enum direction collisionBallBrick(Ball const *ball, Brick const *brick) {
 /**
  * Determines if there is a collision between a ball and one brick of the grid.
  * Change the ball speed depending on wich side it collided the brick.
- * @param	GridBrick	grid		the 2 dimensional brick grid
- * @param	Ball*		ball		the current ball pointer
- * @param	int			gridWidth	the config file gridWidth
- * @param	int			gridHeight	the config file gridHeight
- * @return							return true if there is a collision, false otherwise
+ * @param		GridBrick	grid				the 2 dimensional brick grid
+ * @param		Ball*			ball				the current ball pointer
+ * @param		int				gridWidth		the config file gridWidth
+ * @param		int				gridHeight	the config file gridHeight
+ * @return	bool									return true if there is a collision, false otherwise
  */
 bool collisionBallGrid(GridBrick grid, Ball *ball, int gridWidth, int gridHeight) {
 	int i, j;

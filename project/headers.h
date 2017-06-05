@@ -1,9 +1,9 @@
 /**
- * @file	header.h
- *       	List all the program functions : enumerations, structures, unions....
+ * @file		header.h
+ *       		List all the program functions : enumerations, structures, unions....
  * @author	Calmels Gaëlle, Gallet Adrian
  * @version	1.0
- * @date	2017-04-23
+ * @date		2017-04-23
  */
 
 #pragma once
@@ -19,10 +19,8 @@
 #include <GL/glu.h>
 #include <SDL/SDL_image.h>
 
- /* TEXTURES */
-
 /*/////////////////////////////////////////
- //			CONSTANTS DEFINITION		//
+ //				CONSTANTS DEFINITION					//
 /////////////////////////////////////////*/
 
 /* ----------( SCREEN )---------- */
@@ -30,11 +28,10 @@
 #define SCREEN_WIDTH_CENTER (SCREEN_WIDTH / 2)
 #define SCREEN_HEIGHT 700
 #define SCREEN_HEIGHT_CENTER (SCREEN_HEIGHT / 2)
-#define HUD_HEIGHT 70
-#define GAME_HEIGHT (SCREEN_HEIGHT - (2 * HUD_HEIGHT))
 #define GAME_WIDTH (SCREEN_WIDTH - (2 * HUD_HEIGHT))
+#define GAME_HEIGHT (SCREEN_HEIGHT - (2 * HUD_HEIGHT))
 #define BIT_PER_PIXEL 32
-#define TEXTURE_NB 16
+#define TEXTURE_NB 18
 
 /* -----------( MENU )----------- */
 #define NB_BUTTON_MAIN_MENU 5
@@ -42,9 +39,15 @@
 #define BUTTON_HEIGHT 60
 #define SPACE_BETWEEN_BUTTONS 20
 
+/* -----------( HUD )------------ */
+#define HUD_HEIGHT 70
+#define LIFE_SIZE_WIDTH 20
+#define LIFE_SIZE_HEIGHT 26
+
 /* -----------( BRICK )---------- */
 #define BRICK_WIDTH 62
 #define BRICK_HEIGHT 32
+
 /* -----------( BAR )------------ */
 #define BAR_HEIGHT 12
 #define BAR_SPEED 6
@@ -57,16 +60,12 @@
 #define BALL_RESPAWN_TIME 100
 #define BALL_BONUS_TIME 600
 
-/* -----------( MATHS )---------- */
-#define PI 3.1415926535897932384626433832795
-
 /* -----------( OTHER )---------- */
+#define PI 3.1415926535897932384626433832795
 #define MALLOC_ERROR -3
-#define LIFE_SIZE_WIDTH 20
-#define LIFE_SIZE_HEIGHT 26
 
 /*/////////////////////////////////////////
- //			ENUMERATIONS				//
+ //						ENUMERATIONS							//
 /////////////////////////////////////////*/
 
 enum difficulty {
@@ -146,7 +145,7 @@ enum gameStep {
 };
 
 /*/////////////////////////////////////////
- //			GEOMETRIC STRUCTURES		//
+ //					GEOMETRIC STRUCTURES				//
 /////////////////////////////////////////*/
 
 typedef struct Point2D {
@@ -162,7 +161,7 @@ typedef struct Color3f {
 } Color3f;
 
 /*/////////////////////////////////////////
- //			GAME STRUCTURES				//
+ //					GAME STRUCTURES							//
 /////////////////////////////////////////*/
 
 typedef struct Ball {
@@ -199,7 +198,7 @@ typedef struct Brick {
 typedef Brick** GridBrick;
 
 /*/////////////////////////////////////////
- //			GAMEPLAY STRUCTURES			//
+ //					GAMEPLAY STRUCTURES					//
 /////////////////////////////////////////*/
 
 typedef struct Player {
@@ -212,7 +211,7 @@ typedef struct Player {
 } Player;
 
 /*/////////////////////////////////////////
- //			MENU STRUCTURES				//
+ //					MENU STRUCTURES							//
 /////////////////////////////////////////*/
 
 typedef struct Button {
@@ -230,7 +229,7 @@ typedef struct TextField {
 } TextField;
 
 /*/////////////////////////////////////////
- //			GLOBAL VARIABLES DEF		//
+ //					GLOBAL VARIABLES DEF				//
 /////////////////////////////////////////*/
 
 extern int screenWidth;
@@ -242,15 +241,12 @@ extern GLuint texturesBuffer[];
 extern Color3f themeColor;
 
 /*/////////////////////////////////////////
- //			FUNCTIONS PROTOTYPE			//
+ //					FUNCTIONS PROTOTYPE					//
 /////////////////////////////////////////*/
 
 /* ------------( core.c )------------ */
 
 int *readConfigFile(char *filePath, int *gridWidth, int *gridHeight);
-
-int defineScreenWidth(int gridWidth);
-int defineBrickWidth(int gridWidth);
 
 void initBar(Bar *bar, Point2D center, Color3f color, int playerId);
 void initBall(Ball *bl, int id, int radius, Vector2D speed, Point2D origin, Color3f color, int lastPlayerId);
@@ -258,6 +254,7 @@ void initBrick(Brick *b, int type, enum brickStatus status, int indexX, int inde
 void updateBrickCoordinates(Brick *br, Point2D topLeft);
 void initBrickCoordinates(GridBrick grid, int gridWidth, int gridHeight);
 GridBrick initGrid(int gridWidth, int gridHeight, int *blockType);
+int *readThemeFile(char *filePath, int *gridWidth, int *gridHeight);
 
 /* ----------( geometry.c )---------- */
 
@@ -284,7 +281,6 @@ bool collisionBallLine(Ball const *ball, Point2D A, Point2D B);
 enum collisionType collisionBallSegment(Ball const *ball, Point2D A, Point2D B);
 enum direction collisionBallBrick(Ball const *ball, Brick const *brick);
 bool collisionBallGrid(GridBrick grid, Ball *ball, int gridWidth, int gridHeight);
-
 void collisionBarBall(Bar const *bar, Ball *ball);
 
 void moveBall(Ball *ball);
@@ -296,6 +292,8 @@ void drawBall(Ball ball);
 void drawBrick(Brick br);
 void drawGrid(GridBrick const grid,int gridWidth, int gridHeight);
 void drawBackground(int index);
+
+/* HUD DISPLAY */
 void drawHUD(Player const *pl, int nbPlayers);
 void drawLife();
 void drawLifes(int nbHearts);
@@ -312,23 +310,28 @@ void chargeTexture(char *imgaddress);
 
 /* ----------( gameplay.c )---------- */
 
+/* INITIALISATON */
 void initPlayer(Player *pl, int id, char *name, Point2D barCenter, Color3f barColor);
 void initGame(int nbPlayers);
 
+/* ACTIONS */
 void moveBar (Bar *bar, enum direction dir);
 void handleGladOS(Bar *bar, Ball const *balls, int nbBalls);
 int indesirableNumberOne(Ball const *ball);
 void hitBrick (Brick *brick, Ball *ball);
 void ballOutOfBounds(Ball *ball, enum direction dir);
 
+/* COLORS */
 int defineBrickColor(Brick br);
 
 /* ----------( menu.c )---------- */
 
+/* INITIALISATON */
 void initButton(Button *bt, Point2D origin, void (*action)(int), int param);
 void initMenu(Button *menu);
 void drawMenu(Button const *menu);
 
+/* MANAGE */
 int handleButton(Button *bt, SDL_Event event, int *currentStep);
 bool isInsideButton(Point2D clic, Button bt);
 void selectTheme(int themeId);

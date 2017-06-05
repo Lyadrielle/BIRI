@@ -1,9 +1,9 @@
 /**
- * @file	core.c
- *       	Core functions library. Read config files, initiate basic structures,
+ * @file		core.c
+ *       		Core functions library. Read config files, initiate basic structures,
  * @author	Calmels Gaëlle, Gallet Adrian
  * @version	1.0
- * @date	2017-04-23
+ * @date		2017-04-23
  */
 
 #include <stdio.h>
@@ -16,10 +16,10 @@
 
 /**
  * Read the config file containing the grid configuration.
- * @param	char*	filePath	the relative file path
- * @param	int*	gridWidth	the pointer of the gridWidth
+ * @param	char*	filePath		the relative file path
+ * @param	int*	gridWidth		the pointer of the gridWidth
  * @param	int*	gridHeight	the pointer of the gridHeight
- * @return						return the array containing all brick types in order
+ * @return									return the array containing all brick types in order
  */
 int *readConfigFile(char *filePath, int *gridWidth, int *gridHeight) {
 	FILE *file;
@@ -62,9 +62,9 @@ int *readConfigFile(char *filePath, int *gridWidth, int *gridHeight) {
 
 /**
  * Initialise a bar for a player structure.
- * @param	Bar*	bar		the pointer of the bar to be initialised
+ * @param	Bar*		bar			the pointer of the bar to be initialised
  * @param	Point2D	center	the origin of the bar depending on the player
- * @param	Color3f	color	the bar color depending on the player too
+ * @param	Color3f	color		the bar color depending on the player too
  */
 void initBar(Bar *bar, Point2D center, Color3f color, int playerId) {
 	bar->playerId = playerId;
@@ -83,12 +83,12 @@ void initBar(Bar *bar, Point2D center, Color3f color, int playerId) {
 
 /**
  * Initialise a ball.
- * @param	Ball*		bl		the pointer of the ball to be initialised
- * @param	int			id		the ball id (multiple balls allowed in the game)
- * @param	int			radius	the ball radius
- * @param	Vector2D	speed	the ball speed depending on the player (start position)
+ * @param	Ball*			bl			the pointer of the ball to be initialised
+ * @param	int				id			the ball id (multiple balls allowed in the game)
+ * @param	int				radius	the ball radius
+ * @param	Vector2D	speed		the ball speed depending on the player (start position)
  * @param	Point2D		origin	the origin of the ball depending on the player too
- * @param	Color3f		color	the ball color depending on the player (for now)
+ * @param	Color3f		color		the ball color depending on the player (for now)
  */
 void initBall(Ball *bl, int id, int radius, Vector2D speed, Point2D origin, Color3f color, int lastPlayerId) {
 	bl->id = id;
@@ -110,11 +110,11 @@ void initBall(Ball *bl, int id, int radius, Vector2D speed, Point2D origin, Colo
 
 /**
  * Initialise a brick with it's index in the grid of bricks.
- * @param	Brick*	b		the pointer of the brick to be initialied
- * @param	int		type	the type of the brick taken from the brickTypes array
- * @param	enum	status	the initial status of the brick PRISTINE normally
- * @param	int		indexX	the x index of  the brick into the brickGrid
- * @param	int		indexY	the y index of  the brick into the brickGrid
+ * @param	Brick*	b				the pointer of the brick to be initialied
+ * @param	int			type		the type of the brick taken from the brickTypes array
+ * @param	enum		status	the initial status of the brick PRISTINE normally
+ * @param	int			indexX	the x index of  the brick into the brickGrid
+ * @param	int			indexY	the y index of  the brick into the brickGrid
  */
 void initBrick(Brick *b, int type, enum brickStatus status, int indexX, int indexY) {
 	b->type = type;
@@ -126,8 +126,8 @@ void initBrick(Brick *b, int type, enum brickStatus status, int indexX, int inde
 
 /**
  * Update a brick structure to set the coordinates of each corners. (to avoid numerous operations)
- * @param	Brick*	br		the pointer of the brick to be updated
- * @param	int		width	the width of the brick
+ * @param	Brick*	br			the pointer of the brick to be updated
+ * @param	int			width		the width of the brick
  * @param	Point2D	topLeft	the top left corner of the brick
  */
 void updateBrickCoordinates(Brick *br, Point2D topLeft) {
@@ -144,6 +144,12 @@ void updateBrickCoordinates(Brick *br, Point2D topLeft) {
 	br->bottomRight.y = topLeft.y + BRICK_HEIGHT;
 }
 
+/**
+ * Initiate the true coordinates of all bricks (depending on theire number (column and lines))
+ * @param	GridBrick	grid				the grid in wich all bricks goes
+ * @param	int				gridWidth		the number of columns
+ * @param	int				gridHeight	the number of lines
+ */
 void initBrickCoordinates(GridBrick grid, int gridWidth, int gridHeight) {
 	Point2D topLeft;
 	int originX = SCREEN_WIDTH_CENTER - ((gridWidth / 2) * BRICK_WIDTH);
@@ -167,10 +173,10 @@ void initBrickCoordinates(GridBrick grid, int gridWidth, int gridHeight) {
 
 /**
  * Initialise a 2 dimensional grid of bricks with the config file params.
- * @param	int	gridWidth	the config file gridWidth
+ * @param	int	gridWidth		the config file gridWidth
  * @param	int	gridHeight	the config file gridHeight
- * @param	int	blockType	the blockTypes array containing all bricks types
- * @return					return a 2 dimensional grid of bricks
+ * @param	int	blockType		the blockTypes array containing all bricks types
+ * @return								return a 2 dimensional grid of bricks
  */
 GridBrick initGrid(int gridWidth, int gridHeight, int *blockType) {
 	GridBrick grid = malloc(gridHeight * sizeof(Brick*));
@@ -195,10 +201,10 @@ GridBrick initGrid(int gridWidth, int gridHeight, int *blockType) {
 
 /**
  * Read the config file containing the grid configuration.
- * @param	char*	filePath	the relative file path
- * @param	int*	gridWidth	the pointer of the gridWidth
+ * @param	char*	filePath		the relative file path
+ * @param	int*	gridWidth		the pointer of the gridWidth
  * @param	int*	gridHeight	the pointer of the gridHeight
- * @return						return the array containing all brick types in order
+ * @return									return the array containing all brick types in order
  */
 int *readThemeFile(char *filePath, int *gridWidth, int *gridHeight) {
 	FILE *file;

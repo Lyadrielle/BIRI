@@ -1,11 +1,11 @@
 /**
- * @file	menu.c
- *       	menu functions library. Centralise all menu functions.
- * 			from initialisations to drawing buttons or a menu.
- * 			handling the buttons mouse or keyboard events.
+ * @file		menu.c
+ *       		menu functions library. Centralise all menu functions.
+ * 			    from initialisations to drawing buttons or a menu.
+ * 			    handling the buttons mouse or keyboard events.
  * @author	Calmels Gaëlle, Gallet Adrian
  * @version	1.0
- * @date	2017-05-07
+ * @date		2017-05-07
  */
 
 #include <stdio.h>
@@ -19,16 +19,16 @@
 #include "headers.h"
 
 /*/////////////////////////////////////////
- //			MENU CONSTRUCTION			//
+ //					MENU CONSTRUCTION						//
 /////////////////////////////////////////*/
 
 /**
  * Initialise a button based on the menu configuration. (vertical alignement always)
- * @param	Button*	bt		the current button pointer to be initialised
+ * @param	Button*	bt			the current button pointer to be initialised
  * @param	Point2D	origin	the origin based on the menu configuration
- * @param	Color3f	color	the button color (TO DO TEXTURES)
- * @param	void	action	pointer on the action functions
- * @param	int		param	int parameter of the action function
+ * @param	Color3f	color		the button color (TO DO TEXTURES)
+ * @param	void		action	pointer on the action functions
+ * @param	int			param		int parameter of the action function
  */
 void initButton(Button *bt, Point2D origin, void (*action)(int), int param) {
 	bt->origin.x = origin.x;
@@ -43,7 +43,7 @@ void initButton(Button *bt, Point2D origin, void (*action)(int), int param) {
 }
 
 /**
- * Initialise a menu based on an array of buttons. (TO DO BIGGER MENU MANAGER)
+ * Initialise a menu based on an array of buttons.
  * @param	Button* menu	array of buttons
  */
 void initMenu(Button *menu) {
@@ -70,49 +70,48 @@ void initMenu(Button *menu) {
  * @param	Button const*	menu	array of buttons (const)
  */
 void drawMenu(Button const *menu) {
-  int i;
-  for (i = 0; i < NB_BUTTON_MAIN_MENU; ++i) {
-  	glEnable(GL_TEXTURE_2D);
-	glColor3f(255, 255, 255);
-	if (i == 3 && menu[i].param == THEME2) {
-		glBindTexture(GL_TEXTURE_2D, texturesBuffer[12]);
-	} else {
-		glBindTexture(GL_TEXTURE_2D, texturesBuffer[7 + i]);
-	}
-    /*glColor3f(menu[i].color.r, menu[i].color.g, menu[i].color.b);*/
-    glBegin(GL_POLYGON);
-    	glTexCoord2f(0.0f, 0.0f);
-  		glVertex2f(menu[i].origin.x, menu[i].origin.y);
-  		glTexCoord2f(1.0f, 0.0f);
-  		glVertex2f((menu[i].origin.x + BUTTON_WIDTH), menu[i].origin.y);
-  		glTexCoord2f(1.0f, 1.0f);
-  		glVertex2f((menu[i].origin.x + BUTTON_WIDTH), (menu[i].origin.y + BUTTON_HEIGHT));
-  		glTexCoord2f(0.0f, 1.0f);
-  		glVertex2f(menu[i].origin.x, (menu[i].origin.y + BUTTON_HEIGHT));
-  	glEnd();
+	int i;
+	for (i = 0; i < NB_BUTTON_MAIN_MENU; ++i) {
+		glEnable(GL_TEXTURE_2D);
+		glColor3f(255, 255, 255);
+		if (i == 3 && menu[i].param == THEME2) {
+			glBindTexture(GL_TEXTURE_2D, texturesBuffer[12]);
+		} else {
+			glBindTexture(GL_TEXTURE_2D, texturesBuffer[7 + i]);
+		}
+		/*glColor3f(menu[i].color.r, menu[i].color.g, menu[i].color.b);*/
+		glBegin(GL_POLYGON);
+			glTexCoord2f(0.0f, 0.0f);
+			glVertex2f(menu[i].origin.x, menu[i].origin.y);
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex2f((menu[i].origin.x + BUTTON_WIDTH), menu[i].origin.y);
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex2f((menu[i].origin.x + BUTTON_WIDTH), (menu[i].origin.y + BUTTON_HEIGHT));
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex2f(menu[i].origin.x, (menu[i].origin.y + BUTTON_HEIGHT));
+		glEnd();
 
 		if (i == 3 && menu[i].param == THEME2) {
 			glBindTexture(GL_TEXTURE_2D, texturesBuffer[12]);
 		} else {
 			glBindTexture(GL_TEXTURE_2D, texturesBuffer[7 + i]);
 		}
-	glDisable(GL_TEXTURE_2D);
-  }
+		glDisable(GL_TEXTURE_2D);
+	}
 }
 
 /*/////////////////////////////////////////
- //			MENU EVENT FUNCTIONS		//
+ //					MENU EVENT FUNCTIONS				//
 /////////////////////////////////////////*/
 
 /**
  * Handle one button events. Call it's action function.
- * @param	Button*		bt			the current button pointer
- * @param	SDL_Event	event		the trigger event to listen
- * @param	int*		currentStep	the current fase of the game
+ * @param	Button*		bt					the current button pointer
+ * @param	SDL_Event	event				the trigger event to listen
+ * @param	int*			currentStep	the current fase of the game
  */
 int handleButton(Button *bt, SDL_Event event, int *currentStep) {
-  /* ---( MOUSE OFFSET )---*/
-  Point2D clic;
+	Point2D clic;
 	if ((event.type == SDL_MOUSEBUTTONUP) && (event.button.button == SDL_BUTTON_LEFT)) {
 		clic.x = event.button.x;
 		clic.y = event.button.y;
@@ -142,9 +141,9 @@ int handleButton(Button *bt, SDL_Event event, int *currentStep) {
 
 /**
  * Verify if the mouse is inside the correct button action area.
- * @param	Point2D	clic	the current location of the mouse
- * @param	Button	bt		the current button to watch
- * @return	bool			return true if the clic is inside the action area
+ * @param		Point2D	clic	the current location of the mouse
+ * @param		Button	bt		the current button to watch
+ * @return	bool					return true if the clic is inside the action area
  */
 bool isInsideButton(Point2D clic, Button bt) {
 	return ((clic.x > bt.origin.x)
@@ -154,12 +153,20 @@ bool isInsideButton(Point2D clic, Button bt) {
 	);
 }
 
+/**
+ * Select the right theme and call for the loadTextures function
+ * @param	inthemeId	the correct themePath
+ */
 void selectTheme(int themeId) {
 	char path[100];
 	sprintf(path, "img/THEME%d/", (themeId / 10));
 	loadTextures(path);
 }
 
+/**
+ * Just a function because all buttons need to call a function.
+ * @param	int quit	quit
+ */
 void quit(int quit) {
 	printf("QUIT !\n");
 }

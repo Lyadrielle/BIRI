@@ -1,11 +1,11 @@
 /**
- * @file	gameplay.c
- *       	gameplay functions library. Centralise all the gameplay functions,
- * 			definitions/initialisations depending on configuration files or game rules.
- * 			mouvement, bonus, life, score...
+ * @file		gameplay.c
+ *       		gameplay functions library. Centralise all the gameplay functions,
+ * 			    definitions/initialisations depending on configuration files or game rules.
+ * 			    mouvement, bonus, life, score...
  * @author	Calmels Gaëlle, Gallet Adrian
  * @version	1.0
- * @date	2017-05-07
+ * @date		2017-05-07
  */
 
 #include <stdio.h>
@@ -19,16 +19,24 @@
 #include "headers.h"
 
 /*/////////////////////////////////////////
- //			GLOBAL VARIABLES DEF		//
+ //					GLOBAL VARIABLES DEF				//
 /////////////////////////////////////////*/
 
 Ball *balls;
 Player *players;
 
 /*/////////////////////////////////////////
- //	GAMEPLAY INITIALISATON FUNCTIONS	//
+ //		GAMEPLAY INITIALISATON FUNCTIONS	//
 /////////////////////////////////////////*/
 
+/**
+ * Initiate a single player based on multiple variables
+ * @param	Player const*		pl				the current player to be initiate
+ * @param	int							id				his/her ID
+ * @param	char *					name			his/her name
+ * @param	Point2D					barCenter	his/her origin (start position)
+ * @param	Color3f					barColor	his/her color (theme based)
+ */
 void initPlayer(Player *pl, int id, char *name, Point2D barCenter, Color3f barColor) {
 	pl->id = id;
 	pl->name = name;
@@ -42,6 +50,10 @@ void initPlayer(Player *pl, int id, char *name, Point2D barCenter, Color3f barCo
 	pl->score = 0;
 }
 
+/**
+ * Initiate all game objects : players balls grid...
+ * @param	int	nbPlayers	the game mode based on the number of players
+ */
 void initGame(int nbPlayers) {
 	if (nbPlayers == 1)	nbPlayers = 2;
 
@@ -90,11 +102,12 @@ void initGame(int nbPlayers) {
 }
 
 /*/////////////////////////////////////////
- //		GAMEPLAY ACTION FUNCTIONS		//
+ //			GAMEPLAY ACTION FUNCTIONS				//
 /////////////////////////////////////////*/
 
 /**
- * Apply changes of x position to a bar, depending on the player actions and the screen borders.
+ * Apply changes of x position to a bar, depending on
+ * the player actions and the screen borders.
  * @param	Bar*	bar	the current bar pointer
  * @param	enum	dir	the screen border
  */
@@ -121,6 +134,12 @@ void moveBar (Bar *bar, enum direction dir) {
 	}
 }
 
+/**
+ * Handle the IA names GladOS (reference to Portal Video Game by Valve)
+ * @param	Bar *				bar			the IA bar to move
+ * @param	Ball const*	balls		all balls in game to look at
+ * @param	int					nbBalls	the number of balls in game
+ */
 void handleGladOS(Bar *bar, Ball const *balls, int nbBalls) {
 	float score = indesirableNumberOne(&balls[0]);
 	float tmpScore;
@@ -153,6 +172,11 @@ void handleGladOS(Bar *bar, Ball const *balls, int nbBalls) {
 	}
 }
 
+/**
+ * calculate score for each balls help GladOs determine which one to follow restlesly.
+ * @param		Ball const*	ball	the current ball to look at
+ * @return	int								return the score
+ */
 int indesirableNumberOne(Ball const *ball) {
 	if (ball->speed.y < 0) {
 		return - ball->origin.y;

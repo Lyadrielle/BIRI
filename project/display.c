@@ -1,10 +1,10 @@
 /**
- * @file	display.c
- *       	display functions library. Centralise all basic display functions,
- * 			basic shapes non dependent of the gameplay.
+ * @file		display.c
+ *       		display functions library. Centralise all basic display functions,
+ * 			    basic shapes non dependent of the gameplay.
  * @author	Calmels Gaëlle, Gallet Adrian
  * @version	1.0
- * @date	2017-04-23
+ * @date		2017-04-23
  */
 
 #include <stdio.h>
@@ -23,7 +23,7 @@
 #include "headers.h"
 
 /*/////////////////////////////////////////
- //		BASIC DRAWING FUNCTIONS			//
+ //				BASIC DRAWING FUNCTIONS				//
 /////////////////////////////////////////*/
 
 /**
@@ -71,9 +71,7 @@ void drawBall(Ball ball) {
 
 /**
  * Draw a normalized brick. (x = 0, y = 0) (top left corner)
- * @param	Brick	br			the current brick to draw
- * @param	int		brickWidth	the brick width based on the
- *             					config file gridWidth and screenWidth
+ * @param	Brick	br					the current brick to draw
  */
 void drawBrick(Brick br) {
 	int index = defineBrickColor(br);
@@ -98,11 +96,9 @@ void drawBrick(Brick br) {
 
 /**
  * Draw a 2 dimensional grid of bricks, centered, based on their type and index.
- * @param	GridBrick	grid		the current gridBrick to draw
- * @param	int			gridWidth	the gridWidth from the config file
- * @param	int			gridHeight	the gridHeight from the config file
- * @param	int			brickWidth	the brickWidth based on the
- *              					gridWidth and screenWidth
+ * @param	GridBrick	grid				the current gridBrick to draw
+ * @param	int				gridWidth		the gridWidth from the config file
+ * @param	int				gridHeight	the gridHeight from the config file
  */
 void drawGrid(GridBrick const grid,int gridWidth, int gridHeight) {
 	int i, j;
@@ -129,7 +125,7 @@ void drawGrid(GridBrick const grid,int gridWidth, int gridHeight) {
 
 /**
  * Draw the background texture. (x = 0, y = 0) (top left corner)
- *
+ * @param	int	index	the correct texture index needed to draw the brick
  */
 void drawBackground(int index) {
 		glEnable(GL_TEXTURE_2D);
@@ -151,6 +147,16 @@ void drawBackground(int index) {
 		glDisable(GL_TEXTURE_2D);
 }
 
+/*/////////////////////////////////////////
+ //					HUD DISPLAY FUNCTIONS				//
+/////////////////////////////////////////*/
+
+/**
+ * Draw all HUD baed on the number of players. Automatically up to date
+ * because It's based on the Players structures
+ * @param	Player const*	pl				The current player
+ * @param	int						nbPlayers	total number of players in game
+ */
 void drawHUD(Player const *pl, int nbPlayers) {
 	char score[9] = "0";
 	sprintf(score, "%d", pl->score);
@@ -275,6 +281,9 @@ void drawHUD(Player const *pl, int nbPlayers) {
 	}
 }
 
+/**
+ * Draw a single life
+ */
 void drawLife() {
 	glEnable(GL_TEXTURE_2D);
 	glColor3f(255, 255, 255);
@@ -295,6 +304,11 @@ void drawLife() {
 	glDisable(GL_TEXTURE_2D);
 }
 
+/**
+ * Draw all lifes of one particular player.
+ * based on it's current number of lifes
+ * @param	int	nbHearts	number of remaining lifes
+ */
 void drawLifes(int nbHearts) {
 	int i;
 	for (i = nbHearts; i > 0; --i) {
@@ -305,6 +319,12 @@ void drawLifes(int nbHearts) {
 	}
 }
 
+/**
+ * Render an HORIZONTAL Bitmap string using GLUT library
+ * @param	float				x				top left corner (x value)
+ * @param	float				y				top left corner (y value)
+ * @param	char const*	string	the string to render horizontally
+ */
 void renderBitmapString(float x, float y, char const *string) {
 	char const *c;
 	for (c = string; *c != '\0'; c++) {}
@@ -315,6 +335,12 @@ void renderBitmapString(float x, float y, char const *string) {
 	}
 }
 
+/**
+ * Render a VERTICAL Bitmap string using GLUT library
+ * @param	float				x				top left corner (x value)
+ * @param	float				y				top left corner (y value)
+ * @param	char const*	string	the string to render vertically
+ */
 void renderBitmapVerticalString(float x, float y, char const *string) {
 	char const *c;
 	for (c = string; *c != '\0'; c++) {}
@@ -325,6 +351,12 @@ void renderBitmapVerticalString(float x, float y, char const *string) {
 	}
 }
 
+/**
+ * Print the victory screen. Winner on top the all players in their ID order.
+ * @param	Player const*	players		the players array containing all in game players
+ * @param	int						nbPlayers	total number of players in game
+ * @param	bool					gladOS		if GaldOS is active then print
+ */
 void printVictoryScreen(Player const *players, int nbPlayers, bool gladOS) {
 	char scorePl[100];
 	int score = players[0].score + (players[0].life * 10), tmpScore = 0;
@@ -335,11 +367,7 @@ void printVictoryScreen(Player const *players, int nbPlayers, bool gladOS) {
 	glPushMatrix();
 	if (nbPlayers < 3) {
 		if (players[0].life == 0) {
-			if (gladOS) {
-				renderBitmapString((SCREEN_WIDTH_CENTER - 27), 200, "gladOS");
-			} else {
-				renderBitmapString((SCREEN_WIDTH_CENTER - (((NameLenght(players[1].name)/2) * 9))), 230, players[1].name);
-			}
+			renderBitmapString((SCREEN_WIDTH_CENTER - (((NameLenght(players[1].name)/2) * 9))), 230, players[1].name);
 		} else {
 			renderBitmapString((SCREEN_WIDTH_CENTER - (((NameLenght(players[0].name)/2) * 9))), 230, players[0].name);
 		}
@@ -366,6 +394,11 @@ void printVictoryScreen(Player const *players, int nbPlayers, bool gladOS) {
 	glPopMatrix();
 }
 
+/**
+ * Calcul the user name length and return this length
+ * @param		char const*	name	the player name
+ * @return	int								lenght of the player name
+ */
 int NameLenght(char const *name) {
 	int lenght = 0;
 	while (name[lenght] != '\0') {
@@ -375,12 +408,13 @@ int NameLenght(char const *name) {
 }
 
 /*/////////////////////////////////////////
- //			TEXTURES FUNCTIONS			//
+ //					TEXTURES FUNCTIONS					//
 /////////////////////////////////////////*/
 
 /**
  * Return the color format of the picture
- * @param	SDL_Surface  img the picture currently loaded
+ * @param		SDL_Surface	img the picture currently loaded
+ * @return	GLenum					format of the current picture
  */
 GLenum testFormat(SDL_Surface *img){
 	GLenum format;
@@ -401,8 +435,8 @@ GLenum testFormat(SDL_Surface *img){
 }
 
 /**
- * Load and give pictures of the theme to the GPU
- * @param	char 		themePath	the name of the theme directory
+ * Load and give all theme pictures to the GPU
+ * @param	char 	themePath	the name of the theme directory
  */
 void loadTextures(char *themePath) {
 	SDL_Surface *surface;
@@ -444,8 +478,10 @@ void loadTextures(char *themePath) {
 			case 16 :
 				sprintf(imgPath, "%sHUDv.jpg", tmp);
 				break;
+			case 17 :
+				sprintf(imgPath, "img/pause.jpg");
+				break;
 			default :
-				sprintf(imgPath, "%serror.jpg", tmp);
 				break;
 		}
 		printf("PATH : %s et %d\n", imgPath, i-1);

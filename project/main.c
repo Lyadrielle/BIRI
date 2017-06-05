@@ -1,10 +1,10 @@
 /**
- * @file	main.c
- *       	Entry point of the program. Define and execute all basic SDL functions,
+ * @file		main.c
+ *       		Entry point of the program. Define and execute all basic SDL functions,
  *       	 such as initialise, set, reshape... the game window.
  * @author	Calmels Gaëlle, Gallet Adrian
  * @version	1.0
- * @date	2017-04-23
+ * @date		2017-04-23
  */
 
 #include <stdio.h>
@@ -22,7 +22,7 @@
 #include "headers.h"
 
 /*/////////////////////////////////////////
- //			GLOBAL VARIABLES DEF		//
+ //					GLOBAL VARIABLES DEF				//
 /////////////////////////////////////////*/
 
 char *playersNames[4];
@@ -30,12 +30,11 @@ GLuint texturesBuffer[TEXTURE_NB];
 Color3f themeColor;
 
 /*/////////////////////////////////////////
- //			MAIN SDL FUNCTIONS			//
+ //					MAIN SDL FUNCTIONS					//
 /////////////////////////////////////////*/
 
 /**
  * Reajust the axis of the window, x and y start at 0 at the top left corner
- * @param	int	screenWidth	new screenWidth calculated with the config file gridWith
  */
 void reshape() {
 	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -46,7 +45,6 @@ void reshape() {
 
 /**
  * Set the video mode for an SDL_OPENGL window.
- * @param int screenWidth new screenWidth calculated with the config file gridWith
  */
 void setVideoMode() {
 	if(NULL == SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, BIT_PER_PIXEL, SDL_OPENGL)) {
@@ -58,6 +56,11 @@ void setVideoMode() {
 	SDL_GL_SwapBuffers();
 }
 
+/**
+ * Instanciate all players names based on theyre number and the program params (argv, argc)
+ * @param	int			argc	number of paramaters of main
+ * @param	Char**	argv	array containing each main params
+ */
 void instanciatePlayerNames(int argc, char** argv) {
 	if(argc < 2) {
 		printf("ERREUR : Config file manquant\n");
@@ -91,16 +94,20 @@ void instanciatePlayerNames(int argc, char** argv) {
 }
 
 /*/////////////////////////////////////////
- //			MAIN FUNCTION START			//
+ //					MAIN FUNCTION START					//
 /////////////////////////////////////////*/
 
 /**
  * Main function
- * @param  argc [description]
- * @param  argv [description]
- * @return      [description]
+ * @param		argc	number of paramaters of main
+ * @param		argv	array containing each main params
+ * @return	int		the error code value or the correct end value.
  */
 int main (int argc, char** argv) {
+	/*/////////////////////////////////////////
+	 //				VARIABLES DEFINITION					//
+	/////////////////////////////////////////*/
+
 	Uint8 * keyState = SDL_GetKeyState(NULL);
 	int gridWidth = 0, gridHeight = 0;
 	int *brickTypes;
@@ -108,22 +115,23 @@ int main (int argc, char** argv) {
 	glutInit(&argc, argv);
 	initColor3f(&themeColor, 255, 139, 0);
 	instanciatePlayerNames(argc, argv);
-
 	brickTypes = readConfigFile(argv[1], &gridWidth, &gridHeight);
+
+	/*/////////////////////////////////////////
+	 //			INITIATE SDL OPENGL CONTEXT			//
+	/////////////////////////////////////////*/
 
 	if (-1 == SDL_Init(SDL_INIT_VIDEO)) {
 		fprintf(stderr, "Impossible d'initialiser la SDL. Fin du programme.\n");
 		return EXIT_FAILURE;
 	}
-
-	/* set the openGL SDL context */
 	setVideoMode(SCREEN_WIDTH);
-	/* Set a title to the window */
 	SDL_WM_SetCaption("KassPong", NULL);
 
 	/*/////////////////////////////////////////
-	 //				INITIALISATONS			//
+	 //						INITIALISATONS						//
 	/////////////////////////////////////////*/
+
 	Button *menu = malloc(NB_BUTTON_MAIN_MENU * sizeof(Button));
 	initMenu(menu);
 	GridBrick grid = initGrid(gridWidth, gridHeight, brickTypes);
@@ -132,14 +140,18 @@ int main (int argc, char** argv) {
 	loadTextures("img/THEME1/");
 
 	/*/////////////////////////////////////////
-	 //				INFINITE LOOP			//
+	 //				START OF INFINITE LOOP				//
 	/////////////////////////////////////////*/
+
 	int tmp, i, j, loop = true, nbPlayers = 0, nbBalls = 0;
 	int gameStep = INITIALISATON;
+
 	while (loop) {
+
 		/*/////////////////////////////////////////
-		 //				EVENT MANAGER			//
+		 //						EVENT MANAGER							//
 		/////////////////////////////////////////*/
+
 		SDL_Event trigger;
 		/*----------( STOP CONDITION )---------- */
 		while(SDL_PollEvent(&trigger)) {
@@ -147,6 +159,7 @@ int main (int argc, char** argv) {
 				loop = 0;
 				break;
 			}
+			/*----------( OTHER ACTINS )---------- */
 			switch (gameStep) {
 				case INITIALISATON :
 					tmp = handleButton(&menu[0], trigger, &gameStep);
@@ -178,16 +191,17 @@ int main (int argc, char** argv) {
 			}
 		}
 
-
 		/*/////////////////////////////////////////
-		 //				GAME MANAGER			//
+		 //			COLLISION / DISPLAY MANAGER			//
 		/////////////////////////////////////////*/
+
 		glClear(GL_COLOR_BUFFER_BIT);
 		/* ----------( INITIALISATION FASE )---------- */
 		if (gameStep == INITIALISATON) {
 			drawBackground(13);
 			drawMenu(menu);
 		}
+
 		/* -------------( PLAYTIME FASE )------------ */
 		if (gameStep == PLAYTIME) {
 			drawBackground(4);
@@ -226,34 +240,39 @@ int main (int argc, char** argv) {
 				}
 			}
 		}
-
+		/* -------------( SCOREBOARD FASE )------------ */
 		if (gameStep == SCOREBOARD) {
 			drawBackground(14);
 			printVictoryScreen(players, nbPlayers, gladOS);
 		}
 
+		/* -------------( PAUSE FASE )------------ */
 		if (gameStep == PAUSE) {
-			drawBackground(14);
+			drawBackground(16);
 		}
 
-		/* -------------( SCOREBOARD FASE )------------ */
 		SDL_GL_SwapBuffers();
 
 		/*/////////////////////////////////////////
-		 //			KEYBOARD MANAGER			//
+		 //					KEYBOARD MANAGER						//
 		/////////////////////////////////////////*/
-		if (keyState[SDLK_p] && trigger.type == SDL_KEYDOWN && gameStep == PLAYTIME) {
+
+		/* -------------( PAUSE ACTIONS )------------ */
+		if (trigger.type == SDL_KEYDOWN && trigger.key.keysym.sym == SDLK_p && gameStep == PLAYTIME) {
 			gameStep = PAUSE;
 		} else if (keyState[SDLK_p] && trigger.type == SDL_KEYDOWN && gameStep == PAUSE) {
 			gameStep = PLAYTIME;
 		}
 
+		/* -------------( PLAYTIME ACTIONS )------------ */
 		if (gameStep == PLAYTIME) {
 			keyState = SDL_GetKeyState(NULL);
+
+			/* BASIC ACTIONS */
 			if (keyState[SDLK_a]) moveBar(&(players[0].bar), LEFT);
 			if (keyState[SDLK_z]) moveBar(&(players[0].bar), RIGHT);
 
-			/* IA */
+			/* GladOS ACTIONS */
 			if (!gladOS) {
 				if (keyState[SDLK_LEFT]) moveBar(&(players[1].bar), LEFT);
 				if (keyState[SDLK_RIGHT]) moveBar(&(players[1].bar), RIGHT);
@@ -262,7 +281,7 @@ int main (int argc, char** argv) {
 				handleGladOS(&(players[1].bar), balls, nbPlayers);
 			}
 
-			/* 4 PLAYERS */
+			/* 4PLAYER MODE ACTIONS */
 			if (nbPlayers > 2) {
 				if (keyState[SDLK_u]) moveBar(&(players[2].bar), TOP);
 				if (keyState[SDLK_n]) moveBar(&(players[2].bar), BOTTOM);
@@ -270,10 +289,17 @@ int main (int argc, char** argv) {
 				if (keyState[SDLK_KP9]) moveBar(&(players[3].bar), TOP);
 				if (keyState[SDLK_KP3]) moveBar(&(players[3].bar), BOTTOM);
 			}
-
 			SDL_Delay(5);
 		}
+
+		/*/////////////////////////////////////////
+		 //				END OF INFINITE LOOP					//
+		/////////////////////////////////////////*/
 	}
+
+	/*/////////////////////////////////////////
+	 //						FREE MEMORY								//
+	/////////////////////////////////////////*/
 
 	if (menu != NULL) {
 		free(menu);
@@ -295,7 +321,12 @@ int main (int argc, char** argv) {
 	if (balls != NULL) {
 		free(balls);
 	}
+
+	/*/////////////////////////////////////////
+	 //					FREE SDL AND QUIT						//
+	/////////////////////////////////////////*/
 	glDeleteTextures(TEXTURE_NB, texturesBuffer);
 	SDL_Quit();
+	
 	return EXIT_SUCCESS;
 }
